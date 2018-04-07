@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>开始使用layui</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" type="text/css" href="./alicon/iconfont.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/comment.css">
+
+</head>
+<body class="mbg">
+
+<!-- 你的HTML代码 -->
+<div class="layui-header header header-doc ">
+    <div class="layui-main pbg">
+        <a class="logo" href="./index.html"><img src="img/logo.png"/>
+        </a>
+        <ul class="layui-nav layui-layout-left" lay-filter="">
+            <li class="layui-nav-item layui-this"><a href="./index.html">首页</a></li>
+            <li class="layui-nav-item"><a href="./search.html">搜索</a></li>
+
+            <li class="layui-nav-item"><a href="./events.html">动态</a></li>
+            <li class="layui-nav-item layui-layout-right">
+            </li>
+        </ul>
+    </div>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</div>
+
+
+<div class="layui-main pbg">
+
+
+    <div class="layui-carousel" id="carousel">
+        <div carousel-item>
+            <div>条目1</div>
+            <div>条目2</div>
+            <div>条目3</div>
+            <div>条目4</div>
+            <div>条目5</div>
+        </div>
+    </div>
+    <div class="layui-row">
+
+        <ul class=" icon_lists  clear">
+            <div class="layui-col-md2 layui-col-lg-offset2">
+
+                <li>
+                    <a href="./recommend.html">
+                        <i class="icon iconfont icon-tuijiandianpu" style="color: #FF8240"></i>
+                    </a>
+                    <div class="name">推荐</div>
+                </li>
+            </div>
+            <div class="layui-col-md2 ">
+                <li>
+                    <a href="./buzz.html">
+                        <i class="icon iconfont icon-pinglun" style="color: #FF5900"></i>
+                    </a>
+                    <div class="name">评论</div>
+                </li>
+            </div>
+            <div class="layui-col-md2">
+
+                <li>
+                    <a href="./music.html">
+                        <i class="icon iconfont icon-yinle" style="color: #BF6230"></i>
+                    </a>
+                    <div class="name">音乐</div>
+                </li>
+            </div>
+
+            <div class="layui-col-md2">
+
+                <li>
+                    <a href="./topic.html">
+                        <i class="icon iconfont icon-huati" style="color: #BF6230"></i>
+                    </a>
+                    <div class="name">话题</div>
+                </li>
+            </div>
+        </ul>
+    </div>
+    <hr>
+
+    <div class="layui-row">
+        <div class="layui-col-md9">
+            <div class="card">
+                <div class="float_left">
+                    <img src="img/109951163161135955.jpg" class="head"/>
+                </div>
+                <div class="card_detail">
+                    <div class="card_nick">
+                        <a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1">桂花乌龙冰</a>
+                    </div>
+                    <div class="card_time">3月29日 09:38</div>
+                    <div class="card_text ws14">跟Alan Walker的Fade有异曲同工之妙。</div>
+                    <div class="float_right">——来自 <a>Ahrix</a> 《<a href="javascript:;">Nova</a>》 <a>网易云音乐</a></div>
+                    <div class="layui-row">
+                        <ul class="inline">
+                            <li class="like">
+                                <a href="javascript:;"><i class="layui-icon">&#xe6c6;</i>
+                                    <num>999+</num>
+                                </a>
+                            </li>
+                            <li class="reply">
+                                <a href="javascript:;"><i class="layui-icon">&#xe63a;</i>
+                                    <num>999+</num>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe641;</i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe6c5;</i></a>
+                            </li>
+                        </ul>
+                        <div class="commentAll"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div style="text-align: center;font-size: x-large">...</div>
+
+            <!--推荐歌曲-->
+            <div class="card">
+                <div class="float_left">
+                    <img src="img/head.jpg" class="head"/>
+                </div>
+                <div class="card_detail">
+                    <div class="card_nick">
+                        <a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1">Agustone</a>
+                    </div>
+                    <div class="card_time">3月29日 09:38</div>
+                    <div class="card_text ws14">
+                        推荐了一首《<a>The Top (Original Mix)</a>》
+                    </div>
+                    <div class="card_text ws14">
+                        “说实话，我曾经很喜欢tobu的曲子，但是都听腻了，最棒的是这类好听的电音能给我带来焕然一新的感觉，它们没有可比性，只因为爱音乐，享受音乐，享受生活”
+                    </div>
+
+                    <div class="layui-row">
+                        <ul class="inline">
+                            <li class="like">
+                                <a href="javascript:;"><i class="layui-icon">&#xe6c6;</i>
+                                    <num>999+</num>
+                                </a>
+                            </li>
+                            <li class="reply">
+                                <a href="javascript:;"><i class="layui-icon">&#xe63a;</i>
+                                    <num>999+</num>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe641;</i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe6c5;</i></a>
+                            </li>
+                        </ul>
+                        <div class="commentAll"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="float_left">
+                    <img src="img/109951163189964747.jpg" class="head"/>
+                </div>
+                <div class="card_detail">
+                    <div class="card_nick">
+                        <a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1">Agustone</a>
+                    </div>
+                    <div class="card_time">3月29日 09:38</div>
+                    <div class="card_text ws14">
+                        推荐了一首《<a>Move</a>》
+                    </div>
+                    <div class="card_text ws14">
+
+                        “我在西藏一个酒吧打碟都是电音歌曲！西藏多落后你们懂得！但是作为国内领先的深圳城市还在放我是 DJ系列！ 当时我就听不下去了！”
+                    </div>
+
+                    <div class="layui-row">
+                        <ul class="inline">
+                            <li class="like">
+                                <a href="javascript:;"><i class="layui-icon">&#xe6c6;</i>
+                                    <num>999+</num>
+                                </a>
+                            </li>
+                            <li class="reply">
+                                <a href="javascript:;"><i class="layui-icon">&#xe63a;</i>
+                                    <num>999+</num>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe641;</i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe6c5;</i></a>
+                            </li>
+                        </ul>
+                        <div class="commentAll"></div>
+                    </div>
+                </div>
+            </div>
+            <ul class="site-icon">
+                <li>
+                    话题1
+                </li>
+                <li>
+                    话题2
+                </li>
+                <li>
+                    话题3
+                </li>
+            </ul>
+            <div class="card">
+                <div class="float_left">
+                    <img src="img/head.jpg" class="head"/>
+                </div>
+                <div class="card_detail">
+                    <div class="card_nick">
+                        <a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1">Agustone</a>
+                    </div>
+                    <div class="card_time">3月29日 09:38</div>
+                    <div class="card_text ws14">
+                        <a href="javascript:;">#话题xxxx#</a>十六年前的伊斯坦堡是在土耳其<br>
+                        十六年后的现在冰激凌也是在土耳其<br>
+                        我伦一定很喜欢这个地方<br>
+                        其实我也很喜欢
+                    </div>
+                    <div class="layui-row">
+                        <ul class="inline">
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe6c6;</i>
+                                    <num>999+</num>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe63a;</i>
+                                    <num>999+</num>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe641;</i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe6c5;</i></a>
+                            </li>
+                        </ul>
+                        <div class="commentAll"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="float_left">
+                    <img src="img/head.jpg" class="head"/>
+                </div>
+                <div class="card_detail">
+                    <div class="card_nick">
+                        <a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1">Agustone</a>
+                    </div>
+                    <div class="card_time">3月29日 09:38</div>
+                    <div class="card_text ws14">
+                        <a href="javascript:;">#话题yyyy#</a>十六年前的伊斯坦堡是在土耳其<br>
+                        十六年后的现在冰激凌也是在土耳其<br>
+                        我伦一定很喜欢这个地方<br>
+                        其实我也很喜欢
+                    </div>
+                    <div class="layui-row">
+                        <ul class="inline">
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe6c6;</i>
+                                    <num>999+</num>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe63a;</i>
+                                    <num>999+</num>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe641;</i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="layui-icon">&#xe6c5;</i></a>
+                            </li>
+                        </ul>
+                        <div class="commentAll"></div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+        </div>
+
+        <div class="layui-col-md3">
+            <div class="layui-box ">
+                <div class="ws18 up25">活动</div>
+                <hr>
+                <ul>
+                    <div class="layui-show-lg-inline-block">
+                        <li><a>活动1..............</a></li>
+                        <li><a>活动2..............</a></li>
+                        <li><a>活动3..............</a></li>
+                    </div>
+                </ul>
+                <hr>
+            </div>
+            <div class="layui-box">
+                <div class="ws18">附近</div>
+                <hr>
+                <ul>
+                    <div class="layui-show-lg-inline-block">
+                        <div class="inline">
+                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
+                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
+                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
+                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
+                        </div>
+                    </div>
+                    <div class="layui-show-lg-inline-block">
+                        <div class="inline">
+                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
+                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
+                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
+                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
+                        </div>
+                    </div>
+                </ul>
+                <hr>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="footer">
+        &copy;Copyright 2018 乐热评<br>
+        感谢：<a>Layui</a>,<a>Bootstrap</a>,<a>网易云</a>,<a>QQ音乐</a>,<a>酷我音乐</a>...<br>
+        联系我们：<a href="mailto:amoxuk@aliyun.com">amoxuk#aliyun.com(#换成@)</a>
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="js/jquery.flexText.js"></script>
+<script src="js/common.js"></script>
+<script src="layui/layui.js"></script>
+<script src="js/top.js"></script>
+
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+
+    layui.use('carousel', function () {
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#carousel'
+            , width: '100%' //设置容器宽度
+            , height: 200 //设置容器宽度
+            , arrow: 'hover' //始终显示箭头
+        });
+    });
+</script>
+</body>
+</html>

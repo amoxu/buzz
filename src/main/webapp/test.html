@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/aes.js"></script>
+</head>
+<body>
+<script>
+  console.log(window.btoa(aes.encrypt(JSON.stringify({"username":"amoxu","password":"4AvG+1zfQxv3GvbOlrF3CA==","captcha":"capw"}))));
+
+  console.log(aes.decrypt(window.atob(window.btoa(aes.encrypt(JSON.stringify({"username":"amoxu","password":"4AvG+1zfQxv3GvbOlrF3CA==","captcha":"capw"}))))));
+</script>
+</body>
+</html>

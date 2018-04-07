@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>开始使用layui</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/comment.css">
+
+
+</head>
+<body class="mbg">
+
+<!-- 你的HTML代码 -->
+<div class="layui-header header header-doc ">
+    <div class="layui-main pbg">
+        <a class="logo" href="../index.html"><img src="../img/logo.png"/>
+        </a>
+        <ul class="layui-nav layui-layout-left" lay-filter="">
+            <li class="layui-nav-item "><a href="../index.html">首页</a></li>
+            <li class="layui-nav-item "><a href="../search.html">搜索</a></li>
+
+            <li class="layui-nav-item"><a href="../events.html">动态</a></li>
+            <li class="layui-nav-item layui-layout-right layui-this">
+                <a href="javascript:;">我的</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="my.html">个人中心</a></dd>
+                    <dd><a href="../my/message.html">留言消息</a></dd>
+                    <dd><a href="../my/setting.html#password">修改密码</a></dd>
+                    <dd><a href="../my/friends.html">我的关注</a></dd>
+                    <dd><a href="../login-out">退出</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</div>
+
+
+<div class="layui-main pbg">
+
+
+    <div class="layui-row">
+        <div class="layui-col-xs6 layui-col-md12">
+
+            <div class="p-prf">
+                <dl class="m-proifo f-cb" id="head-box">
+                    <dt class="f-pr" id="ava">
+                        <img class=" head"
+                             src="http://p2.music.126.net/KffRmQaVGqS-jcAlE3b9DA==/109951163196815856.jpg?param=180y180">
+                        <div class="btm"><a href="../my/setting.html#head-icon" class="upload">更换头像</a></div>
+                    </dt>
+                    <dd>
+                        <div class="name f-cb">
+                            <div class="f-cb">
+
+                                <h2 id="j-name-wrap" class="wrap f-fl f-cb ">
+                                    <span class="tit f-ff2 s-fc0 f-thide">Amoxukng</span>
+                                </h2>
+                            </div>
+                        </div>
+                        <ul class="data f-cb ws16">
+                            <li><i class="layui-icon">&#xe662;</i></li>
+                            <!--男&#xe662; 女&#xe661;-->
+                            <li>24岁</li>
+                            <li>安徽省 - 宣城市</li>
+                        </ul>
+
+
+                        <div class="clearfix ">
+                            <div class="inf layui-form-label float_left">个性签名：</div>
+                            <div class="inf ">无。</div>
+
+                            <div class="inf layui-form-label float_left">邮箱：</div>
+                            <div class="inf">amoxuk@aliyun.com</div>
+                        </div>
+
+
+                    </dd>
+                </dl>
+
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md2">
+                    <ul class="hf-con-block" lay-filter="test">
+                        <li class=" tab-block"><a class="ws18 float_right this" href="my.html"> 动态</a></li>
+                        <li class=" tab-block"><a class="ws18 float_right" href="../my/friends.html"><i
+                                class="layui-icon">&#xe623;</i> 关注</a></li>
+                        <li class=" tab-block"><a class="ws18 float_right" href="../my/message.html"> 留言</a></li>
+                        <li class=" tab-block"><a class="ws18 float_right" href="../my/setting.html"> 设置</a></li>
+                    </ul>
+                </div>
+                <div class="layui-col-md9">
+                    <div class="layui-row">
+                        <div class="layui-col-xs6 layui-col-md12">
+                            <div class="f-show">
+                                <div class="comment-show-con clearfix">
+                                    <div class="comment-show-con-img pull-left"><img
+                                            src="../images/header-img-comment_03.png" alt=""></div>
+                                    <div class="f-list pull-left clearfix">
+                                        <div class="pl-text clearfix"><a href="javascript:;" class="f-name">hahaha:</a>
+                                        </div>
+                                        <div class="date-dz"><span class="f-note pull-left comment-time">签名：12222222222222222</span>
+                                            <div class="date-dz-right pull-right comment-pl-block">
+                                                <a href="javascript:;" class="f-opt">发消息</a>
+                                                <span class="pull-left date-dz-line">|</span>
+                                                <a href="javascript:;" class="f-opt">TA的空间</a>
+                                                <span class="pull-left date-dz-line">|</span>
+                                                <a href="javascript:;" class="f-opt">取消关注</a>
+                                            </div>
+                                        </div>
+                                        <div class="hf-list-con"></div>
+                                    </div>
+                                </div>
+                                <div class="comment-show-con clearfix">
+                                    <div class="comment-show-con-img pull-left"><img
+                                            src="../images/header-img-comment_03.png" alt=""></div>
+                                    <div class="f-list pull-left clearfix">
+                                        <div class="pl-text clearfix"><a href="javascript:;" class="f-name">hahaha:</a>
+                                        </div>
+                                        <div class="date-dz"><span class="f-note pull-left comment-time">签名：12222222222222222</span>
+                                            <div class="date-dz-right pull-right comment-pl-block">
+                                                <a href="javascript:;" class="f-opt">发消息</a>
+                                                <span class="pull-left date-dz-line">|</span>
+                                                <a href="javascript:;" class="f-opt">TA的空间</a>
+                                                <span class="pull-left date-dz-line">|</span>
+                                                <a href="javascript:;" class="f-opt">取消关注</a>
+                                            </div>
+                                        </div>
+                                        <div class="hf-list-con"></div>
+                                    </div>
+                                </div>
+                                <div class="comment-show-con clearfix">
+                                    <div class="comment-show-con-img pull-left"><img
+                                            src="../images/header-img-comment_03.png" alt=""></div>
+                                    <div class="f-list pull-left clearfix">
+                                        <div class="pl-text clearfix"><a href="javascript:;" class="f-name">hahaha:</a>
+                                        </div>
+                                        <div class="date-dz"><span class="f-note pull-left comment-time">签名：12222222222222222</span>
+                                            <div class="date-dz-right pull-right comment-pl-block">
+                                                <a href="javascript:;" class="f-opt">发消息</a>
+                                                <span class="pull-left date-dz-line">|</span>
+                                                <a href="javascript:;" class="f-opt">TA的空间</a>
+                                                <span class="pull-left date-dz-line">|</span>
+                                                <a href="javascript:;" class="f-opt">取消关注</a>
+                                            </div>
+                                        </div>
+                                        <div class="hf-list-con"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="footer">
+        &copy;Copyright 2018 乐热评<br>
+        感谢：<a>Layui</a>,<a>Bootstrap</a>,<a>网易云</a>,<a>QQ音乐</a>,<a>酷我音乐</a>...<br>
+        联系我们：<a href="mailto:amoxuk@aliyun.com">amoxuk#aliyun.com(#换成@)</a>
+    </div>
+
+
+</div>
+
+
+<script src="../layui/layui.js"></script>
+<script src="../js/top.js"></script>
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    layui.use('carousel', function () {
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#carousel'
+            , width: '100%' //设置容器宽度
+            , height: 200 //设置容器宽度
+            , arrow: 'hover' //始终显示箭头
+        });
+    });
+
+    layui.use('table', function () {
+        var table = layui.table;
+        table.render({
+            elem: '.demo'
+            ,
+            skin: 'line' //行边框风格
+            ,
+            data: [{"id": 1, "用户": 2, "内容": 3}, {"id": 1, "用户": 2, "内容": 3}, {"id": 1, "用户": 2, "内容": 3}, {
+                "id": 1,
+                "用户": 2,
+                "内容": 3
+            }, {"id": 1, "用户": 2, "内容": 3}, {"id": 1, "用户": 2, "内容": 3}]
+            ,
+            page: false
+            ,
+            cols: [[
+                {field: "id", title: "id", width: 120}
+                , {field: "用户", title: "用户"}
+                , {field: "时间", title: "时间"}
+                , {field: "内容", title: "内容"}
+            ]]
+        });
+    });
+    layui.use(['laypage'], function () {
+        var laypage = layui.laypage
+        //开启HASH
+        laypage.render({
+            elem: 'searchpage'
+            , count: 500
+            , curr: location.hash.replace('#!fenye=', '') //获取hash值为fenye的当前页
+            , hash: 'fenye' //自定义hash值
+        });
+    });
+</script>
+</body>
+</html>

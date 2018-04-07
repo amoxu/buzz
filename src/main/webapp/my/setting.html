@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>开始使用layui</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/comment.css">
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery-1.12.0.min.js"></script>
+
+
+</head>
+<body class="mbg">
+
+<!-- 你的HTML代码 -->
+<div class="layui-header header header-doc ">
+    <div class="layui-main pbg">
+        <a class="logo" href="../index.html"><img src="../img/logo.png"/>
+        </a>
+        <ul class="layui-nav layui-layout-left" lay-filter="">
+            <li class="layui-nav-item "><a href="../index.html">首页</a></li>
+            <li class="layui-nav-item "><a href="../search.html">搜索</a></li>
+
+            <li class="layui-nav-item"><a href="../events.html">动态</a></li>
+            <li class="layui-nav-item layui-layout-right layui-this">
+                <a href="javascript:;">我的</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="../my/my.html">个人中心</a></dd>
+                    <dd><a href="../my/message.html">留言消息</a></dd>
+                    <dd><a href="../my/setting.html#password">修改密码</a></dd>
+                    <dd><a href="../my/friends.html">我的关注</a></dd>
+                    <dd><a href="../login-out">退出</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</div>
+
+
+<div class="layui-main pbg">
+
+
+    <div class="layui-row">
+        <div class="layui-col-xs6 layui-col-md12">
+
+            <div class="p-prf">
+                <dl class="m-proifo f-cb" id="head-box">
+                    <dt class="f-pr" id="ava">
+                        <img class=" head"
+                             src="http://p2.music.126.net/KffRmQaVGqS-jcAlE3b9DA==/109951163196815856.jpg?param=180y180">
+                        <div class="btm"><a href="../my/setting.html#head-icon" class="upload">更换头像</a></div>
+                    </dt>
+                    <dd>
+                        <div class="name f-cb">
+                            <div class="f-cb">
+
+                                <h2 id="j-name-wrap" class="wrap f-fl f-cb ">
+                                    <span class="tit f-ff2 s-fc0 f-thide">Amoxukng</span>
+                                </h2>
+                            </div>
+                        </div>
+                        <ul class="data f-cb ws16">
+                            <li><i class="layui-icon">&#xe662;</i></li>
+                            <!--男&#xe662; 女&#xe661;-->
+                            <li>24岁</li>
+                            <li>安徽省 - 宣城市</li>
+                        </ul>
+
+
+                        <div class="clearfix ">
+                            <div class="inf layui-form-label float_left">个性签名：</div>
+                            <div class="inf ">无。</div>
+
+                            <div class="inf layui-form-label float_left">邮箱：</div>
+                            <div class="inf">amoxuk@aliyun.com</div>
+                        </div>
+
+
+                    </dd>
+                </dl>
+
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md2">
+                    <ul class="hf-con-block" lay-filter="test">
+                        <li class=" tab-block"><a class="ws18 float_right this" href="my.html"> 动态</a></li>
+                        <li class=" tab-block"><a class="ws18 float_right" href="../my/friends.html"> 关注</a></li>
+                        <li class=" tab-block"><a class="ws18 float_right" href="../my/message.html"> 留言</a></li>
+                        <li class=" tab-block"><a class="ws18 float_right" href="../my/setting.html#information"><i
+                                class="layui-icon">&#xe623;</i> 设置</a></li>
+                    </ul>
+                </div>
+                <div class="layui-col-md9">
+                    <div class="layui-row layui-col-space10 setting">
+                        <div class="layui-col-md2 ">
+                            <a href="#information">资料</a>
+                        </div>
+                        <div class="layui-col-md2 ">
+                            <a href="#permission">权限</a>
+                        </div>
+                        <div class="layui-col-md2">
+                            <a href="#password">
+                                密码
+                            </a>
+                        </div>
+                        <div class="layui-col-md2">
+                            <a href="#email">
+                                邮箱
+                            </a>
+                        </div>
+                        <div class="layui-col-md2">
+                            <a href="#head-icon">
+                                头像
+                            </a>
+                        </div>
+                    </div>
+                    <div id="information" class="setting">
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-input-inline  layui-form-label-col">性别</label>
+                                    <div class="layui-input-inline">
+                                        <input type="radio" name="sex" value="男" title="男" checked="">
+                                        <input type="radio" name="sex" value="女" title="女">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-input-inline layui-form-label-col">生日</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="date" id="date1" autocomplete="off"
+                                               class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-input-inline  layui-form-label-col">城市</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="city" lay-verify="" autocomplete="off"
+                                               class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+
+                                    <label class="layui-input-inline  layui-form-label-col">个性介绍</label>
+                                    <div class="layui-inline">
+                                        <div class="layui-input-inline">
+                                            <textarea placeholder="聊一聊自己。" class="layui-textarea"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="permission" class="setting" hidden>
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-input-inline  layui-form-label-col">谁可以查看我的动态</label>
+                                    <div class="layui-input-inline">
+                                        <select name="events">
+                                            <option value="所有人">所有人</option>
+                                            <option value="我关注的人">我关注的人</option>
+                                            <option value="仅自己">仅自己</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-input-inline  layui-form-label-col">谁可以查看我关注的人</label>
+                                    <div class="layui-input-inline">
+                                        <select name="friends">
+                                            <option value="所有人">所有人</option>
+                                            <option value="我关注的人">我关注的人</option>
+                                            <option value="仅自己">仅自己</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-input-inline  layui-form-label-col">谁可以给我留言</label>
+                                    <div class="layui-input-inline">
+                                        <select name="message">
+
+                                            <option value="所有人">所有人</option>
+                                            <option value="我关注的人">我关注的人</option>
+                                            <option value="仅自己">仅自己</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-input-inline  layui-form-label-col">出现在附近</label>
+                                    <div class="layui-input-inline float_right">
+                                        <input type="checkbox" checked="" name="nearby" lay-skin="switch"
+                                               lay-filter="switchTest" lay-text="ON|OFF">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="password" class="setting" hidden>
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-input-inline  layui-form-label-col">原密码</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="city" lay-verify="" autocomplete="off"
+                                               class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-input-inline  layui-form-label-col">新密码</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="city" lay-verify="" autocomplete="off"
+                                               class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-input-inline  layui-form-label-col">确认密码</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="city" lay-verify="" autocomplete="off"
+                                               class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="email" class="setting" hidden>
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-input-inline  layui-form-label-col">输入新邮箱</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="mail" lay-verify="mail" autocomplete="off"
+                                               class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit="" lay-filter="demo1">激活</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div id="head-icon" class="setting" hidden>
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="test1">上传图片</button>
+                            <div class="layui-upload-list">
+                                <img class="layui-upload-img" id="demo1" style="width: 180px;height: 180px;">
+
+                                <p id="demoText"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="footer">
+        &copy;Copyright 2018 乐热评<br>
+        感谢：<a>Layui</a>,<a>Bootstrap</a>,<a>网易云</a>,<a>QQ音乐</a>,<a>酷我音乐</a>...<br>
+        联系我们：<a href="mailto:amoxuk@aliyun.com">amoxuk#aliyun.com(#换成@)</a>
+    </div>
+
+
+</div>
+
+<script src="../js/common.js"></script>
+<script src="../layui/layui.js"></script>
+<script src="../js/top.js"></script>
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    layui.use('carousel', function () {
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#carousel'
+            , width: '100%' //设置容器宽度
+            , height: 200 //设置容器宽度
+            , arrow: 'hover' //始终显示箭头
+        });
+    });
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+    });
+    layui.use('upload', function () {
+        var $ = layui.jquery
+            , upload = layui.upload;
+
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1'
+            , url: '/upload/'
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                var demoText = $('#demoText');
+                demoText.html(' <span style="color: #FF5722;">上传成功，确认保存？</span> <a class="layui-btn layui-btn-mini head-save" href="javascript:;">保存</a>');
+                demoText.find('.head-save').on('click', function () {
+                    /*TODO save head icon*/
+                });
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+    });
+    layui.use('table', function () {
+        var table = layui.table;
+        table.render({
+            elem: '.demo'
+            ,
+            skin: 'line' //行边框风格
+            ,
+            data: [{"id": 1, "用户": 2, "内容": 3}, {"id": 1, "用户": 2, "内容": 3}, {"id": 1, "用户": 2, "内容": 3}, {
+                "id": 1,
+                "用户": 2,
+                "内容": 3
+            }, {"id": 1, "用户": 2, "内容": 3}, {"id": 1, "用户": 2, "内容": 3}]
+            ,
+            page: false
+            ,
+            cols: [[
+                {field: "id", title: "id", width: 120}
+                , {field: "用户", title: "用户"}
+                , {field: "时间", title: "时间"}
+                , {field: "内容", title: "内容"}
+            ]]
+        });
+    });
+    layui.use(['laypage'], function () {
+        var laypage = layui.laypage
+        //开启HASH
+        laypage.render({
+            elem: 'searchpage'
+            , count: 500
+            , curr: location.hash.replace('#!fenye=', '') //获取hash值为fenye的当前页
+            , hash: 'fenye' //自定义hash值
+        });
+    });
+</script>
+</body>
+</html>

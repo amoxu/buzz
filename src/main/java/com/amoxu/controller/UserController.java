@@ -1,0 +1,122 @@
+package com.amoxu.controller;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.amoxu.entity.AjaxResult;
+import com.amoxu.entity.User;
+import com.amoxu.service.UserService;
+import com.amoxu.util.StaticEnum;
+import com.amoxu.util.ToolKit;
+import com.sun.istack.internal.NotNull;
+import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+
+@Controller
+public class UserController {
+    @Resource(name = "userServiceImpl")
+    private UserService userService;
+
+    private Logger logger = Logger.getLogger(getClass());
+
+    @RequestMapping(value = "/user/login",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+    @ResponseBody
+    public String login(@RequestParam("data") String param) {
+        logger.info("通过浏览器获取的param：" + param.length());
+
+
+        logger.info("解密过过后的param：" + param);
+
+
+        logger.info(ToolKit.aesDecrypt(param));
+        String s = ToolKit.aesDecrypt(param);
+        logger.info(s);
+
+        JSONObject json = JSON.parseObject(s);
+        String username = json.getString("username");
+        String password = json.getString("password");
+        String captcha = json.getString("captcha");
+        /*logger.info(param + " " + username + " " + password + " " + captcha);*/
+        AjaxResult ajaxResult = new AjaxResult<String>();
+
+        Subject subject = SecurityUtils.getSubject();
+        Session session = subject.getSession();
+        @NotNull
+        String tempCaptcha = (String) session.getAttribute("captcha");
+        try {
+            if (tempCaptcha.equals(captcha)) {
+                AuthenticationToken token = new UsernamePasswordToken(username, password);
+                subject.login(token);
+            } else {
+                ajaxResult.failed();
+                ajaxResult.setMsg("验证码错误");
+            }
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            ajaxResult.failed();
+            ajaxResult.setMsg("账号或密码错误");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ajaxResult.failed();
+            ajaxResult.setMsg("请尝试重新登录");
+        }
+        return ajaxResult.toString();
+    }
+
+    @RequestMapping(value = "/user/reg",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+    @ResponseBody
+    public String register(@RequestParam("data") String param) {
+        logger.info("通过浏览器获取的param：" + param.length());
+        String s = ToolKit.aesDecrypt(param);
+        logger.info(s);
+
+        User user = JSON.parseObject(s, User.class);
+
+        /*logger.info(param + " " + username + " " + password + " " + captcha);*/
+        AjaxResult ajaxResult = new AjaxResult<String>();
+
+        Subject subject = SecurityUtils.getSubject();
+        Session session = subject.getSession();
+        @NotNull
+        String tempCaptcha = (String) session.getAttribute("captcha");
+        if (tempCaptcha.equals(user.getNote())) {
+            user.setNote("");
+            int code = userService.insetUser(user);
+            if (StaticEnum.REG_SUCCESS == code) {
+                ajaxResult.ok();
+                ajaxResult.setMsg("注册成功");
+            } else if (StaticEnum.REG_MAIL_ERROR == code) {
+                ajaxResult.failed();
+                ajaxResult.setMsg("邮箱已存在");
+            } else if (StaticEnum.REG_ACCOUNT_ERROR == code) {
+                ajaxResult.failed();
+                ajaxResult.setMsg("账户已存在");
+            } else {
+                ajaxResult.failed();
+                ajaxResult.setMsg("注册失败");
+            }
+        } else {
+            ajaxResult.failed();
+            ajaxResult.setMsg("验证码错误");
+        }
+
+        return ajaxResult.toString();
+    }
+}
+

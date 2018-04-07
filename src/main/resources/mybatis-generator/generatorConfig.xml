@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry
+            location="F:\mybatis-generator-core-1.3.2\lib\mysql-connector-5.1.8.jar"/>
+    <context id="my" targetRuntime="MyBatis3">
+        <!--分页插件-->
+        <plugin type="com.xxg.mybatis.plugins.MySQLLimitPlugin"></plugin>
+
+        <commentGenerator>
+            <property name="suppressDate" value="false"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/buzz?useSSL=true"
+                        userId="root" password="950815x">
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.amoxu.entity"
+                            targetProject="F:\mybatis-generator-core-1.3.2\lib">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="com.amoxu.mapper"
+                         targetProject="F:\mybatis-generator-core-1.3.2\lib">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.amoxu.mapper"
+                             targetProject="F:\mybatis-generator-core-1.3.2\lib">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table tableName="activity" domainObjectName="Activity"/>
+        <table tableName="ad_source" domainObjectName="AdSource"/>
+        <table tableName="advertise" domainObjectName="Advertise"/>
+        <table tableName="carousel" domainObjectName="carousel"/>
+        <table tableName="carousel_type" domainObjectName="CarouselType"/>
+        <table tableName="comments" domainObjectName="Comments"/>
+        <table tableName="events" domainObjectName="Events"/>
+        <table tableName="feature" domainObjectName="Feature"/>
+        <table tableName="friends" domainObjectName="Friends"/>
+        <table tableName="message" domainObjectName="Message"/>
+        <table tableName="music" domainObjectName="Music"/>
+        <table tableName="music_share" domainObjectName="MusicShare"/>
+        <table tableName="music_share_content" domainObjectName="MusicShareContent"/>
+        <table tableName="permission" domainObjectName="Permission"/>
+        <table tableName="roles" domainObjectName="Roles"/>
+        <table tableName="set_state" domainObjectName="SetState"/>
+        <table tableName="setting" domainObjectName="Setting"/>
+        <table tableName="singer" domainObjectName="Singer"/>
+        <table tableName="source" domainObjectName="Source"/>
+        <table tableName="state" domainObjectName="State"/>
+        <table tableName="topic_comment" domainObjectName="TopicComment"/>
+        <table tableName="topic_talk" domainObjectName="TopicTalk"/>
+        <table tableName="topics" domainObjectName="Topics"/>
+        <table tableName="user" domainObjectName="User"/>
+        <table tableName="user_feature" domainObjectName="UserFeature"/>
+    </context>
+</generatorConfiguration>
