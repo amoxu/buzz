@@ -35,11 +35,12 @@ public class UserServiceImplTest {
 
     @Test
     public void selectUserByName() {
-        List<User> users = userService.selectUserByName("amoxuk");
+        List<User> users = userService.selectUserLikeName("amoxuk");
         for (User user : users) {
             logger.info("user:" + user.getNickname()
-                    + "id：" + user.getUid()
-                    + "birth: " + user.getBirth()
+                    + " id：" + user.getUid()
+                    + " birth: " + user.getBirth()
+                    + " role:" + user.getRoles().getName()
             );
         }
         Assert.assertEquals(users.size(), 1);

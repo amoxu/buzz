@@ -148,7 +148,7 @@ public class ToolKit {
         return StringUtils.isEmpty(encryptStr) ? null : aesDecryptByBytes(base64Decode(encryptStr), decryptKey);
     }
 
-    public static String shaDecode(String src) {
+    public static String shaEncode(String src) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA");
             md.update(src.getBytes());
@@ -170,7 +170,7 @@ public class ToolKit {
         System.out.println("加密后：" + encrypt);*/
         String decrypt = aesDecrypt(content, KEY);
         System.out.println("解密后：" + decrypt);
-        System.out.println(shaDecode(content));
+        System.out.println(shaEncode(content));
     }
 
     /**

@@ -8,8 +8,10 @@ public interface UserService {
     int insetUser(User user);
 
     int updateUser(User user);
-    List<User> selectUserByName(String name);
 
+    List<User> selectUserLikeName(String name);
+
+    User selectUserByName(String name);
     User selectUserById(Integer id);
 
     User getLoginUser(String user, String pwd);

@@ -37,30 +37,9 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="activity" domainObjectName="Activity"/>
-        <table tableName="ad_source" domainObjectName="AdSource"/>
-        <table tableName="advertise" domainObjectName="Advertise"/>
-        <table tableName="carousel" domainObjectName="carousel"/>
-        <table tableName="carousel_type" domainObjectName="CarouselType"/>
-        <table tableName="comments" domainObjectName="Comments"/>
-        <table tableName="events" domainObjectName="Events"/>
-        <table tableName="feature" domainObjectName="Feature"/>
-        <table tableName="friends" domainObjectName="Friends"/>
-        <table tableName="message" domainObjectName="Message"/>
-        <table tableName="music" domainObjectName="Music"/>
-        <table tableName="music_share" domainObjectName="MusicShare"/>
-        <table tableName="music_share_content" domainObjectName="MusicShareContent"/>
-        <table tableName="permission" domainObjectName="Permission"/>
-        <table tableName="roles" domainObjectName="Roles"/>
-        <table tableName="set_state" domainObjectName="SetState"/>
-        <table tableName="setting" domainObjectName="Setting"/>
-        <table tableName="singer" domainObjectName="Singer"/>
-        <table tableName="source" domainObjectName="Source"/>
-        <table tableName="state" domainObjectName="State"/>
-        <table tableName="topic_comment" domainObjectName="TopicComment"/>
-        <table tableName="topic_talk" domainObjectName="TopicTalk"/>
-        <table tableName="topics" domainObjectName="Topics"/>
+
+        <table tableName="carousel" domainObjectName="Carousel"/>
         <table tableName="user" domainObjectName="User"/>
-        <table tableName="user_feature" domainObjectName="UserFeature"/>
+
     </context>
 </generatorConfiguration>

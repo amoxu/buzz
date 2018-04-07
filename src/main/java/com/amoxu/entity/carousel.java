@@ -1,6 +1,6 @@
 package com.amoxu.entity;
 
-public class carousel {
+public class Carousel {
     private Integer id;
 
     private Integer tid;

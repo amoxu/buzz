@@ -3,7 +3,7 @@ package com.amoxu.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class carouselExample {
+public class CarouselExample {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -14,7 +14,7 @@ public class carouselExample {
 
     private Integer offset;
 
-    public carouselExample() {
+    public CarouselExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

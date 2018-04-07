@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     public int insetUser(User user) {
         user.setCity("北京-西城");
         user.setSex("男");
-        user.setPassword(ToolKit.shaDecode(user.getPassword().trim()));
+        user.setPassword(ToolKit.shaEncode(ToolKit.aesDecrypt(user.getPassword())));
         user.setState(StaticEnum.STATE_ACTIVATED);
         user.setBirth(new Date());
         int code = 0;
@@ -61,13 +61,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> selectUserByName(String name) {
+    public List<User> selectUserLikeName(String name) {
         UserExample example = new UserExample();
         UserExample.Criteria criteria = example.createCriteria();
         criteria.andNicknameLike(name);
         return mapper.selectByExample(example);
     }
 
+    @Override
+    public User selectUserByName(String name) {
+        UserExample example = new UserExample();
+        UserExample.Criteria criteria = example.createCriteria();
+        criteria.andNicknameEqualTo(name);
+        List<User> users = mapper.selectByExample(example);
+        return users.size() > 0 ? users.get(0) :  null;
+    }
     @Override
     public User selectUserById(Integer id) {
         return mapper.selectByPrimaryKey(id);

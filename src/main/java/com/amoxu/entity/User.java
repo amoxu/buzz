@@ -7,6 +7,8 @@ public class User {
 
     private String nickname;
 
+    private Integer rid;
+
     private String icons;
 
     private String email;
@@ -27,7 +29,28 @@ public class User {
 
     private String note;
 
+    public State getUserState() {
+        return userState;
+    }
+
+    public User setUserState(State userState) {
+        this.userState = userState;
+        return this;
+    }
+
+    public Roles getRoles() {
+        return roles;
+    }
+
+    public User setRoles(Roles roles) {
+        this.roles = roles;
+        return this;
+    }
+
     private State userState = null;
+
+    private Roles roles = null;
+
 
     public Integer getUid() {
         return uid;
@@ -43,6 +66,14 @@ public class User {
 
     public void setNickname(String nickname) {
         this.nickname = nickname == null ? null : nickname.trim();
+    }
+
+    public Integer getRid() {
+        return rid;
+    }
+
+    public void setRid(Integer rid) {
+        this.rid = rid;
     }
 
     public String getIcons() {
@@ -123,33 +154,5 @@ public class User {
 
     public void setNote(String note) {
         this.note = note == null ? null : note.trim();
-    }
-
-    public State getUserState() {
-        return userState;
-    }
-
-    public User setUserState(State userState) {
-        this.userState = userState;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "uid=" + uid +
-                ", nickname='" + nickname + '\'' +
-                ", icons='" + icons + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", sex='" + sex + '\'' +
-                ", birth=" + birth +
-                ", city='" + city + '\'' +
-                ", state=" + state +
-                ", ctime=" + ctime +
-                ", introduce='" + introduce + '\'' +
-                ", note='" + note + '\'' +
-                ", userState=" + userState +
-                '}';
     }
 }

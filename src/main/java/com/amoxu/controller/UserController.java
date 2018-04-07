@@ -59,8 +59,15 @@ public class UserController {
         String tempCaptcha = (String) session.getAttribute("captcha");
         try {
             if (tempCaptcha.equals(captcha)) {
+                password = ToolKit.aesDecrypt(password);
+                logger.info("the password is : " + password);
+                password = ToolKit.shaEncode(password);
+                logger.info("the sha password is : " + password);
+
                 AuthenticationToken token = new UsernamePasswordToken(username, password);
                 subject.login(token);
+                ajaxResult.ok();
+                ajaxResult.setMsg("登录成功");
             } else {
                 ajaxResult.failed();
                 ajaxResult.setMsg("验证码错误");
@@ -74,6 +81,7 @@ public class UserController {
             ajaxResult.failed();
             ajaxResult.setMsg("请尝试重新登录");
         }
+
         return ajaxResult.toString();
     }
 
@@ -83,7 +91,7 @@ public class UserController {
     @ResponseBody
     public String register(@RequestParam("data") String param) {
         logger.info("通过浏览器获取的param：" + param.length());
-        String s = ToolKit.aesDecrypt(param);
+        String s = ToolKit.aesDecrypt(param);//
         logger.info(s);
 
         User user = JSON.parseObject(s, User.class);
