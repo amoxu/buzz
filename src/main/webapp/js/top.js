@@ -26,7 +26,7 @@ $(".top-btn").on("click", function () {
 
     var Login = layui.sessionData('unLogin');
 
-    if (true != Login.statue) {
+    if (null == Login || !Login.statue) {
         /*
         <a href="javascript:;">我的</a>
                 <dl class="layui-nav-child">
@@ -58,8 +58,9 @@ $(".top-btn").on("click", function () {
             "                </dl>";
         $(".layui-layout-right").html(login);
         $(".logout").on('click', function () {
-            layui.sessionData('unLogin', {key: 'statue', value: true});
+            layui.sessionData('unLogin', {key: 'statue', value: false});
             window.location.href = "./logout";
+            layer.alert("退出成功");
         });
     }
 

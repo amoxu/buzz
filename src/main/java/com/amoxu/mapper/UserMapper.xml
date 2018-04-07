@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.amoxu.entity.User" >
     <id column="uid" property="uid" jdbcType="INTEGER" />
     <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="rid" property="rid" jdbcType="INTEGER" />
     <result column="icons" property="icons" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
@@ -15,6 +16,7 @@
     <result column="introduce" property="introduce" jdbcType="VARCHAR" />
     <result column="note" property="note" jdbcType="VARCHAR" />
     <association property="userState" column="state" select="com.amoxu.mapper.StateMapper.selectByPrimaryKey"/>
+    <association property="roles" column="rid" select="com.amoxu.mapper.RolesMapper.selectByPrimaryKey"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -75,7 +77,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    uid, nickname, icons, email, password, sex, birth, city, state, ctime, introduce, 
+    uid, nickname, rid, icons, email, password, sex, birth, city, state, ctime, introduce, 
     note
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.UserExample" >
@@ -117,14 +119,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.amoxu.entity.User" >
-    insert into user (uid, nickname, icons, 
-      email, password, sex, 
-      birth, city, state, ctime,
-      introduce, note)
-    values (#{uid,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{icons,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, 
-      #{birth,jdbcType=DATE}, #{city,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, 
-      #{introduce,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR})
+    insert into user (uid, nickname, rid, 
+      icons, email, password, 
+      sex, birth, city, state, 
+      ctime, introduce, note
+      )
+    values (#{uid,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{rid,jdbcType=INTEGER}, 
+      #{icons,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=CHAR}, #{birth,jdbcType=DATE}, #{city,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
+      #{ctime,jdbcType=TIMESTAMP}, #{introduce,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.amoxu.entity.User" >
     insert into user
@@ -134,6 +138,9 @@
       </if>
       <if test="nickname != null" >
         nickname,
+      </if>
+      <if test="rid != null" >
+        rid,
       </if>
       <if test="icons != null" >
         icons,
@@ -172,6 +179,9 @@
       </if>
       <if test="nickname != null" >
         #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="rid != null" >
+        #{rid,jdbcType=INTEGER},
       </if>
       <if test="icons != null" >
         #{icons,jdbcType=VARCHAR},
@@ -220,6 +230,9 @@
       <if test="record.nickname != null" >
         nickname = #{record.nickname,jdbcType=VARCHAR},
       </if>
+      <if test="record.rid != null" >
+        rid = #{record.rid,jdbcType=INTEGER},
+      </if>
       <if test="record.icons != null" >
         icons = #{record.icons,jdbcType=VARCHAR},
       </if>
@@ -259,6 +272,7 @@
     update user
     set uid = #{record.uid,jdbcType=INTEGER},
       nickname = #{record.nickname,jdbcType=VARCHAR},
+      rid = #{record.rid,jdbcType=INTEGER},
       icons = #{record.icons,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
@@ -278,6 +292,9 @@
     <set >
       <if test="nickname != null" >
         nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="rid != null" >
+        rid = #{rid,jdbcType=INTEGER},
       </if>
       <if test="icons != null" >
         icons = #{icons,jdbcType=VARCHAR},
@@ -315,6 +332,7 @@
   <update id="updateByPrimaryKey" parameterType="com.amoxu.entity.User" >
     update user
     set nickname = #{nickname,jdbcType=VARCHAR},
+      rid = #{rid,jdbcType=INTEGER},
       icons = #{icons,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},

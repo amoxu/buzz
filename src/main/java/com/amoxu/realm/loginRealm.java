@@ -3,7 +3,6 @@ package com.amoxu.realm;
 
 import com.amoxu.entity.User;
 import com.amoxu.service.UserService;
-import com.amoxu.util.ToolKit;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;

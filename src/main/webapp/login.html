@@ -138,17 +138,20 @@
                 if (1 === res["status"]) {
                     layer.msg(res['msg']);
                     setTimeout("$(\"#captcha\").click()", 2000);
+
                     return false;
                 } else {
                     layer.msg("登录成功！");
-                    layui.sessionData('unLogin', {key: 'statue', value: false});
-                    self.location = window.history.forward();
+                    layui.sessionData('unLogin', {key: 'statue', value: true});
+                    self.location = window.history.back();
+                    window.refresh();
                 }
                 /*self.location = res["msg"];*/
 
             }
             , error: function (res) {
                 layer.msg('错误码：' + res.status);
+
                 setTimeout(" $(\"#reset\").click();", 2000)
             }
         });

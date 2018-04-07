@@ -1,30 +1,30 @@
 package com.amoxu.mapper;
 
-import com.amoxu.entity.carousel;
-import com.amoxu.entity.carouselExample;
+import com.amoxu.entity.Carousel;
+import com.amoxu.entity.CarouselExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-public interface carouselMapper {
-    int countByExample(carouselExample example);
+public interface CarouselMapper {
+    int countByExample(CarouselExample example);
 
-    int deleteByExample(carouselExample example);
+    int deleteByExample(CarouselExample example);
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(carousel record);
+    int insert(Carousel record);
 
-    int insertSelective(carousel record);
+    int insertSelective(Carousel record);
 
-    List<carousel> selectByExample(carouselExample example);
+    List<Carousel> selectByExample(CarouselExample example);
 
-    carousel selectByPrimaryKey(Integer id);
+    Carousel selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") carousel record, @Param("example") carouselExample example);
+    int updateByExampleSelective(@Param("record") Carousel record, @Param("example") CarouselExample example);
 
-    int updateByExample(@Param("record") carousel record, @Param("example") carouselExample example);
+    int updateByExample(@Param("record") Carousel record, @Param("example") CarouselExample example);
 
-    int updateByPrimaryKeySelective(carousel record);
+    int updateByPrimaryKeySelective(Carousel record);
 
-    int updateByPrimaryKey(carousel record);
+    int updateByPrimaryKey(Carousel record);
 }
