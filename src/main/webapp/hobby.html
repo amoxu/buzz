@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+
+</head>
+<body>
+<div class="layui-row">
+    <div class="layui-col-md4 layui-col-md-offset3">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+
+            </div>
+
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+
+        </form>
+    </div>
+
+
+</div>
+
+<script src="./layui/layui.js"></script>
+<script src="./js/jquery.min.js"></script>
+
+<script>
+
+    layui.use(['form', 'jquery'], function () {
+        //监听提交
+
+        $.get("./feature", function (result) {
+            var s = "";
+            var arr = result['data'];
+            for (var i = 0; i < arr.length; i++) {
+                s += '<div class="layui-row"><input type="checkbox" name="' + arr[i]['fid'] + '" title="' + arr[i]['name'] + '"></div>';
+            }
+            $(".layui-form-item").html(s);
+            form.render();
+        });
+
+        var form = layui.form;
+        form.on('submit(demo1)', function (data) {
+            layer.msg(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            });
+            $.ajax({
+                url:"./user/reg/feature"
+                ,data:{"data":JSON.stringify(data.field)}
+                ,type:'post'
+                ,contentType: 'application/x-www-form-urlencoded;charset=UTF-8'
+                ,success:function (res) {
+                    if (1 === res["status"]) {
+                        layer.msg(res['msg']);
+                        return false;
+                    } else {
+                        layer.msg(res["msg"]);
+                        //当你在iframe页面关闭自身时
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        setTimeout(function () {
+                            parent.layer.close(index); //再执行关闭
+                        }, 2000);
+                        return false;
+                    }
+                }
+                ,error:function (res) {
+                    layer.msg('错误码：' + res.status);
+                    return false;
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
