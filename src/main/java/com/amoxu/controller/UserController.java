@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.amoxu.entity.AjaxResult;
 import com.amoxu.entity.User;
+import com.amoxu.service.UserFeatureService;
 import com.amoxu.service.UserService;
 import com.amoxu.util.StaticEnum;
 import com.amoxu.util.ToolKit;
 import com.sun.istack.internal.NotNull;
+import org.apache.ibatis.annotations.Param;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -23,11 +25,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Controller
 public class UserController {
     @Resource(name = "userServiceImpl")
     private UserService userService;
+    @Resource(name = "userFeatureServiceImpl")
+    private UserFeatureService userFeatureService;
+
+
 
     private Logger logger = Logger.getLogger(getClass());
 
@@ -105,10 +114,13 @@ public class UserController {
         String tempCaptcha = (String) session.getAttribute("captcha");
         if (tempCaptcha.equals(user.getNote())) {
             user.setNote("");
+            user.setPassword(ToolKit.shaEncode(ToolKit.aesDecrypt(user.getPassword())));
             int code = userService.insetUser(user);
             if (StaticEnum.REG_SUCCESS == code) {
                 ajaxResult.ok();
                 ajaxResult.setMsg("注册成功");
+                AuthenticationToken token = new UsernamePasswordToken(user.getNickname(), user.getPassword());
+                subject.login(token);
             } else if (StaticEnum.REG_MAIL_ERROR == code) {
                 ajaxResult.failed();
                 ajaxResult.setMsg("邮箱已存在");
@@ -125,6 +137,37 @@ public class UserController {
         }
 
         return ajaxResult.toString();
+    }
+
+    /*
+    * 注册初始化用户兴趣
+    *
+    * @data 收用户选择的爱好id列表
+    *   对id进行封装为List交于service处理
+    * @return 操作结果
+    *
+    *
+    * */
+    @RequestMapping(value = "/user/reg/feature"
+            , method = RequestMethod.POST
+            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+    )
+    @ResponseBody
+    public String setUserFeature(@Param("data") String data) {
+        logger.info(data);
+        AjaxResult<String> result = new AjaxResult<>();
+        JSONObject js = JSON.parseObject(data);
+        Iterator<String> iterator = js.keySet().iterator();
+        List<Integer> fids = new ArrayList<>();
+        while (iterator.hasNext()) {
+            fids.add(Integer.valueOf(iterator.next()));
+        }
+        if (fids.size() == 0 || userFeatureService.createUserFeature(fids) > 0) {
+            result.ok();
+        } else {
+            result.failed();
+        }
+        return result.toString();
     }
 }
 

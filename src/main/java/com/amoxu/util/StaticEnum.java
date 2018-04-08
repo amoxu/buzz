@@ -1,6 +1,8 @@
 package com.amoxu.util;
 
 public final class StaticEnum {
+    public final static String OPT_SUCCESS = "操作成功";
+    public final static String OPT_ERROR = "操作失败";
     /*用户状态
     * 1	已激活
     * 2	未激活

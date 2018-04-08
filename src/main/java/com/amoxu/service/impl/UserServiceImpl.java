@@ -5,7 +5,6 @@ import com.amoxu.entity.UserExample;
 import com.amoxu.mapper.UserMapper;
 import com.amoxu.service.UserService;
 import com.amoxu.util.StaticEnum;
-import com.amoxu.util.ToolKit;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -26,7 +25,7 @@ public class UserServiceImpl implements UserService {
     public int insetUser(User user) {
         user.setCity("北京-西城");
         user.setSex("男");
-        user.setPassword(ToolKit.shaEncode(ToolKit.aesDecrypt(user.getPassword())));
+
         user.setState(StaticEnum.STATE_ACTIVATED);
         user.setBirth(new Date());
         int code = 0;

@@ -2,8 +2,9 @@ package com.amoxu.mapper;
 
 import com.amoxu.entity.UserFeature;
 import com.amoxu.entity.UserFeatureExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface UserFeatureMapper {
     int countByExample(UserFeatureExample example);
@@ -27,4 +28,6 @@ public interface UserFeatureMapper {
     int updateByPrimaryKeySelective(UserFeature record);
 
     int updateByPrimaryKey(UserFeature record);
+
+    int insertBatch(List<UserFeature> list);
 }

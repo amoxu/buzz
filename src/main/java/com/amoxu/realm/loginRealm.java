@@ -32,9 +32,8 @@ public class loginRealm extends AuthorizingRealm {
      */
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 
-        String nickname = (String) getAvailablePrincipal(principalCollection);
+        User user = (User) getAvailablePrincipal(principalCollection);
 
-        User user = userService.selectUserByName(nickname);
         //通过用户名从数据库获取权限/角色信息
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Set<String> r = new HashSet<String>();
@@ -67,7 +66,7 @@ public class loginRealm extends AuthorizingRealm {
             //密码错误
             throw new IncorrectCredentialsException();
         }
-        AuthenticationInfo aInfo = new SimpleAuthenticationInfo(username, password, getName());
+        AuthenticationInfo aInfo = new SimpleAuthenticationInfo(userlogin, password, getName());
         //身份验证通过,返回一个身份信息
 
         return aInfo;

@@ -10,6 +10,7 @@
         <!--级联延迟加载-->
         <setting name="lazyLoadingEnabled" value="true"/>
         <setting name="aggressiveLazyLoading" value="false"/>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
     </settings>
 
     <!-- 为JAVA PO类起类别名 -->

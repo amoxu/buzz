@@ -62,4 +62,16 @@ public class UserFeature {
     public void setAtime(Date atime) {
         this.atime = atime;
     }
+
+    @Override
+    public String toString() {
+        return "UserFeature{" +
+                "id=" + id +
+                ", uid=" + uid +
+                ", fid=" + fid +
+                ", counts=" + counts +
+                ", ctime=" + ctime +
+                ", atime=" + atime +
+                '}';
+    }
 }

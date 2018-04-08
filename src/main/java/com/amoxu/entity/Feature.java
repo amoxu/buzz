@@ -42,4 +42,14 @@ public class Feature {
     public void setHeat(Double heat) {
         this.heat = heat;
     }
+
+    @Override
+    public String toString() {
+        return "Feature{" +
+                "fid=" + fid +
+                ", name='" + name + '\'' +
+                ", ctime=" + ctime +
+                ", heat=" + heat +
+                '}';
+    }
 }

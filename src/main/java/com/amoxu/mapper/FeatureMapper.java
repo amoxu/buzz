@@ -2,8 +2,9 @@ package com.amoxu.mapper;
 
 import com.amoxu.entity.Feature;
 import com.amoxu.entity.FeatureExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface FeatureMapper {
     int countByExample(FeatureExample example);
@@ -27,4 +28,6 @@ public interface FeatureMapper {
     int updateByPrimaryKeySelective(Feature record);
 
     int updateByPrimaryKey(Feature record);
+
+    List<Feature> selectByRandom(@Param("limit") Integer limit);
 }

@@ -150,15 +150,31 @@
                     setTimeout("$(\"#captcha\").click()", 2000);
                     return false;
                 } else {
-                    layer.msg("登录成功！");
-                    layui.sessionData('unLogin', {key: 'statue', value: false});
+                    layer.msg("注册成功！");
+                    layui.sessionData('unLogin', {key: 'statue', value: true});
+                    layer.open({
+                        type: 2,
+                        title: '选择爱好',
+                        shadeClose: true,
+                        area: ['500px', '300px'],
+                        shade: 0.8,
+                        content: './hobby.html'
+                        , end: function () {
+                            layer.msg("跳转中...")
+                            setTimeout(function () {
+                                window.history.back();
+                                window.refresh();
+                            },1000);
+                        }
+                    });
+
                 }
-                /*self.location = res["msg"];*/
 
             }
             , error: function (res) {
                 layer.msg('错误码：' + res.status);
                 setTimeout(" $(\"#reset\").click();", 2000)
+
             }
         });
         return false;

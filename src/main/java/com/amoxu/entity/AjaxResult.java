@@ -1,6 +1,7 @@
 package com.amoxu.entity;
 
 import com.alibaba.fastjson.JSON;
+import com.amoxu.util.StaticEnum;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,11 +16,12 @@ public class AjaxResult<T> {
 
     public void ok() {
         this.status = 0;
-        setMsg("操作成功。");
+        setMsg(StaticEnum.OPT_SUCCESS);
     }
 
     public void failed() {
         this.status = 1;
+        setMsg(StaticEnum.OPT_ERROR);
     }
 
     public int getStatus() {
