@@ -3,7 +3,9 @@ package com.amoxu.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.amoxu.entity.AjaxResult;
+import com.amoxu.entity.Permission;
 import com.amoxu.entity.User;
+import com.amoxu.service.PermissionService;
 import com.amoxu.service.UserFeatureService;
 import com.amoxu.service.UserService;
 import com.amoxu.util.StaticEnum;
@@ -32,6 +34,8 @@ public class UserController {
     private UserService userService;
     @Resource(name = "userFeatureServiceImpl")
     private UserFeatureService userFeatureService;
+    @Resource(name = "permissionServiceImpl")
+    private PermissionService permissionService;
 
 
     private Logger logger = Logger.getLogger(getClass());
@@ -178,5 +182,32 @@ public class UserController {
         result.setData(info);
         return result.toString();
     }
+
+    @RequestMapping(value = "/user/info"
+            , method = RequestMethod.POST
+            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+    )
+    @ResponseBody
+    public String setUserInfo(User user) {
+        AjaxResult<User> result = new AjaxResult<>();
+        int code = userService.updateUser(user);
+        result.ok();
+        return result.toString();
+    }
+
+    @RequestMapping(value = "/user/permission"
+            , method = RequestMethod.GET
+            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+    )
+    @ResponseBody
+    public String getUserPermission() {
+        AjaxResult<Permission> result = new AjaxResult<>();
+
+        result.setData(permissionService.getUserPermission());
+        result.ok();
+        return result.toString();
+    }
+
+
 }
 

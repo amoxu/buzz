@@ -1,3 +1,4 @@
+
 window.onscroll = function () {
     scrollFunction()
 };
@@ -41,25 +42,25 @@ $(".top-btn").on("click", function () {
         */
         var unLogin =
             "            <li class=\"layui-nav-item \" style=\"float: right\">\n" +
-            "                <a href=\"./register.html\">注册</a>\n" +
+            "                <a href=\"../register.html\">注册</a>\n" +
             "<li class=\"layui-nav-item \" style=\"float: right\">\n" +
-            "                <a href=\"./login.html\">登录</a>\n" +
+            "                <a href=\"../login.html\">登录</a>\n" +
             "            </li>\n" +
             "            </li>";
         $(".layui-layout-right").replaceWith(unLogin);
     } else {
         var login = "<a href=\"javascript:;\">我的</a>\n" +
             "                <dl class=\"layui-nav-child\">\n" +
-            "                    <dd><a href=\"./my/my.html\">个人中心</a></dd>\n" +
-            "                    <dd><a href=\"./my/message.html\">留言消息</a></dd>\n" +
-            "                    <dd><a href=\"./my/setting.html#password\">修改密码</a></dd>\n" +
-            "                    <dd><a href=\"./my/friends.html\">我的关注</a></dd>\n" +
+            "                    <dd><a href=\"../my/my.html\">个人中心</a></dd>\n" +
+            "                    <dd><a href=\"../my/message.html\">留言消息</a></dd>\n" +
+            "                    <dd><a href=\"../my/setting.html#password\">修改密码</a></dd>\n" +
+            "                    <dd><a href=\"../my/friends.html\">我的关注</a></dd>\n" +
             "                    <dd><a href=\"javascript:void(0);\" class='logout'>退出</a></dd>\n" +
             "                </dl>";
         $(".layui-layout-right").html(login);
         $(".logout").on('click', function () {
             layui.sessionData('unLogin', {key: 'statue', value: false});
-            window.location.href = "./logout";
+            window.location.href = "../logout";
             layer.alert("退出成功");
         });
     }

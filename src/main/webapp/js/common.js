@@ -1,11 +1,29 @@
+var setting = {
+    show: function showInfo(res) {
+        $('.head').attr("src", !res['data'].icon ? this.innerHTML : res['data'].icon);
+        $('.tit').html(res['data'].nickname);//nickname
+        $('.data i').html(res['data'].sex === '男' ? '&#xe662;' : '&#xe661;');//sex
+        $('.data ').find('li')[1].innerHTML = Math.floor((Date.now() - res['data'].birth) / 1000 / 60 / 60 / 365 / 24) + '岁';//old
+        $('.data ').find('li')[2].innerHTML = res['data'].city;//city
+        $('.inf ')[1].innerHTML = !res['data']['indroduce'] ? '无。' : res['data']['indroduce'];//city
+        $('.inf ')[3].innerHTML = res['data'].email;//city
+    }
+    ,error:function (res) {
+        layer.msg('错误码：' + res.status);
+    }
+    ,permission:function (res) {
+
+    }
+};
+
 (function () {
     $(".reply").on('click', function () {
-        if ($(this).parent().next().html().length>0) {
+        if ($(this).parent().next().html().length > 0) {
             $(".commentAll").html("");
             $(this).parent().next().html("");
             $('.content').flexText();
 
-        }else {
+        } else {
             $(".commentAll").html("");
             $(this).parent().next().html(
                 "                            <!--评论区域 begin-->\n" +
@@ -225,7 +243,7 @@ function addList(obj, now, oSize, nick) {
         $('.comment-show').siblings('.flex-text-wrap').find('.comment-input').prop('value', '').siblings('pre').find('span').text('');
     }
 }
-
+/*刷新页面时根据hash确定显示页面*/
 (function () {
     var hash = window.location.hash;
     if (hash.includes("#")) {
@@ -233,6 +251,7 @@ function addList(obj, now, oSize, nick) {
         $(hash).show();
     }
 })();
+/*根据点击内容隐藏和显示对应div*/
 (function () {
     $(".setting a").on("click", function () {
         /*var hash = window.location.hash;*/
@@ -240,6 +259,7 @@ function addList(obj, now, oSize, nick) {
         $(this.hash).show();
     });
 })();
+/*根据hash改变修改显示和隐藏对应div*/
 (function () {
     window.onhashchange = function () {
         if (window.location.hash.includes("#")) {
@@ -249,7 +269,23 @@ function addList(obj, now, oSize, nick) {
     };
 })();
 
-
+/**
+ * 日期格式化（原型扩展或重载）
+ * 格式 YYYY/yyyy/ 表示年份
+ * MM/M 月份
+ * dd/DD/d/D 日期
+ * @param {formatStr} 格式模版
+ * @type string
+ * @returns 日期字符串
+ */
+Date.prototype.format = function (formatStr) {
+    var str = formatStr;
+    var Week = ['日', '一', '二', '三', '四', '五', '六'];
+    str = str.replace(/yyyy|YYYY/, this.getFullYear());
+    str = str.replace(/mm|MM/, (this.getMonth() + 1) > 9 ? (this.getMonth() + 1).toString() : '0' + (this.getMonth() + 1));
+    str = str.replace(/dd|DD/, this.getDate() > 9 ? this.getDate().toString() : '0' + this.getDate());
+    return str;
+}
 
 
 

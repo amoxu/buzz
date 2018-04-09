@@ -144,7 +144,7 @@
                     layer.msg("登录成功！");
                     layui.sessionData('unLogin', {key: 'statue', value: true});
                     self.location = window.history.back();
-                    window.refresh();
+                    window.location.refresh();
                 }
                 /*self.location = res["msg"];*/
 

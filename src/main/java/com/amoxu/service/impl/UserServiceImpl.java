@@ -27,7 +27,6 @@ public class UserServiceImpl implements UserService {
     public int insetUser(User user) {
         user.setCity("北京-西城");
         user.setSex("男");
-
         user.setState(StaticEnum.STATE_ACTIVATED);
         user.setBirth(new Date());
         user.setRid(1);
@@ -100,6 +99,7 @@ public class UserServiceImpl implements UserService {
         if (uid == StaticEnum.SELF_ID) {
             Subject subject = SecurityUtils.getSubject();
             user = (User) subject.getPrincipal();
+            logger.info(user);
         } else {
             user = mapper.selectByPrimaryKey(uid);
         }

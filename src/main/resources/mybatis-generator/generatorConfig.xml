@@ -38,8 +38,7 @@
         </javaClientGenerator>
 
 
-        <table tableName="carousel" domainObjectName="Carousel"/>
-        <table tableName="user" domainObjectName="User"/>
+        <table tableName="permission" domainObjectName="Permission"/>
 
     </context>
 </generatorConfiguration>
