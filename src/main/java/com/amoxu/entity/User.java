@@ -3,6 +3,27 @@ package com.amoxu.entity;
 import java.util.Date;
 
 public class User {
+    @Override
+    public String toString() {
+        return "User{" +
+                "uid=" + uid +
+                ", nickname='" + nickname + '\'' +
+                ", rid=" + rid +
+                ", icons='" + icons + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", sex='" + sex + '\'' +
+                ", birth=" + birth +
+                ", city='" + city + '\'' +
+                ", state=" + state +
+                ", ctime=" + ctime +
+                ", introduce='" + introduce + '\'' +
+                ", note='" + note + '\'' +
+                ", userState=" + userState +
+                ", roles=" + roles +
+                '}';
+    }
+
     private Integer uid;
 
     private String nickname;

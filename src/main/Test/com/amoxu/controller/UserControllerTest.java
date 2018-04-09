@@ -17,10 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-dao.xml",
         "classpath:spring/applicationContext-service.xml",
         "classpath:spring/applicationContext-trsaction.xml",
-        "classpath:spring/applicationContext-shiro.xml",
         "classpath:spring/springmvc.xml"})
 public class UserControllerTest {
-    private Logger logger = Logger.getLogger(UserControllerTest.class);
+    private Logger logger = Logger.getLogger(getClass());
     private MockMvc mockMvc;
     @Autowired
     private UserController controller;
@@ -49,5 +48,17 @@ public class UserControllerTest {
 
         logger.info(s);
 
+    }
+
+    @Test
+    public void getUserInfo() throws Exception {
+        String s = mockMvc.perform(
+                MockMvcRequestBuilders.
+                        get("/user/info/1")
+        )
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        logger.info(s);
     }
 }

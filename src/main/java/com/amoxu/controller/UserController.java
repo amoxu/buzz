@@ -19,10 +19,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -35,7 +32,6 @@ public class UserController {
     private UserService userService;
     @Resource(name = "userFeatureServiceImpl")
     private UserFeatureService userFeatureService;
-
 
 
     private Logger logger = Logger.getLogger(getClass());
@@ -140,14 +136,14 @@ public class UserController {
     }
 
     /*
-    * 注册初始化用户兴趣
-    *
-    * @data 收用户选择的爱好id列表
-    *   对id进行封装为List交于service处理
-    * @return 操作结果
-    *
-    *
-    * */
+     * 注册初始化用户兴趣
+     *
+     * @data 收用户选择的爱好id列表
+     *   对id进行封装为List交于service处理
+     * @return 操作结果
+     *
+     *
+     * */
     @RequestMapping(value = "/user/reg/feature"
             , method = RequestMethod.POST
             , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
@@ -167,6 +163,19 @@ public class UserController {
         } else {
             result.failed();
         }
+        return result.toString();
+    }
+
+    @RequestMapping(value = "/user/info/{id}"
+            , method = RequestMethod.GET
+            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+    )
+    @ResponseBody
+    public String getUserInfo(@PathVariable("id") Integer id) {
+        AjaxResult<User> result = new AjaxResult<>();
+        User info = userService.getUserInfo(id);
+        result.ok();
+        result.setData(info);
         return result.toString();
     }
 }

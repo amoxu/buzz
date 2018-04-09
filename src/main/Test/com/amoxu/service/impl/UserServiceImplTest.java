@@ -1,5 +1,6 @@
 package com.amoxu.service.impl;
 
+import com.amoxu.entity.AjaxResult;
 import com.amoxu.entity.User;
 import com.amoxu.service.UserService;
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -64,4 +66,16 @@ public class UserServiceImplTest {
         logger.info(u);
     }
 
+    @Test
+    public void getUserInfo() {
+        User userInfo = userService.getUserInfo(1);
+        int uid = userInfo.getUid();
+        AjaxResult<List<User>> result = new AjaxResult<>();
+        List<User> lu = new ArrayList<>();
+        lu.add(userInfo);
+        result.setData(lu);
+
+        logger.info(result);
+        Assert.assertEquals(uid, 1);
+    }
 }

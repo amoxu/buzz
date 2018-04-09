@@ -15,4 +15,6 @@ public interface UserService {
     User selectUserById(Integer id);
 
     User getLoginUser(String user, String pwd);
+
+    User getUserInfo(Integer uid);
 }

@@ -6,6 +6,8 @@ import com.amoxu.mapper.UserMapper;
 import com.amoxu.service.UserService;
 import com.amoxu.util.StaticEnum;
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,8 @@ public class UserServiceImpl implements UserService {
 
         user.setState(StaticEnum.STATE_ACTIVATED);
         user.setBirth(new Date());
+        user.setRid(1);
+
         int code = 0;
         try {
             code = mapper.insert(user);
@@ -88,5 +92,24 @@ public class UserServiceImpl implements UserService {
         criteria.andPasswordEqualTo(pwd);
         List<User> users = mapper.selectByExample(example);
         return users.size() > 0 ? users.get(0) : null;
+    }
+
+    @Override
+    public User getUserInfo(Integer uid) {
+        User user;
+        if (uid == StaticEnum.SELF_ID) {
+            Subject subject = SecurityUtils.getSubject();
+            user = (User) subject.getPrincipal();
+        } else {
+            user = mapper.selectByPrimaryKey(uid);
+        }
+        user.setPassword(null);
+        user.setUserState(null);
+        user.setCtime(null);
+        user.setNote(null);
+        user.setRoles(null);
+        user.setRid(null);
+        user.setState(null);
+        return user;
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public class AjaxResult<T> {
     private int status;
-    private List<T> data;
+    private T data;
     private String msg = "";
     private int count = -1;
 
@@ -29,16 +29,19 @@ public class AjaxResult<T> {
     }
 
 
-    public List getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(List data) {
+    public void setData(T data) {
         this.data = data;
         if (this.count == -1) {
-            this.count = data.size();
+            if (data instanceof java.util.List)
+                this.count = ((List) data).size();
+            this.count = 1;
         }
     }
+
 
     public String getMsg() {
         return msg;

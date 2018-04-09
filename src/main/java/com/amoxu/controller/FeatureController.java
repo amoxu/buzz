@@ -22,7 +22,7 @@ public class FeatureController {
     @ResponseBody
     public String regFeature() {
 
-        AjaxResult<Feature> ajaxResult = new AjaxResult<>();
+        AjaxResult<List<Feature>> ajaxResult = new AjaxResult<>();
 
         List<Feature> regFeatures = featureService.getRegFeatures();
         ajaxResult.setData(regFeatures);

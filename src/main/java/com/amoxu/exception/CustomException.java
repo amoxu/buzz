@@ -1,5 +1,7 @@
 package com.amoxu.exception;
 
+import com.amoxu.entity.AjaxResult;
+
 /**
  * 系统自定义异常类，针对预期异常，需要在程序中抛出此类的异常
  */
@@ -10,7 +12,9 @@ public class CustomException extends Exception {
 
     public CustomException(String message) {
         super(message);
-        this.message = "{\"status\":1,\"msg\":\"" + message + "\"}";
+        AjaxResult<String> ajaxResult = new AjaxResult<>();
+        ajaxResult.setMsg(message);
+        this.message = ajaxResult.toString();
     }
 
     public String getMessage() {
@@ -21,3 +25,4 @@ public class CustomException extends Exception {
         this.message = message;
     }
 }
+
