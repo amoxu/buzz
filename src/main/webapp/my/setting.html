@@ -178,9 +178,9 @@
                                     <label class="layui-input-inline  layui-form-label-col">谁可以查看我的动态</label>
                                     <div class="layui-input-inline">
                                         <select name="events">
-                                            <option value="所有人">所有人</option>
-                                            <option value="我关注的人">我关注的人</option>
-                                            <option value="仅自己">仅自己</option>
+                                            <option value="0">所有人</option>
+                                            <option value="1">我关注的人</option>
+                                            <option value="2">仅自己</option>
                                         </select>
                                     </div>
                                 </div>
@@ -189,10 +189,10 @@
                                 <div class="layui-inline">
                                     <label class="layui-input-inline  layui-form-label-col">谁可以查看我关注的人</label>
                                     <div class="layui-input-inline">
-                                        <select name="friends">
-                                            <option value="所有人">所有人</option>
-                                            <option value="我关注的人">我关注的人</option>
-                                            <option value="仅自己">仅自己</option>
+                                        <select name="friend">
+                                            <option value="0">所有人</option>
+                                            <option value="1">我关注的人</option>
+                                            <option value="2">仅自己</option>
                                         </select>
                                     </div>
                                 </div>
@@ -202,10 +202,9 @@
                                     <label class="layui-input-inline  layui-form-label-col">谁可以给我留言</label>
                                     <div class="layui-input-inline">
                                         <select name="message">
-
-                                            <option value="所有人">所有人</option>
-                                            <option value="我关注的人">我关注的人</option>
-                                            <option value="仅自己">仅自己</option>
+                                            <option value="0">所有人</option>
+                                            <option value="1">我关注的人</option>
+                                            <option value="2">仅自己</option>
                                         </select>
                                     </div>
                                 </div>
@@ -214,7 +213,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-input-inline  layui-form-label-col">出现在附近</label>
                                     <div class="layui-input-inline float_right">
-                                        <input type="checkbox" checked="" name="nearby" lay-skin="switch"
+                                        <input type="checkbox" checked=""  name="nearby" lay-skin="switch"
                                                lay-filter="switchTest" lay-text="ON|OFF">
                                     </div>
                                 </div>
@@ -232,7 +231,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-input-inline  layui-form-label-col">原密码</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="city" lay-verify="" autocomplete="off"
+                                        <input type="password" name="oldPassword" lay-verify="required|pass" autocomplete="off"
                                                class="layui-input">
                                     </div>
                                 </div>
@@ -241,7 +240,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-input-inline  layui-form-label-col">新密码</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="city" lay-verify="" autocomplete="off"
+                                        <input type="password" name="newPassword" lay-verify="required|pass" autocomplete="off"
                                                class="layui-input">
                                     </div>
                                 </div>
@@ -250,7 +249,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-input-inline  layui-form-label-col">确认密码</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="city" lay-verify="" autocomplete="off"
+                                        <input type="password" name="rePassword" lay-verify="required|pass" autocomplete="off"
                                                class="layui-input">
                                     </div>
                                 </div>
@@ -308,12 +307,118 @@
 </div>
 
 <script type="text/javascript" src="../js/jquery-1.12.0.min.js"></script>
-<script src="../js/common.js"></script>
 <script src="../layui/layui.js"></script>
 <script src="../js/top.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/aes.js"></script>
+
 <script>
     //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use(['form', 'layedit', 'laydate', 'layer'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
 
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        form.verify({
+            pass: [
+                /^[\S]{6,12}$/
+                ,'密码必须6到12位，且不能出现空格'
+            ]
+        });
+        form.on('submit(info)', function (data) {
+            console.log(data.field);
+            $.ajax({
+                async: true
+                , type: 'post'
+                , url: '/user/info'
+                , data: data.field
+                , success: function (res) {
+                    layer.msg(res.msg);
+                }
+                , error: function (res) {
+                    setting.error(res);
+                }
+            });
+            return false;
+        });
+        form.on('submit(permission)', function (data) {
+            console.log(data.field);
+            if (!data.field.nearby) {
+                data.field.nearby = 0;
+            }else
+                data.field.nearby = 1;
+
+            $.ajax({
+                async: true
+                , type: 'post'
+                , url: '/user/permission'
+                , data: data.field
+                , success: function (res) {
+                    if (res.status === 0) {
+                        layui.sessionData("user", {key: 'permission',value:data.field});
+                    }
+                    layer.msg(res.msg);
+                }
+                , error: function (res) {
+                    setting.error(res);
+                }
+            });
+            return false;
+        });
+        form.on('submit(password)', function (data) {
+            if (data.field.rePassword != data.field.newPassword) {
+                layer.tips('两次密码不相同', 'input[name=rePassword]');
+                return false;
+            }
+            $.ajax({
+                async:false
+                ,type:'post'
+                ,url:'/user/password'
+                ,data:{'data':aes.encrypt(JSON.stringify({
+                            'oldPassword':aes.encrypt(data.field.oldPassword),
+                            'newPassword':aes.encrypt(data.field.newPassword)
+                        }))}
+                ,success:function (res) {
+                    layer.msg(res['msg']);
+
+                }
+                ,error:function (res) {
+                    setting.error(res);
+                }
+                ,complete:function () {
+                    /*清空输入框*/
+                    $('#password').find('input').val("");
+                    return false;
+                }
+            });
+            return false;
+        });
+        form.on('submit(mail)', function (data) {
+            $.ajax({
+                url:'/user/mail'
+                ,type:'post'
+                ,async:false
+                ,data:{'data':data.field.mail}
+                ,success:function (res) {
+                    if (res.status === 0) {
+                        layer.alert("激活成功，请前往邮箱查看邮件并激活。");
+                    }else {
+                        layer.alert(res.msg);
+                    }
+                }
+                ,error:function (res) {
+                    setting.error(res);
+                }
+            });
+            return false;
+        });
+
+    });
     layui.use(['element', 'jquery'], function () {
         var element = layui.element;
         var $ = layui.jquery;
@@ -321,7 +426,7 @@
         if ($.isEmptyObject(userInfo)) {
             /*0表示自身ID*/
             $.ajaxSettings.async = false;
-            $.get("../user/info/0.json", function (res) {
+            $.get("/user/info/0", function (res) {
                 layui.sessionData("user", {key: 'user', value: res});
                 userInfo = res;
             });
@@ -335,52 +440,37 @@
         $("#date").val(new Date(userInfo['data'].birth).format("yyyy-mm-dd"));
         $("input[name=city]").val(userInfo['data'].city);
         $("textarea[name=indroduce]").val(userInfo['data'].indroduce);
-
-        if ($.isEmptyObject(layui.sessionData('user').permission)) {
+        var p = layui.sessionData('user').permission;
+        if (true||$.isEmptyObject(p)) {
             $.ajax({
                 async: true
                 , url: '/user/permission'
                 , type: 'get'
                 , success: function (data) {
-                    layui.sessionData('user', {
-                        key: 'permission'
-                        , value: data
-                    });
+                    if (data.status === 0) {
+                        layui.sessionData('user', {
+                            key: 'permission'
+                            , value: data['data']
+                        });
+                    }else
+                        layer.msg(data.msg);
+                    console.log(data['data']);
+                    /**
+                     * 设置permission选项
+                     * {count: 1, data: {events: 0, friend: 0, message: 0, nearby: 1, uid: 1}, msg: "操作成功", status: 0}
+                     * */
+                    setting.permission(data['data']);
                 }
                 , error: function (res) {
                     setting.error(res);
                 }
             });
+        }else {
+            setting.permission(p);
         }
     });
 
-    layui.use(['form', 'layedit', 'laydate', 'layer'], function () {
-        var form = layui.form
-            , layer = layui.layer
-            , layedit = layui.layedit
-            , laydate = layui.laydate;
 
-        //日期
-        laydate.render({
-            elem: '#date'
-        });
-        form.on('submit(info)', function (data) {
-            console.log(data.field);
-            $.ajax({
-                async: true
-                , type: 'post'
-                , url: '/user/info'
-                , data: data.field
-                , success: function (res) {
-                }
-                , error: function (res) {
-                    setting.error(res);
-                }
-            });
-            return false;
-        });
-
-    });
     layui.use('upload', function () {
         var $ = layui.jquery
             , upload = layui.upload;

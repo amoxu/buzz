@@ -13,6 +13,22 @@ var setting = {
     }
     ,permission:function (res) {
 
+        var permit = res;
+        for (var key in permit) {
+            var dds=$('select[name='+key+']').parent().find("dd");
+            for(var i=0;i<dds.length;i++){
+                if(dds[i].getAttribute("lay-value")==permit[key]){
+                    dds[i].click();
+                }
+            }
+        }
+        /*class选择器 调用点击事件 控制是否出现在附近*/
+        if (permit['nearby'] === 1) {
+            $('.layui-unselect.layui-form-switch:not(.layui-form-onswitch)').click();
+        }else {
+            $('.layui-unselect.layui-form-switch.layui-form-onswitch').click();
+        }
+
     }
 };
 

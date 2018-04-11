@@ -37,5 +37,6 @@
         <property name="sqlSessionFactoryBeanName" value="sessionFactory"/>
     </bean>
 
+    <bean id="subject" class="org.apache.shiro.subject.Subject" abstract="true"/>
 
 </beans>

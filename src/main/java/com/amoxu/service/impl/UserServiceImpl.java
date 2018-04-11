@@ -4,7 +4,9 @@ import com.amoxu.entity.User;
 import com.amoxu.entity.UserExample;
 import com.amoxu.mapper.UserMapper;
 import com.amoxu.service.UserService;
+import com.amoxu.util.MailSender;
 import com.amoxu.util.StaticEnum;
+import com.amoxu.util.ToolKit;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -22,6 +25,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper mapper;
+    @Autowired
+    private MailSender mailSender;
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
     public int insetUser(User user) {
@@ -30,10 +37,19 @@ public class UserServiceImpl implements UserService {
         user.setState(StaticEnum.STATE_ACTIVATED);
         user.setBirth(new Date());
         user.setRid(1);
-
+        user.setState(0);
         int code = 0;
+        StringBuffer url = new StringBuffer()
+                .append(request.getScheme())
+                .append("://")
+                .append(request.getServerName())
+                .append(":")
+                .append(request.getServerPort());
+
+        user.setNote(String.valueOf(new Date().getTime()));
         try {
             code = mapper.insert(user);
+            mailSender.send(user.getNickname(), StaticEnum.MAIL_REGISTER, url.toString(), user.getEmail());
         } catch (DuplicateKeyException e) {
             logger.error(e.getMessage());
             logger.error(e.getCause());
@@ -103,13 +119,36 @@ public class UserServiceImpl implements UserService {
         } else {
             user = mapper.selectByPrimaryKey(uid);
         }
-        user.setPassword(null);
-        user.setUserState(null);
-        user.setCtime(null);
-        user.setNote(null);
-        user.setRoles(null);
-        user.setRid(null);
-        user.setState(null);
+
         return user;
+    }
+
+    @Override
+    public int updateUserPassword(String oldPasswor, String newPasswor) {
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal(); //当前登录用户，用于获取用户ID
+        logger.info("Subject user Object: " + user);
+        logger.info(ToolKit.aesDecrypt(oldPasswor));
+        logger.info(ToolKit.aesDecrypt(newPasswor));
+        Integer uid = user.getUid();
+        User userInfo = mapper.selectByPrimaryKey(uid);
+
+        oldPasswor = ToolKit.shaEncode(ToolKit.aesDecrypt(oldPasswor));
+        newPasswor = ToolKit.shaEncode(ToolKit.aesDecrypt(newPasswor));
+
+        if (!userInfo.getPassword().equals(oldPasswor)) {
+            return 0;
+        } else {
+            userInfo.setPassword(newPasswor);
+            logger.info(userInfo);
+            return updateUser(userInfo);
+        }
+
+    }
+
+    @Override
+    public int sendMail2NewNail(String mail) {
+
+        return 0;
     }
 }

@@ -78,4 +78,9 @@ public class UserServiceImplTest {
         logger.info(result);
         Assert.assertEquals(uid, 1);
     }
+
+    @Test
+    public void sendMail2NewNail() {
+        userService.sendMail2NewNail("");
+    }
 }

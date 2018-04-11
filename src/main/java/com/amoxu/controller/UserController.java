@@ -179,8 +179,24 @@ public class UserController {
         AjaxResult<User> result = new AjaxResult<>();
         User info = userService.getUserInfo(id);
         result.ok();
+        /**
+         * 设置返回数据隐私内容不显示
+         *
+         * ======================
+        */
+        info.setPassword(null);
+        info.setUserState(null);
+        info.setCtime(null);
+        info.setNote(null);
+        info.setRoles(null);
+        info.setRid(null);
+        info.setState(null);
+        /**
+         * =====================
+         * */
         result.setData(info);
         return result.toString();
+
     }
 
     @RequestMapping(value = "/user/info"
@@ -202,9 +218,76 @@ public class UserController {
     @ResponseBody
     public String getUserPermission() {
         AjaxResult<Permission> result = new AjaxResult<>();
-
         result.setData(permissionService.getUserPermission());
         result.ok();
+        return result.toString();
+    }
+    @RequestMapping(value = "/user/permission"
+            , method = RequestMethod.POST
+            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+    )
+    @ResponseBody
+    public String setUserPermission(Permission permission) {
+        AjaxResult<Permission> result = new AjaxResult<>();
+        if (0 < permissionService.updateUserPermission(permission)) {
+            result.ok();
+        } else {
+            result.failed();
+        }
+        return result.toString();
+    }
+
+    @RequestMapping(value = "/user/password"
+            , method = RequestMethod.POST
+            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+    )
+    @ResponseBody
+    /**
+     * @descript  修改密码
+     *
+     * @param data 经过两层aes加密的新密码和旧密码
+     *
+     *
+     * */
+    public String alterPassword(@Param("data") String data) {
+        AjaxResult<Permission> result = new AjaxResult<>();
+        logger.info(data);
+        data = ToolKit.aesDecrypt(data);
+        JSONObject obj = JSON.parseObject(data);
+        logger.info("obj: " + obj);
+        int code = userService.updateUserPassword(obj.getString("oldPassword"), obj.getString("newPassword"));
+        if (code == 0) {
+            result.setMsg("密码错误");
+            result.failed();
+        } else {
+            result.ok();
+        }
+        return result.toString();
+    }
+
+    @RequestMapping(value = "/user/mail"
+            , method = RequestMethod.POST
+            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+    )
+    @ResponseBody
+    /**
+     * @descript 修改邮箱
+     *
+     * @param data 邮箱地址
+     *
+     *
+     * */
+    public String alterMail(@Param("data") String mail) {
+
+        AjaxResult<Permission> result = new AjaxResult<>();
+        logger.info(mail);
+        int code = userService.sendMail2NewNail(mail);
+        if (code == 0) {
+            result.setMsg("密码错误");
+            result.failed();
+        } else {
+            result.ok();
+        }
         return result.toString();
     }
 

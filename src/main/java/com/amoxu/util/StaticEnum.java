@@ -27,6 +27,9 @@ public final class StaticEnum {
      * 用户当前ID
      * */
     public final static int SELF_ID = 0;
-
-
+    /**
+     * 邮件标题
+     */
+    public final static String MAIL_ACTIVE = "激活邮箱";
+    public final static String MAIL_REGISTER = "注册用户";
 }

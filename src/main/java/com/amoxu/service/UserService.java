@@ -17,4 +17,8 @@ public interface UserService {
     User getLoginUser(String user, String pwd);
 
     User getUserInfo(Integer uid);
+
+    int updateUserPassword(String oldPasswor, String newPasswor);
+
+    int sendMail2NewNail(String mail);
 }
