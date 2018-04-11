@@ -21,4 +21,11 @@ public interface UserService {
     int updateUserPassword(String oldPasswor, String newPasswor);
 
     int sendMail2NewNail(String mail);
+
+    String activeUserMail(String id, String key);
+
+    String findPassword(String email);
+
+    String findPassword(String email, String verNote, String password);
+
 }

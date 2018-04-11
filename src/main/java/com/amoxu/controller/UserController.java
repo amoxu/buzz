@@ -24,6 +24,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -40,17 +44,25 @@ public class UserController {
 
     private Logger logger = Logger.getLogger(getClass());
 
+    @RequestMapping(value = "/logout",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+    @ResponseBody
+    public String logout() {
+        AjaxResult<String> ajaxResult = new AjaxResult<>();
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        ajaxResult.ok();
+        return ajaxResult.toString();
+    }
+
     @RequestMapping(value = "/user/login",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
     @ResponseBody
     public String login(@RequestParam("data") String param) {
         logger.info("通过浏览器获取的param：" + param.length());
-
-
         logger.info("解密过过后的param：" + param);
-
-
         logger.info(ToolKit.aesDecrypt(param));
         String s = ToolKit.aesDecrypt(param);
         logger.info(s);
@@ -109,18 +121,18 @@ public class UserController {
         AjaxResult ajaxResult = new AjaxResult<String>();
 
         Subject subject = SecurityUtils.getSubject();
-        Session session = subject.getSession();
-        @NotNull
-        String tempCaptcha = (String) session.getAttribute("captcha");
-        if (tempCaptcha.equals(user.getNote())) {
+
+        if (checkCaptchaEqu(user.getNote())) {
             user.setNote("");
             user.setPassword(ToolKit.shaEncode(ToolKit.aesDecrypt(user.getPassword())));
             int code = userService.insetUser(user);
             if (StaticEnum.REG_SUCCESS == code) {
-                ajaxResult.ok();
-                ajaxResult.setMsg("注册成功");
+
                 AuthenticationToken token = new UsernamePasswordToken(user.getNickname(), user.getPassword());
                 subject.login(token);
+
+                ajaxResult.ok();
+                ajaxResult.setMsg("注册成功");
             } else if (StaticEnum.REG_MAIL_ERROR == code) {
                 ajaxResult.failed();
                 ajaxResult.setMsg("邮箱已存在");
@@ -183,7 +195,7 @@ public class UserController {
          * 设置返回数据隐私内容不显示
          *
          * ======================
-        */
+         */
         info.setPassword(null);
         info.setUserState(null);
         info.setCtime(null);
@@ -222,6 +234,7 @@ public class UserController {
         result.ok();
         return result.toString();
     }
+
     @RequestMapping(value = "/user/permission"
             , method = RequestMethod.POST
             , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
@@ -237,33 +250,7 @@ public class UserController {
         return result.toString();
     }
 
-    @RequestMapping(value = "/user/password"
-            , method = RequestMethod.POST
-            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
-    )
-    @ResponseBody
-    /**
-     * @descript  修改密码
-     *
-     * @param data 经过两层aes加密的新密码和旧密码
-     *
-     *
-     * */
-    public String alterPassword(@Param("data") String data) {
-        AjaxResult<Permission> result = new AjaxResult<>();
-        logger.info(data);
-        data = ToolKit.aesDecrypt(data);
-        JSONObject obj = JSON.parseObject(data);
-        logger.info("obj: " + obj);
-        int code = userService.updateUserPassword(obj.getString("oldPassword"), obj.getString("newPassword"));
-        if (code == 0) {
-            result.setMsg("密码错误");
-            result.failed();
-        } else {
-            result.ok();
-        }
-        return result.toString();
-    }
+
 
     @RequestMapping(value = "/user/mail"
             , method = RequestMethod.POST
@@ -278,8 +265,7 @@ public class UserController {
      *
      * */
     public String alterMail(@Param("data") String mail) {
-
-        AjaxResult<Permission> result = new AjaxResult<>();
+        AjaxResult<String> result = new AjaxResult<>();
         logger.info(mail);
         int code = userService.sendMail2NewNail(mail);
         if (code == 0) {
@@ -291,6 +277,133 @@ public class UserController {
         return result.toString();
     }
 
+    /**
+     * @param id  用户id
+     * @param key note 信息
+     * @descript 修改邮箱
+     */
+    @RequestMapping(value = "/user/active"
+            , method = RequestMethod.GET
+            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+    )
 
+    public void activeMail(@Param("id") String id,
+                           @Param("key") String key,
+                           HttpServletRequest request,
+                           HttpServletResponse response
+    ) throws IOException {
+        logger.info(id + key);
+        String code = userService.activeUserMail(id, key);
+        String html = "<br><h3><a href = '" + request.getScheme() + "://"
+                + request.getServerName()
+                + ":" + request.getServerPort()
+                + "'>点击返回主页</a></h3>";
+        /**
+         * 直接用response的writer无法输出中文字符
+         * Exception java.io.CharConversionException: Not an ISO 8859-1 character
+         * 用PrintWriter同样无法输出html
+        * */
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter out=response.getWriter();
+        out.println(code + html);
+    }
+
+    @Controller
+    public class Password {
+        @RequestMapping(value = "/user/password"
+                , method = RequestMethod.POST
+                , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+        )
+        @ResponseBody
+        /**
+         * @descript 修改密码
+         *
+         * @param data 经过两层aes加密的新密码和旧密码
+         *
+         *
+         * */
+        public String alterPassword(@Param("data") String data) {
+            AjaxResult<Permission> result = new AjaxResult<>();
+            logger.info(data);
+            data = ToolKit.aesDecrypt(data);
+            JSONObject obj = JSON.parseObject(data);
+            logger.info("obj: " + obj);
+            int code = userService.updateUserPassword(obj.getString("oldPassword"), obj.getString("newPassword"));
+            if (code == 0) {
+                result.setMsg("密码错误");
+                result.failed();
+            } else {
+                result.ok();
+            }
+            return result.toString();
+        }
+
+        @RequestMapping(value = "/user/password/{step}"
+                , method = RequestMethod.POST
+                , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+        )
+        @ResponseBody
+        /**
+         * @descript 修改密码
+         *
+         * @param data 经过两层aes加密的新密码和旧密码
+         *
+         *
+         * */
+        public String findPassword(@Param("data") String data, @PathVariable("step") Integer step) {
+            AjaxResult<String> result = new AjaxResult<>();
+            logger.info(data);
+            data = ToolKit.aesDecrypt(data);
+            JSONObject obj = JSON.parseObject(data);
+            logger.info("obj: " + obj);
+
+            if (checkCaptchaEqu(obj.getString("note"))) {
+                result.failed();
+                result.setMsg("验证码错误");
+                return result.toString();
+            }
+
+            if (step == 1) {
+                String msg = userService.findPassword(obj.getString("email"));
+                if (StaticEnum.OPT_SUCCESS.equals(msg)) {
+                    result.ok();
+                    result.setMsg("请前往邮箱获取验证编码");
+                } else {
+                    result.failed();
+                    result.setMsg(msg);
+                }
+            } else if (step == 2) {
+                /**
+                 * {"note":"xjrt","password":"lRZFV1Xw+l+ZcvTzTyWTxQ==","nickname":"12345","email":"amoxu@qq.com"}
+                 * */
+                String msg = userService.findPassword(obj.getString("email"), obj.getString("nickname"), obj.getString("password"));
+                if (StaticEnum.OPT_SUCCESS.equals(msg)) {
+                    result.ok();
+                } else {
+                    result.failed();
+                    result.setMsg(msg);
+                }
+            } else {
+                result.setMsg("请重新输入验证码");
+                result.failed();
+            }
+
+
+            return result.toString();
+        }
+
+    }
+    /**
+    * 检查验证码是否相等
+    *
+    * */
+    private boolean checkCaptchaEqu(@NotNull String captcha) {
+        Subject subject = SecurityUtils.getSubject();
+        Session session = subject.getSession();
+        @NotNull
+        String tempCaptcha = (String) session.getAttribute("captcha");
+        return tempCaptcha.equals(captcha);
+    }
 }
+
 

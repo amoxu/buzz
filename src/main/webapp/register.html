@@ -150,7 +150,7 @@
                     setTimeout("$(\"#captcha\").click()", 2000);
                     return false;
                 } else {
-                    layer.msg("注册成功！");
+
                     layui.sessionData('unLogin', {key: 'statue', value: true});
                     layer.open({
                         type: 2,
@@ -160,13 +160,21 @@
                         shade: 0.8,
                         content: './hobby.html'
                         , end: function () {
-                            layer.msg("跳转中...")
-                            setTimeout(function () {
-                                window.history.back();
-                                window.location.refresh();
-                            },1000);
+                            layer.open({
+                                title: '注册成功'
+                                ,content: '请前往邮箱激活账号。'
+                                ,end:function () {
+                                    layer.msg("跳转中...");
+                                    setTimeout(function () {
+                                        window.history.back();
+                                        window.location.refresh();
+                                    },1000);
+                                }
+                            });
+
                         }
                     });
+
 
                 }
 

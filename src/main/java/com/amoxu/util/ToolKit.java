@@ -2,8 +2,8 @@ package com.amoxu.util;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
@@ -132,7 +132,7 @@ public class ToolKit {
         Cipher cipher = Cipher.getInstance(ALGORITHMSTR);
         cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(decryptKey.getBytes(), "AES"));
         byte[] decryptBytes = cipher.doFinal(encryptBytes);
-        return new String(decryptBytes);
+        return org.apache.commons.codec.binary.StringUtils.newStringUtf8(decryptBytes);
     }
 
 
@@ -157,6 +157,31 @@ public class ToolKit {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /*
+     * 获取字符串MD5
+     *
+     * */
+    public static String MD5(String s) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] bytes = md.digest(s.getBytes("utf-8"));
+            return toHex(bytes);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static String toHex(byte[] bytes) {
+
+        final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
+        StringBuilder ret = new StringBuilder(bytes.length * 2);
+        for (int i=0; i<bytes.length; i++) {
+            ret.append(HEX_DIGITS[(bytes[i] >> 4) & 0x0f]);
+            ret.append(HEX_DIGITS[bytes[i] & 0x0f]);
+        }
+        return ret.toString();
     }
 
     /**

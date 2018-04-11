@@ -2,11 +2,14 @@ package com.amoxu.service.impl;
 
 import com.amoxu.entity.AjaxResult;
 import com.amoxu.entity.User;
+import com.amoxu.entity.UserExample;
+import com.amoxu.mapper.UserMapper;
 import com.amoxu.service.UserService;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -82,5 +85,21 @@ public class UserServiceImplTest {
     @Test
     public void sendMail2NewNail() {
         userService.sendMail2NewNail("");
+    }
+
+    @Autowired
+    private UserMapper mapper;
+
+    @Test
+    public void findPassword() {
+        User user = new User();
+        user.setNote("");
+
+        UserExample example = new UserExample();
+        UserExample.Criteria criteria = example.createCriteria();
+        criteria.andEmailEqualTo("amoxu@qq.com");
+        criteria.andNoteLike("%768710");
+
+        mapper.updateByExampleSelective(user, example);
     }
 }

@@ -1,5 +1,6 @@
 package com.amoxu.service.impl;
 
+import com.amoxu.entity.MailUrlBuilder;
 import com.amoxu.entity.User;
 import com.amoxu.entity.UserExample;
 import com.amoxu.mapper.UserMapper;
@@ -14,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 @Service
@@ -27,29 +28,32 @@ public class UserServiceImpl implements UserService {
     private UserMapper mapper;
     @Autowired
     private MailSender mailSender;
-    @Autowired
-    private HttpServletRequest request;
+
 
     @Override
     public int insetUser(User user) {
+        MailUrlBuilder builder = new MailUrlBuilder().builder(user.getEmail(), user.getNickname());
+
+
         user.setCity("北京-西城");
         user.setSex("男");
         user.setState(StaticEnum.STATE_ACTIVATED);
         user.setBirth(new Date());
         user.setRid(1);
         user.setState(0);
-        int code = 0;
-        StringBuffer url = new StringBuffer()
-                .append(request.getScheme())
-                .append("://")
-                .append(request.getServerName())
-                .append(":")
-                .append(request.getServerPort());
+        user.setNote(builder.getNote());
 
-        user.setNote(String.valueOf(new Date().getTime()));
+        int code = 0;
+
+
         try {
             code = mapper.insert(user);
-            mailSender.send(user.getNickname(), StaticEnum.MAIL_REGISTER, url.toString(), user.getEmail());
+            mailSender.send(user.getNickname(),
+                    StaticEnum.MAIL_REGISTER,
+                    builder.getMailUrl(),
+                    user.getEmail()
+            );
+
         } catch (DuplicateKeyException e) {
             logger.error(e.getMessage());
             logger.error(e.getCause());
@@ -92,8 +96,9 @@ public class UserServiceImpl implements UserService {
         UserExample.Criteria criteria = example.createCriteria();
         criteria.andNicknameEqualTo(name);
         List<User> users = mapper.selectByExample(example);
-        return users.size() > 0 ? users.get(0) :  null;
+        return users.size() > 0 ? users.get(0) : null;
     }
+
     @Override
     public User selectUserById(Integer id) {
         return mapper.selectByPrimaryKey(id);
@@ -148,7 +153,126 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int sendMail2NewNail(String mail) {
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        MailUrlBuilder builder = new MailUrlBuilder().builder(mail, user.getNickname());
+        user.setNote(builder.getNote());
+        mapper.updateByPrimaryKeySelective(user);
 
+        mailSender.send(user.getNickname(),
+                StaticEnum.MAIL_ACTIVE,
+                builder.getMailUrl(),
+                mail
+        );
         return 0;
     }
+
+    @Override
+    public String activeUserMail(String id, String key) {
+        try {
+            id = ToolKit.aesDecrypt(id);
+            User user = selectUserByName(id);
+            boolean status = ToolKit.MD5(user.getNote()).equals(key);
+            if (status) {
+                /**
+                 * [0] 时间戳
+                 * [1] 新邮箱
+                 * */
+                String[] notes = user.getNote().split("\\$");
+                Long sendTime = Long.valueOf(notes[0]);
+                Long now = new Date().getTime();
+                boolean timeoff = now - sendTime > 30 * 60 * 1000;
+                int userState = user.getState();
+                /**
+                 * 用户未激活过邮箱或者激活未超时
+                 * */
+                if (userState == 0 || !timeoff) {
+                    user.setEmail(notes[1]);
+                    user.setNote("");
+                    if (userState == 0) {
+                        user.setState(1);
+                    }
+                    mapper.updateByPrimaryKeySelective(user);
+                    return StaticEnum.MAIL_ACTIVE_SUC;
+                } else {
+                    return StaticEnum.MAIL_TIMEOFF;
+                }
+
+
+            }
+            return StaticEnum.MAIL_VER_ERROR;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return StaticEnum.MAIL_VER_ERROR;
+        }
+    }
+
+    @Override
+    public String findPassword(String email) {
+
+
+        int verCode = new Random().nextInt(900000)  + 100000;
+
+        String noteVerify = new Date().getTime() + "$";
+
+        noteVerify += verCode;
+
+        User user = new User();
+        user.setEmail(email);
+        user.setNote(noteVerify);
+
+        UserExample example = new UserExample();
+        UserExample.Criteria criteria = example.createCriteria();
+        criteria.andEmailEqualTo(email);
+        int code = mapper.updateByExampleSelective(user, example);
+
+
+        if (code == 1) {
+            mailSender.send("亲爱的乐热评会员", StaticEnum.MAIL_FIND_PASSWORD, String.valueOf(verCode), email);
+            return StaticEnum.OPT_SUCCESS;
+        } else {
+            return "邮箱不存在";
+        }
+    }
+
+    @Override
+    public String findPassword(String email, String noteVerify, String password) {
+        password = ToolKit.aesDecrypt(password);
+        password = ToolKit.shaEncode(password);
+
+        User user = new User();
+        user.setEmail(email);
+        user.setNote("");
+        user.setPassword(password);
+
+        UserExample example = new UserExample();
+        UserExample.Criteria criteria = example.createCriteria();
+        criteria.andEmailEqualTo(email);
+        criteria.andNoteLike("%"+noteVerify);
+
+        List<User> users = mapper.selectByExample(example);
+
+        if (users.size() < 1) {
+            return "邮箱或验证码错误";
+        }
+
+        String[] notes = users.get(0).getNote().split("\\$");
+        Long sendTime = Long.valueOf(notes[0]);
+        Long now = new Date().getTime();
+        boolean timeoff = now - sendTime > 30 * 60 * 1000;
+        if (timeoff) {
+            return StaticEnum.MAIL_TIMEOFF;
+        } else {
+            if (1 == mapper.updateByExampleSelective(user, example)) {
+
+                return StaticEnum.OPT_SUCCESS;
+            } else {
+                return StaticEnum.OPT_ERROR;
+            }
+
+        }
+
+    }
+
+
 }
