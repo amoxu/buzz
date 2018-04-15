@@ -5,6 +5,7 @@ import com.amoxu.entity.User;
 import com.amoxu.entity.UserExample;
 import com.amoxu.mapper.UserMapper;
 import com.amoxu.service.UserService;
+import com.amoxu.util.ToolKit;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
@@ -101,5 +102,22 @@ public class UserServiceImplTest {
         criteria.andNoteLike("%768710");
 
         mapper.updateByExampleSelective(user, example);
+    }
+
+    @Test
+    public void activeUserMail() {
+        User user = new User();
+        user.setIcons("f85d233849aa09ee8a44c1d48b7441ba?d=https%3A%2F%2Ficon.amoxuk.com%2Ficon%2Ff85d233849aa09ee8a44c1d48b7441ba.jpg");
+        String[] notes = user.getIcons().split("\\?d=");
+        for (String s : notes) {
+            logger.info(s);
+        }
+        String[] split = user.getIcons().split("\\?d=");
+        user.setEmail("amoxuk@163.com");
+        String newIcon = ToolKit.md5Hex(user.getEmail());
+        newIcon += "?d=";
+        newIcon += split[1];
+        user.setIcons(newIcon);
+        logger.info(user);
     }
 }

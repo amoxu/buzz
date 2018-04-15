@@ -53,7 +53,7 @@
                 <dl class="m-proifo f-cb" id="head-box">
                     <dt class="f-pr" id="ava">
                         <img class=" head"
-                             src="http://p2.music.126.net/KffRmQaVGqS-jcAlE3b9DA==/109951163196815856.jpg?param=180y180">
+                             src="">
                         <div class="btm"><a href="../my/setting.html#head-icon" class="upload">更换头像</a></div>
                     </dt>
                     <dd>
@@ -213,7 +213,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-input-inline  layui-form-label-col">出现在附近</label>
                                     <div class="layui-input-inline float_right">
-                                        <input type="checkbox" checked=""  name="nearby" lay-skin="switch"
+                                        <input type="checkbox" checked="" name="nearby" lay-skin="switch"
                                                lay-filter="switchTest" lay-text="ON|OFF">
                                     </div>
                                 </div>
@@ -231,7 +231,8 @@
                                 <div class="layui-inline">
                                     <label class="layui-input-inline  layui-form-label-col">原密码</label>
                                     <div class="layui-input-inline">
-                                        <input type="password" name="oldPassword" lay-verify="required|pass" autocomplete="off"
+                                        <input type="password" name="oldPassword" lay-verify="required|pass"
+                                               autocomplete="off"
                                                class="layui-input">
                                     </div>
                                 </div>
@@ -240,7 +241,8 @@
                                 <div class="layui-inline">
                                     <label class="layui-input-inline  layui-form-label-col">新密码</label>
                                     <div class="layui-input-inline">
-                                        <input type="password" name="newPassword" lay-verify="required|pass" autocomplete="off"
+                                        <input type="password" name="newPassword" lay-verify="required|pass"
+                                               autocomplete="off"
                                                class="layui-input">
                                     </div>
                                 </div>
@@ -249,7 +251,8 @@
                                 <div class="layui-inline">
                                     <label class="layui-input-inline  layui-form-label-col">确认密码</label>
                                     <div class="layui-input-inline">
-                                        <input type="password" name="rePassword" lay-verify="required|pass" autocomplete="off"
+                                        <input type="password" name="rePassword" lay-verify="required|pass"
+                                               autocomplete="off"
                                                class="layui-input">
                                     </div>
                                 </div>
@@ -281,12 +284,17 @@
 
                     </div>
                     <div id="head-icon" class="setting" hidden>
+                        <p id="gravatar-tips" class=" layui-btn layui-btn-normal " style="margin: 5px" >
+                            Gravatar用户?
+                        </p>
+
                         <div class="layui-upload">
-                            <button type="button" class="layui-btn" id="test1">上传图片</button>
+                            <button type="button" class="layui-btn layui-btn-normal" id="smfile">选择图片</button>
                             <div class="layui-upload-list">
                                 <img class="layui-upload-img" id="demo1" style="width: 180px;height: 180px;">
-
-                                <p id="demoText"></p>
+                                <p>
+                                    <button class="layui-btn-normal layui-btn " id="upload" style="display:none;">上传</button>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -311,9 +319,12 @@
 <script src="../js/top.js"></script>
 <script src="../js/common.js"></script>
 <script src="../js/aes.js"></script>
+<script src="../js/zone.js"></script>
+
 
 <script>
     //注意：导航 依赖 element 模块，否则无法进行功能性操作
+
     layui.use(['form', 'layedit', 'laydate', 'layer'], function () {
         var form = layui.form
             , layer = layui.layer
@@ -324,10 +335,13 @@
         laydate.render({
             elem: '#date'
         });
+
+
+
         form.verify({
             pass: [
                 /^[\S]{6,12}$/
-                ,'密码必须6到12位，且不能出现空格'
+                , '密码必须6到12位，且不能出现空格'
             ]
         });
         form.on('submit(info)', function (data) {
@@ -339,6 +353,7 @@
                 , data: data.field
                 , success: function (res) {
                     layer.msg(res.msg);
+                    setting.reload();
                 }
                 , error: function (res) {
                     setting.error(res);
@@ -350,7 +365,7 @@
             console.log(data.field);
             if (!data.field.nearby) {
                 data.field.nearby = 0;
-            }else
+            } else
                 data.field.nearby = 1;
 
             $.ajax({
@@ -360,9 +375,11 @@
                 , data: data.field
                 , success: function (res) {
                     if (res.status === 0) {
-                        layui.sessionData("user", {key: 'permission',value:data.field});
+                        layui.sessionData("user", {key: 'permission', value: data.field});
                     }
                     layer.msg(res.msg);
+                    setting.reload();
+
                 }
                 , error: function (res) {
                     setting.error(res);
@@ -376,21 +393,24 @@
                 return false;
             }
             $.ajax({
-                async:false
-                ,type:'post'
-                ,url:'/user/password'
-                ,data:{'data':aes.encrypt(JSON.stringify({
-                            'oldPassword':aes.encrypt(data.field.oldPassword),
-                            'newPassword':aes.encrypt(data.field.newPassword)
-                        }))}
-                ,success:function (res) {
+                async: false
+                , type: 'post'
+                , url: '/user/password'
+                , data: {
+                    'data': aes.encrypt(JSON.stringify({
+                        'oldPassword': aes.encrypt(data.field.oldPassword),
+                        'newPassword': aes.encrypt(data.field.newPassword)
+                    }))
+                }
+                , success: function (res) {
                     layer.msg(res['msg']);
+                    setting.reload();
 
                 }
-                ,error:function (res) {
+                , error: function (res) {
                     setting.error(res);
                 }
-                ,complete:function () {
+                , complete: function () {
                     /*清空输入框*/
                     $('#password').find('input').val("");
                     return false;
@@ -400,18 +420,18 @@
         });
         form.on('submit(mail)', function (data) {
             $.ajax({
-                url:'/user/mail'
-                ,type:'post'
-                ,async:false
-                ,data:{'data':data.field.mail}
-                ,success:function (res) {
+                url: '/user/mail'
+                , type: 'post'
+                , async: false
+                , data: {'data': data.field.mail}
+                , success: function (res) {
                     if (res.status === 0) {
                         layer.alert("激活成功，请前往邮箱查看邮件并激活。");
-                    }else {
+                    } else {
                         layer.alert(res.msg);
                     }
                 }
-                ,error:function (res) {
+                , error: function (res) {
                     setting.error(res);
                 }
             });
@@ -420,28 +440,27 @@
 
     });
     layui.use(['element', 'jquery'], function () {
-        var element = layui.element;
+
+      var element = layui.element;
         var $ = layui.jquery;
-        var userInfo = layui.sessionData("user").user;
-        if ($.isEmptyObject(userInfo)) {
-            /*0表示自身ID*/
-            $.ajaxSettings.async = false;
-            $.get("/user/info/0", function (res) {
-                layui.sessionData("user", {key: 'user', value: res});
-                userInfo = res;
+
+        $("#gravatar-tips").on('click', function () {
+            layer.open({
+                title:"Gravatar:"
+                ,btn:['关闭']
+                ,content:"<p >我们的头像是基于Gravatar，可以通过邮箱名在共享你在Gravatar设置的头像。\n" +
+                "                            <br>如果你已经注册了Gravatar并且设置了头像，那么你需要到进行设置\n" +
+                "                            <br>如果你没有注册过，可以直接通过上传修改你在本站的头像。\n" +
+                "                            <br>前往修改/注册:<a href=\"https://en.gravatar.com/\" target=\"_blank\">https://en.gravatar.com/</a>\n" +
+                "                            <br>\n" +
+                "                        </p>"
+
             });
-        }
+        });
 
-        setting.show(userInfo);
 
-        var sex = userInfo['data'].sex;
-
-        $("input[title=" + sex + "]").attr("checked", true);
-        $("#date").val(new Date(userInfo['data'].birth).format("yyyy-mm-dd"));
-        $("input[name=city]").val(userInfo['data'].city);
-        $("textarea[name=indroduce]").val(userInfo['data'].indroduce);
         var p = layui.sessionData('user').permission;
-        if (true||$.isEmptyObject(p)) {
+        if (true || $.isEmptyObject(p)) {
             $.ajax({
                 async: true
                 , url: '/user/permission'
@@ -452,7 +471,7 @@
                             key: 'permission'
                             , value: data['data']
                         });
-                    }else
+                    } else
                         layer.msg(data.msg);
                     console.log(data['data']);
                     /**
@@ -465,7 +484,7 @@
                     setting.error(res);
                 }
             });
-        }else {
+        } else {
             setting.permission(p);
         }
     });
@@ -474,36 +493,66 @@
     layui.use('upload', function () {
         var $ = layui.jquery
             , upload = layui.upload;
+        var userInfo = layui.sessionData("user").user;
+        if ($.isEmptyObject(userInfo) && !userInfo) {
 
+            layer.alert("请重新登录。");
+            return;
+        }
         //普通图片上传
         var uploadInst = upload.render({
-            elem: '#test1'
-            , url: '/upload/'
-            , before: function (obj) {
-                //预读本地文件示例，不支持ie8
+            elem: '#smfile'
+            //'https://sm.ms/api/upload'
+            , url: 'https://icon.amoxuk.com/icon?'+(userInfo['data'].icons).split("?")[0]
+            , field: 'smfile'
+            , auto: false
+            , bindAction: '#upload' //指向一个按钮触发上传
+            , choose: function (obj) {
+                $("#upload").show();
                 obj.preview(function (index, file, result) {
                     $('#demo1').attr('src', result); //图片链接（base64）
                 });
             }
-            , done: function (res) {
-                //如果上传失败
-                if (res.code > 0) {
-                    return layer.msg('上传失败');
-                }
-                //上传成功
-                var demoText = $('#demoText');
-                demoText.html(' <span style="color: #FF5722;">上传成功，确认保存？</span> <a class="layui-btn layui-btn-mini head-save" href="javascript:;">保存</a>');
-                demoText.find('.head-save').on('click', function () {
-                    /*TODO save head icon*/
+            , before: function (res) {
+                layer.msg('上传中', {
+                    icon: 16
+                    , time: 0
+                    , shade: 0.01
                 });
             }
+            , done: function (res) {
+                //如果上传失败
+                if (res.status === 0) {
+                    //上传成功
+                    /*todo 保存至服务器*/
+                    $.ajax({
+                        async:false
+                        ,url:"/user/icon"
+                        ,type:'post'
+                        ,data:{"data":res.data}
+                        ,success:function (res) {
+                            layer.closeAll(); //关闭加载层
+                            layer.alert(res.msg);
+                            setting.reload();
+
+                            return false;
+                        }
+                        ,error:function (res) {
+                            layer.closeAll(); //关闭加载层
+                            layer.alert("错误码："+res.status);
+                            return false;
+                        }
+                    });
+                    return false;
+                }else {
+                    return layer.alert('上传失败，'+res.msg);
+                }
+
+            }
             , error: function () {
+                layer.closeAll(); //关闭加载层
                 //演示失败状态，并实现重传
-                var demoText = $('#demoText');
-                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
-                demoText.find('.demo-reload').on('click', function () {
-                    uploadInst.upload();
-                });
+                return layer.alert('上传失败');
             }
         });
     });

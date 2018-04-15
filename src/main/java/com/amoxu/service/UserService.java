@@ -28,4 +28,7 @@ public interface UserService {
 
     String findPassword(String email, String verNote, String password);
 
+    int updataIcon(String url);
+
+    String findUserIcon(Integer id);
 }

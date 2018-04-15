@@ -20,4 +20,12 @@ public class FriendsKey {
     public void setDuid(Integer duid) {
         this.duid = duid;
     }
+
+    @Override
+    public String toString() {
+        return "FriendsKey{" +
+                "suid=" + suid +
+                ", duid=" + duid +
+                '}';
+    }
 }

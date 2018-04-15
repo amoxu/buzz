@@ -1,36 +1,4 @@
-var setting = {
-    show: function showInfo(res) {
-        $('.head').attr("src", !res['data'].icon ? this.innerHTML : res['data'].icon);
-        $('.tit').html(res['data'].nickname);//nickname
-        $('.data i').html(res['data'].sex === '男' ? '&#xe662;' : '&#xe661;');//sex
-        $('.data ').find('li')[1].innerHTML = Math.floor((Date.now() - res['data'].birth) / 1000 / 60 / 60 / 365 / 24) + '岁';//old
-        $('.data ').find('li')[2].innerHTML = res['data'].city;//city
-        $('.inf ')[1].innerHTML = !res['data']['indroduce'] ? '无。' : res['data']['indroduce'];//city
-        $('.inf ')[3].innerHTML = res['data'].email;//city
-    }
-    ,error:function (res) {
-        layer.msg('错误码：' + res.status);
-    }
-    ,permission:function (res) {
 
-        var permit = res;
-        for (var key in permit) {
-            var dds=$('select[name='+key+']').parent().find("dd");
-            for(var i=0;i<dds.length;i++){
-                if(dds[i].getAttribute("lay-value")==permit[key]){
-                    dds[i].click();
-                }
-            }
-        }
-        /*class选择器 调用点击事件 控制是否出现在附近*/
-        if (permit['nearby'] === 1) {
-            $('.layui-unselect.layui-form-switch:not(.layui-form-onswitch)').click();
-        }else {
-            $('.layui-unselect.layui-form-switch.layui-form-onswitch').click();
-        }
-
-    }
-};
 
 (function () {
     $(".reply").on('click', function () {
@@ -285,23 +253,6 @@ function addList(obj, now, oSize, nick) {
     };
 })();
 
-/**
- * 日期格式化（原型扩展或重载）
- * 格式 YYYY/yyyy/ 表示年份
- * MM/M 月份
- * dd/DD/d/D 日期
- * @param {formatStr} 格式模版
- * @type string
- * @returns 日期字符串
- */
-Date.prototype.format = function (formatStr) {
-    var str = formatStr;
-    var Week = ['日', '一', '二', '三', '四', '五', '六'];
-    str = str.replace(/yyyy|YYYY/, this.getFullYear());
-    str = str.replace(/mm|MM/, (this.getMonth() + 1) > 9 ? (this.getMonth() + 1).toString() : '0' + (this.getMonth() + 1));
-    str = str.replace(/dd|DD/, this.getDate() > 9 ? this.getDate().toString() : '0' + this.getDate());
-    return str;
-}
 
 
 

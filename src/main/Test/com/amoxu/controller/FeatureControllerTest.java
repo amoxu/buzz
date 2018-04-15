@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-dao.xml",
         "classpath:spring/applicationContext-service.xml",
         "classpath:spring/applicationContext-trsaction.xml",
+        "classpath:spring/applicationContext-mail.xml",
         "classpath:spring/springmvc.xml"})
 public class FeatureControllerTest {
     private Logger logger = Logger.getLogger(getClass());

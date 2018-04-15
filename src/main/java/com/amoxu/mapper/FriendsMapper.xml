@@ -5,6 +5,7 @@
     <id column="suid" property="suid" jdbcType="INTEGER" />
     <id column="duid" property="duid" jdbcType="INTEGER" />
     <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <association property="user"  resultMap="friendsMap"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -186,4 +187,18 @@
     where suid = #{suid,jdbcType=INTEGER}
       and duid = #{duid,jdbcType=INTEGER}
   </update>
+  <!--获取朋友信息，id ,用户名，用户介绍-->
+  <resultMap id="friendsMap" type="com.amoxu.entity.User">
+    <id property="uid" column="uid"/>
+    <result property="icons" column="icons"/>
+    <result property="nickname" column="nickname"/>
+    <result property="introduce" column="introduce"/>
+  </resultMap>
+  <select id="selectSelective" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    SELECT friends.suid,friends.duid,friends.ctime, user.uid,user.icons,nickname,introduce
+    FROM buzz.friends
+    LEFT JOIN buzz.user ON user.uid = friends.duid
+    WHERE friends.suid = #{uid,jdbcType=INTEGER}
+  </select>
+
 </mapper>

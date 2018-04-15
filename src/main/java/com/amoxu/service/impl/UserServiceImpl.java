@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -42,9 +44,9 @@ public class UserServiceImpl implements UserService {
         user.setRid(1);
         user.setState(0);
         user.setNote(builder.getNote());
+        user.setIcons(ToolKit.md5Hex(user.getEmail()) + "?d=retro");
 
         int code = 0;
-
 
         try {
             code = mapper.insert(user);
@@ -172,7 +174,7 @@ public class UserServiceImpl implements UserService {
         try {
             id = ToolKit.aesDecrypt(id);
             User user = selectUserByName(id);
-            boolean status = ToolKit.MD5(user.getNote()).equals(key);
+            boolean status = ToolKit.md5Hex(user.getNote()).equals(key);
             if (status) {
                 /**
                  * [0] 时间戳
@@ -187,6 +189,14 @@ public class UserServiceImpl implements UserService {
                  * 用户未激活过邮箱或者激活未超时
                  * */
                 if (userState == 0 || !timeoff) {
+                    /*
+                    * 更新头像
+                    * */
+                    String[] split = user.getIcons().split("\\?d=");
+                    String newIcon = ToolKit.md5Hex(user.getEmail());
+                    newIcon += "?d=";
+                    newIcon += split[1];
+                    user.setIcons(newIcon);
                     user.setEmail(notes[1]);
                     user.setNote("");
                     if (userState == 0) {
@@ -211,7 +221,7 @@ public class UserServiceImpl implements UserService {
     public String findPassword(String email) {
 
 
-        int verCode = new Random().nextInt(900000)  + 100000;
+        int verCode = new Random().nextInt(900000) + 100000;
 
         String noteVerify = new Date().getTime() + "$";
 
@@ -248,7 +258,7 @@ public class UserServiceImpl implements UserService {
         UserExample example = new UserExample();
         UserExample.Criteria criteria = example.createCriteria();
         criteria.andEmailEqualTo(email);
-        criteria.andNoteLike("%"+noteVerify);
+        criteria.andNoteLike("%" + noteVerify);
 
         List<User> users = mapper.selectByExample(example);
 
@@ -272,6 +282,38 @@ public class UserServiceImpl implements UserService {
 
         }
 
+    }
+
+    /**
+     *
+     * TODO : 需要增加一个删除旧头像的功能
+     * 2018/4/15
+     * amoxuk
+     * */
+    @Override
+    public int updataIcon(String url) {
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        String md5 = ToolKit.md5Hex(user.getEmail());
+
+        try {
+            url = md5 + "?d=" + URLEncoder.encode("https://icon.amoxuk.com/icon/" + md5 + ".jpg", "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        logger.info(url);
+        user.setIcons(url);
+        return mapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public String findUserIcon(Integer id) {
+        User u = mapper.selectByPrimaryKey(id);
+        if (u != null) {
+            return u.getIcons();
+        } else {
+            return "ab8138dfc78e29709d0f3651054b433c";
+        }
     }
 
 

@@ -2,8 +2,9 @@ package com.amoxu.mapper;
 
 import com.amoxu.entity.User;
 import com.amoxu.entity.UserExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface UserMapper {
     int countByExample(UserExample example);
@@ -27,4 +28,7 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+
+
 }

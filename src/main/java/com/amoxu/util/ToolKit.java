@@ -9,6 +9,7 @@ import sun.misc.BASE64Decoder;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -162,40 +163,43 @@ public class ToolKit {
     /*
      * 获取字符串MD5
      *
+     * Gravator 头像MD5 hash
+     * 2018/4/12
+     * amoxuk
      * */
-    public static String MD5(String s) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] bytes = md.digest(s.getBytes("utf-8"));
-            return toHex(bytes);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public static String hex(byte[] array) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < array.length; ++i) {
+            sb.append(Integer.toHexString((array[i]
+                    & 0xFF) | 0x100).substring(1,3));
         }
+        return sb.toString();
     }
-
-    private static String toHex(byte[] bytes) {
-
-        final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
-        StringBuilder ret = new StringBuilder(bytes.length * 2);
-        for (int i=0; i<bytes.length; i++) {
-            ret.append(HEX_DIGITS[(bytes[i] >> 4) & 0x0f]);
-            ret.append(HEX_DIGITS[bytes[i] & 0x0f]);
+    public static String md5Hex (String message) {
+        try {
+            MessageDigest md =
+                    MessageDigest.getInstance("MD5");
+            return hex (md.digest(message.getBytes("CP1252")));
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
         }
-        return ret.toString();
+        return null;
     }
 
     /**
      * 测试
      */
     public static void main(String[] args) throws Exception {
-        String content = "dRkyepv798L+UU/+PDOC8xJDSRZCZyTajqafQg+3v75L24c9fqmex8OJQ8NqHHEZFcrphd+koYCdv9iQ8nWPbwWu7R45kxwpoStoCf81AAD/1zH5o4ti16ROaFtJeRge";
+       /* String content = "dRkyepv798L+UU/+PDOC8xJDSRZCZyTajqafQg+3v75L24c9fqmex8OJQ8NqHHEZFcrphd+koYCdv9iQ8nWPbwWu7R45kxwpoStoCf81AAD/1zH5o4ti16ROaFtJeRge";
         System.out.println("加密前：" + content);
         System.out.println("加密密钥和解密密钥：" + KEY);
-    /*    String encrypt = aesEncrypt(content, KEY);
-        System.out.println("加密后：" + encrypt);*/
+    *//*    String encrypt = aesEncrypt(content, KEY);
+        System.out.println("加密后：" + encrypt);*//*
         String decrypt = aesDecrypt(content, KEY);
         System.out.println("解密后：" + decrypt);
-        System.out.println(shaEncode(content));
+        System.out.println(shaEncode(content));*/
+        String email = "amoxuk@qq.com";
+        System.out.println(md5Hex(email));
+
     }
 
     /**

@@ -1,6 +1,10 @@
 package com.amoxu.controller;
 
 import com.amoxu.util.CaptchaUtil;
+import com.sun.istack.internal.NotNull;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,5 +40,15 @@ public class Captcha {
     }
 
 
+    /**
+     * 检查验证码是否相等
+     */
+    public static boolean checkCaptchaEqu(@NotNull String captcha) {
+        Subject subject = SecurityUtils.getSubject();
+        Session session = subject.getSession();
+        @NotNull
+        String tempCaptcha = (String) session.getAttribute("captcha");
+        return tempCaptcha.equals(captcha);
+    }
 
 }

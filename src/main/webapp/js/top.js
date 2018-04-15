@@ -7,6 +7,23 @@ window.onscroll = function () {
     $('body').append(btn);
 })();
 
+/**
+ * 日期格式化（原型扩展或重载）
+ * 格式 YYYY/yyyy/ 表示年份
+ * MM/M 月份
+ * dd/DD/d/D 日期
+ * @param {formatStr} 格式模版
+ * @type string
+ * @returns 日期字符串
+ */
+Date.prototype.format = function (formatStr) {
+    var str = formatStr;
+    var Week = ['日', '一', '二', '三', '四', '五', '六'];
+    str = str.replace(/yyyy|YYYY/, this.getFullYear());
+    str = str.replace(/mm|MM/, (this.getMonth() + 1) > 9 ? (this.getMonth() + 1).toString() : '0' + (this.getMonth() + 1));
+    str = str.replace(/dd|DD/, this.getDate() > 9 ? this.getDate().toString() : '0' + this.getDate());
+    return str;
+}
 
 function scrollFunction() {
     console.log(121);
@@ -59,7 +76,8 @@ $(".top-btn").on("click", function () {
             "                </dl>";
         $(".layui-layout-right").html(login);
         $(".logout").on('click', function () {
-            layui.sessionData('unLogin', {key: 'statue', value: false});
+            layui.sessionData('unLogin', null);
+            layui.sessionData("user", null);
             window.location.href = "../logout";
             layer.alert("退出成功");
         });

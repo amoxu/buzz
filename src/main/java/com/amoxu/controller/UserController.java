@@ -11,7 +11,6 @@ import com.amoxu.service.UserService;
 import com.amoxu.util.StaticEnum;
 import com.amoxu.util.ToolKit;
 import com.sun.istack.internal.NotNull;
-import org.apache.ibatis.annotations.Param;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -21,6 +20,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -122,7 +122,7 @@ public class UserController {
 
         Subject subject = SecurityUtils.getSubject();
 
-        if (checkCaptchaEqu(user.getNote())) {
+        if (Captcha.checkCaptchaEqu(user.getNote())) {
             user.setNote("");
             user.setPassword(ToolKit.shaEncode(ToolKit.aesDecrypt(user.getPassword())));
             int code = userService.insetUser(user);
@@ -165,7 +165,7 @@ public class UserController {
             , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
     )
     @ResponseBody
-    public String setUserFeature(@Param("data") String data) {
+    public String setUserFeature(@RequestParam("data") String data) {
         logger.info(data);
         AjaxResult<String> result = new AjaxResult<>();
         JSONObject js = JSON.parseObject(data);
@@ -251,7 +251,6 @@ public class UserController {
     }
 
 
-
     @RequestMapping(value = "/user/mail"
             , method = RequestMethod.POST
             , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
@@ -264,12 +263,11 @@ public class UserController {
      *
      *
      * */
-    public String alterMail(@Param("data") String mail) {
+    public String alterMail(@RequestParam("data") String mail) {
         AjaxResult<String> result = new AjaxResult<>();
         logger.info(mail);
         int code = userService.sendMail2NewNail(mail);
-        if (code == 0) {
-            result.setMsg("密码错误");
+        if (code != 0) {
             result.failed();
         } else {
             result.ok();
@@ -279,7 +277,7 @@ public class UserController {
 
     /**
      * @param id  用户id
-     * @param key note 信息
+     * @RequestParam key note 信息
      * @descript 修改邮箱
      */
     @RequestMapping(value = "/user/active"
@@ -287,8 +285,8 @@ public class UserController {
             , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
     )
 
-    public void activeMail(@Param("id") String id,
-                           @Param("key") String key,
+    public void activeMail(@RequestParam("id") String id,
+                           @RequestParam("key") String key,
                            HttpServletRequest request,
                            HttpServletResponse response
     ) throws IOException {
@@ -302,14 +300,67 @@ public class UserController {
          * 直接用response的writer无法输出中文字符
          * Exception java.io.CharConversionException: Not an ISO 8859-1 character
          * 用PrintWriter同样无法输出html
-        * */
+         * */
         response.setContentType("text/html;charset=utf-8");
-        PrintWriter out=response.getWriter();
+        PrintWriter out = response.getWriter();
         out.println(code + html);
     }
 
+
+    @RequestMapping(value = "/user/icon"
+            , method = RequestMethod.POST
+            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+    )
+    @ResponseBody
+    /**
+     * @descript 修改用户头像
+     *
+     * @RequestParam url 头像的文件名
+     *
+     *
+     * */
+    public String alterIcon(@RequestParam("data") String url) {
+        AjaxResult<String> result = new AjaxResult<>();
+        logger.info(url);
+        if (StringUtils.isEmpty(url)) {
+            result.setMsg("操作失败");
+            result.failed();
+            return result.toString();
+        }
+        int code = userService.updataIcon(url);
+        if (code == 0) {
+            result.setMsg("操作失败");
+            result.failed();
+        } else {
+            result.ok();
+        }
+        return result.toString();
+    }
+
+    @RequestMapping(value = "/user/icon/{id}"
+            , method = RequestMethod.GET
+            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+    )
+    @ResponseBody
+    /**
+     * @descript 获取用户头像
+     *
+     * @RequestParam id 用户ID
+     *
+     *
+     * */
+    public String getUserIcon(@PathVariable("id") Integer id) {
+        AjaxResult<String> result = new AjaxResult<>();
+        logger.info(id);
+        String url = userService.findUserIcon(id);
+
+        result.ok();
+        result.setData(url);
+
+        return result.toString();
+    }
     @Controller
-    public class Password {
+    public class PasswordController {
         @RequestMapping(value = "/user/password"
                 , method = RequestMethod.POST
                 , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
@@ -322,8 +373,9 @@ public class UserController {
          *
          *
          * */
-        public String alterPassword(@Param("data") String data) {
+        public String alterPassword(@RequestParam("data") String data) {
             AjaxResult<Permission> result = new AjaxResult<>();
+
             logger.info(data);
             data = ToolKit.aesDecrypt(data);
             JSONObject obj = JSON.parseObject(data);
@@ -346,18 +398,18 @@ public class UserController {
         /**
          * @descript 修改密码
          *
-         * @param data 经过两层aes加密的新密码和旧密码
+         * @RequestParam data 经过两层aes加密的新密码和旧密码
          *
          *
          * */
-        public String findPassword(@Param("data") String data, @PathVariable("step") Integer step) {
+        public String findPassword(@RequestParam("data") String data, @PathVariable("step") Integer step) {
             AjaxResult<String> result = new AjaxResult<>();
             logger.info(data);
             data = ToolKit.aesDecrypt(data);
             JSONObject obj = JSON.parseObject(data);
             logger.info("obj: " + obj);
 
-            if (checkCaptchaEqu(obj.getString("note"))) {
+            if (Captcha.checkCaptchaEqu(obj.getString("note"))) {
                 result.failed();
                 result.setMsg("验证码错误");
                 return result.toString();
@@ -393,17 +445,7 @@ public class UserController {
         }
 
     }
-    /**
-    * 检查验证码是否相等
-    *
-    * */
-    private boolean checkCaptchaEqu(@NotNull String captcha) {
-        Subject subject = SecurityUtils.getSubject();
-        Session session = subject.getSession();
-        @NotNull
-        String tempCaptcha = (String) session.getAttribute("captcha");
-        return tempCaptcha.equals(captcha);
-    }
+
 }
 
 

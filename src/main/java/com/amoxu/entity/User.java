@@ -1,8 +1,9 @@
 package com.amoxu.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +

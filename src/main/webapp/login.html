@@ -145,6 +145,7 @@
                 } else {
                     layer.msg("登录成功！");
                     layui.sessionData('unLogin', {key: 'statue', value: true});
+                    layui.sessionData("user", {key:'user',value:res});
                     self.location = window.history.back();
                     window.location.refresh();
                 }
