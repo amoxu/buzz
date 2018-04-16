@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>开始使用layui</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" type="text/css" href="./alicon/iconfont.css">
+    <link rel="stylesheet" href="css/comment.css">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="js/aes.js"></script>
+
+</head>
+<body class="mbg">
+
+<!-- 你的HTML代码 -->
+<div class="layui-header header header-doc ">
+    <div class="layui-main pbg">
+        <a class="logo" href="./index.html"><img src="img/logo.png"/>
+        </a>
+        <ul class="layui-nav layui-layout-left" lay-filter="">
+            <li class="layui-nav-item layui-this"><a href="./index.html">首页</a></li>
+            <li class="layui-nav-item"><a href="./search.html">搜索</a></li>
+
+            <li class="layui-nav-item"><a href="./events.html">动态</a></li>
+            <li class="layui-nav-item layui-layout-right">
+
+            </li>
+        </ul>
+    </div>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</div>
+
+
+<div class=" layui-main pbg">
+
+
+    <div class="layui-row">
+        <div class="layui-col-md6 layui-col-md-offset4 " style="padding: 35px 0px 35px 0px">
+            <div class="layui-col-md9">
+
+                <div class="layui-row">
+                    <div class="form-box">
+                        <div class="form-top">
+                            <div class="form-top-left">
+                                <p class="ws22">找回密码</p>
+                                <p>欢迎来到乐热评。</p>
+                            </div>
+                            <div class="form-top-right">
+                                <i class="fa layui-icon">&#xe62c;</i>
+                            </div>
+                        </div>
+                        <div class="form-bottom">
+
+                            <form role="form" action="" method="post" class="login-form">
+                                <p class="ws18">第二步：填写编码，修改密码</p>
+                                <div class="form-group">
+                                    <label class="sr-only" for="nickname">邮箱验证码</label>
+                                    <input type="text" name="form-password" placeholder="邮箱验证码"
+                                           class="form-password form-control" id="nickname">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="email">邮箱</label>
+                                    <input type="text" name="form-password" placeholder="邮箱"
+                                           class="form-password form-control" id="email">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="password">新密码</label>
+                                    <input type="password" name="form-password" placeholder="密码"
+                                           class="form-password form-control" id="password">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="re-password">确认密码</label>
+                                    <input type="password" name="form-password" placeholder="确认密码"
+                                           class="form-password form-control" id="re-password">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="verify">验证码</label>
+                                    <input type="text" name="form-password" placeholder="验证码"
+                                           class="form-password form-control" id="verify">
+                                    <div class="inline">
+                                        <img id="captchaImg" width="140px" height="60px">
+                                        <span style="">看不清，<a href="javascript:void(0);" id="captcha">换一张</a></span>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn">修改</button>
+                                <a  class="btn" href="./findpwd-1.html">上一步</a>
+                            </form>
+                            <p class="float_right"><a href="./login.html">返回登录</a></p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="footer pbg">
+        &copy;Copyright 2018 乐热评<br>
+        感谢：<a>Layui</a>,<a>Bootstrap</a>,<a>网易云</a>,<a>QQ音乐</a>,<a>酷我音乐</a>...<br>
+        联系我们：<a href="mailto:amoxuk@aliyun.com">amoxuk#aliyun.com(#换成@)</a>
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="js/jquery.flexText.js"></script>
+<script src="js/common.js"></script>
+<script src="layui/layui.js"></script>
+<script src="js/top.js"></script>
+
+<script>
+    layui.use(['element', 'layer'], function () {
+        var element = layui.element;
+        var layer = layui.layer;
+    });
+    $("#captchaImg").attr("src", "captcha?r=" + Date.now());
+    $("#captcha").on('click', function () {
+        $("#captchaImg").attr("src", "captcha?r=" + Date.now());
+    });
+    $("button.btn").on('click', function () {
+        var newTable = {
+
+            "nickname": $("#nickname").val(),
+            "email": $("#email").val(),
+            "password": aes.encrypt($("#password").val()),
+            "note": $("#verify").val()
+        };
+        if (!newTable.nickname ||!newTable.email || !newTable.password || !newTable.note) {
+            layer.msg('请先输入必填项。', {icon: 5});
+            return false;
+        }
+        layer.msg('登录中...', {
+            icon: 16
+            , shade: 0.01
+        }, 2000);
+        $.ajax({
+            type: 'post'
+            , url: "/user/password/2"
+            , data: {"data":aes.encrypt(JSON.stringify(newTable))}
+            , contentType: 'application/x-www-form-urlencoded;charset=UTF-8'
+            , success: function (res) {
+                $("input").val("");
+                if (1 === res["status"]) {
+                    layer.msg(res['msg']);
+                    setTimeout("$(\"#captcha\").click()", 2000);
+                    return false;
+                } else {
+                    layer.open({
+                        title: '操作成功'
+                        ,content: '请前往登录'
+                    });
+                    return false;
+                }
+
+            }
+            , error: function (res) {
+                layer.msg('错误码：' + res.status);
+                setTimeout(" $(\"#reset\").click();", 2000)
+
+            }
+        });
+        return false;
+    });
+
+</script>
+</body>
+</html>
