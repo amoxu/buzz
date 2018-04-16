@@ -24,8 +24,10 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public Permission getUserPermission() {
          Subject subject = SecurityUtils.getSubject();
-         User user = (User) subject.getPrincipal();
-        return mapper.selectByPrimaryKey(user.getUid());
+        if (subject.isAuthenticated()) {
+            User user = (User) subject.getPrincipal();
+            return mapper.selectByPrimaryKey(user.getUid());
+        } else return null;
     }
 
     @Override

@@ -28,7 +28,7 @@ body{font-family: "Microsoft Yahei";}
     border-top: 1px solid #EDEDED;
     padding: 10px 0;
 }
-.comment-show-con-img {
+.comment-show-con-img img {
     width: 48px;
     height: 48px;
     /*overflow: hidden;*/

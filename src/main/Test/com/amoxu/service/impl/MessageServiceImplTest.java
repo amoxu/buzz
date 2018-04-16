@@ -1,5 +1,7 @@
 package com.amoxu.service.impl;
 
+import com.amoxu.entity.Message;
+import com.amoxu.entity.PageResult;
 import com.amoxu.service.MessageService;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -26,5 +28,11 @@ public class MessageServiceImplTest {
     }
 
 
-
+    @Test
+    public void getMessage() {
+        PageResult<Message> pageResult = new PageResult<>();
+        pageResult.setLimit(10);
+        pageResult.setOffset(0);
+        logger.info(messageService.getMessage(pageResult, 1));
+    }
 }

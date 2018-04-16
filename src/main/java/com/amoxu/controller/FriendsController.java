@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+
 /**
- *
  * TODO 做一个拦截器，在需要登录的任务的时候检测用户是否登录，统一返回
- *
- * */
+ */
 
 @Controller
 public class FriendsController {
@@ -28,7 +27,7 @@ public class FriendsController {
 
 
     @RequestMapping(
-            value = "/friend/{id}"
+            value = {"/friend", "/friend/{id}"}
             , method = RequestMethod.GET
             , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
     )
@@ -36,26 +35,21 @@ public class FriendsController {
     public String friendsList(
             @RequestParam(value = "limit") Integer limit,
             @RequestParam(value = "offset") Integer offset,
-            @PathVariable("id") Integer id) {
+            @PathVariable(value = "id", required = false) Integer id) {
         AjaxResult<List<User>> ajaxResult = new AjaxResult<>();
 
-        if (id == 0) {
-            Subject subject = SecurityUtils.getSubject();
-            try {
-                User thisUser = (User) subject.getPrincipal();
-                id = thisUser.getUid();
-            } catch (Exception e) {
-                e.printStackTrace();
-                ajaxResult.failed();
-                ajaxResult.setMsg("用户未登录");
-                return ajaxResult.toString();
-            }
+
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            User thisUser = (User) subject.getPrincipal();
+            id = thisUser.getUid();
         }
-        List<User> frineds = friendsService.getFriends(id, limit, offset);
+
+        List<User> friends = friendsService.getFriends(id, limit, offset);
 
         logger.info("id:" + id + ",limit:" + limit + ",offset:" + offset);
         ajaxResult.ok();
-        ajaxResult.setData(frineds);
+        ajaxResult.setData(friends);
         return ajaxResult.toString();
     }
 
@@ -72,11 +66,11 @@ public class FriendsController {
         int suid;
 
         Subject subject = SecurityUtils.getSubject();
-        try {
+
+        if (subject.isAuthenticated()) {
             User thisUser = (User) subject.getPrincipal();
             suid = thisUser.getUid();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
             ajaxResult.failed();
             ajaxResult.setMsg("用户未登录");
             return ajaxResult.toString();
@@ -86,7 +80,6 @@ public class FriendsController {
         ajaxResult.setData(friendsService.removeRelation(suid, id));
         return ajaxResult.toString();
     }
-
 
 
 }

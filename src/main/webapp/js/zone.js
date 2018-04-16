@@ -80,7 +80,7 @@ layui.use(['jquery','layer'], function () {
                 }, function(value, index, elem){
                     console.log(value); //得到value
 
-                    var idx = layer.load();
+                    var idx = layer.load(1);
 
                     $.ajax({
                         async: false
@@ -94,14 +94,17 @@ layui.use(['jquery','layer'], function () {
                             }else {
                                 layer.msg(res.msg);
                             }
+                            layer.close(index);
                             return false;
                         }
                         ,error:function (res) {
                             layer.close(idx);
                             layer.alert("网络错误，错误码：" + res.status);
+                            layer.close(index);
                             return false;
                         }
                     });
+
                 });
                 return false;
             }else if (node.find('zone')) {
@@ -114,7 +117,7 @@ layui.use(['jquery','layer'], function () {
                 layer.confirm('确定取消关注'+$(this).attr("data-name"), {icon: 3, title:'提示'}, function(index){
                     //do something
                     console.log("sure remove " + toId);
-                    var idx = layer.load();
+                    var idx = layer.load(1);
 
                     $.ajax({
                         async: false
@@ -136,6 +139,7 @@ layui.use(['jquery','layer'], function () {
                         }
                     });
                 });
+
                 return false;
             }else {
                 console.log(this.className);

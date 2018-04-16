@@ -190,6 +190,12 @@ public class UserController {
     public String getUserInfo(@PathVariable("id") Integer id) {
         AjaxResult<User> result = new AjaxResult<>();
         User info = userService.getUserInfo(id);
+        if (info == null) {
+            result.failed();
+            result.setMsg(StaticEnum.OPT_UNLOGIN);
+            return result.toString();
+        }
+
         result.ok();
         /**
          * 设置返回数据隐私内容不显示
@@ -230,8 +236,14 @@ public class UserController {
     @ResponseBody
     public String getUserPermission() {
         AjaxResult<Permission> result = new AjaxResult<>();
-        result.setData(permissionService.getUserPermission());
+        Permission userPermission = permissionService.getUserPermission();
+        if (null == userPermission) {
+            result.failed();
+            return result.toString();
+        }
+
         result.ok();
+        result.setData(userPermission);
         return result.toString();
     }
 

@@ -80,21 +80,30 @@ public class MessageController {
 
     @RequestMapping(
             method = RequestMethod.GET
-            , value = "/msg"
+            , value = {"/msg", "/msg/{suid}"}
             , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
     )
     @ResponseBody
-    public String getMsg(PageResult<Message> pageResult) {
+    public String getMsg(PageResult<Message> pageResult, @PathVariable(value = "suid", required = false) Integer suid) {
 
         AjaxResult<PageResult<Message>> ajaxResult = new AjaxResult<>();
-         Subject subject = SecurityUtils.getSubject();
-        if (!subject.isAuthenticated()) {
-            ajaxResult.failed();
-            ajaxResult.setMsg(StaticEnum.OPT_UNLOGIN);
-            return ajaxResult.toString();
+        int uid;
+        if (suid != null) {
+            uid = suid;
+        } else {
+            Subject subject = SecurityUtils.getSubject();
+
+            if (!subject.isAuthenticated()) {
+                ajaxResult.failed();
+                ajaxResult.setMsg(StaticEnum.OPT_UNLOGIN);
+                return ajaxResult.toString();
+            }
+
+            uid = ((User) subject.getPrincipal()).getUid();
         }
 
-        int uid = ((User) subject.getPrincipal()).getUid();
+
+
         /*int uid = 1;*/
         logger.info(pageResult);
 

@@ -8,21 +8,24 @@ import com.amoxu.mapper.MessageMapper;
 import com.amoxu.service.MessageService;
 import com.amoxu.util.StaticEnum;
 import com.amoxu.util.ToolKit;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 
-@Controller
+@Service
 public class MessageServiceImpl implements MessageService {
     private Logger logger = Logger.getLogger(getClass());
     @Autowired
     private MessageMapper msgMapper;
 
-/*    @Autowired
-    private SqlSessionFactoryBean sqlSessionFactoryBean;*/
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+
 /**
  *
  * 返回不是成功就返回错误信息
@@ -80,15 +83,25 @@ public class MessageServiceImpl implements MessageService {
         MessageExample.Criteria criteria = example.createCriteria();
         criteria.andSuidEqualTo(uid);
         /**
-         *  TODO 希望在这里不用关闭连接池，接着进行第二次查询
+         *  在这里不用关闭连接池，接着进行第二次查询
+         *
          * */
-        /*提前获取数量*/
-        pageResult.setCount(msgMapper.countByExample(example));
 
-        /*然后配置分页*/
-        example.setLimit(pageResult.getLimit());
-        example.setOffset(pageResult.getOffset());
-        pageResult.setList(msgMapper.selectByExample(example));
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        try {
+            MessageMapper messageMapper = sqlSession.getMapper(MessageMapper.class);
+            /*提前获取数量*/
+            pageResult.setCount(messageMapper.countByExample(example));
+
+            /*然后配置分页*/
+            example.setLimit(pageResult.getLimit());
+            example.setOffset(pageResult.getOffset());
+            pageResult.setList(messageMapper.selectByExample(example));
+
+        } finally {
+            sqlSession.close();
+        }
+
         return pageResult;
     }
 }
