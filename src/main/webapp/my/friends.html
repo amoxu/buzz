@@ -98,61 +98,6 @@
                     <div class="layui-row">
                         <div class="layui-col-xs6 layui-col-md12">
                             <div class="f-show">
-                                <div class="comment-show-con clearfix">
-                                    <div class="comment-show-con-img pull-left"><img
-                                            src="../images/header-img-comment_03.png" alt=""></div>
-                                    <div class="f-list pull-left clearfix">
-                                        <div class="pl-text clearfix"><a href="javascript:;" class="f-name">hahaha:</a>
-                                        </div>
-                                        <div class="date-dz"><span class="f-note pull-left comment-time">签名：12222222222222222</span>
-                                            <div class="date-dz-right pull-right comment-pl-block">
-                                                <a href="javascript:;" class="f-opt">发消息</a>
-                                                <span class="pull-left date-dz-line">|</span>
-                                                <a href="javascript:;" class="f-opt">TA的空间</a>
-                                                <span class="pull-left date-dz-line">|</span>
-                                                <a href="javascript:;" class="f-opt">取消关注</a>
-                                            </div>
-                                        </div>
-                                        <div class="hf-list-con"></div>
-                                    </div>
-                                </div>
-                                <div class="comment-show-con clearfix">
-                                    <div class="comment-show-con-img pull-left"><img
-                                            src="../images/header-img-comment_03.png" alt=""></div>
-                                    <div class="f-list pull-left clearfix">
-                                        <div class="pl-text clearfix"><a href="javascript:;" class="f-name">hahaha:</a>
-                                        </div>
-                                        <div class="date-dz"><span class="f-note pull-left comment-time">签名：12222222222222222</span>
-                                            <div class="date-dz-right pull-right comment-pl-block">
-                                                <a href="javascript:;" class="f-opt">发消息</a>
-                                                <span class="pull-left date-dz-line">|</span>
-                                                <a href="javascript:;" class="f-opt">TA的空间</a>
-                                                <span class="pull-left date-dz-line">|</span>
-                                                <a href="javascript:;" class="f-opt">取消关注</a>
-                                            </div>
-                                        </div>
-                                        <div class="hf-list-con"></div>
-                                    </div>
-                                </div>
-                                <div class="comment-show-con clearfix">
-                                    <div class="comment-show-con-img pull-left"><img
-                                            src="../images/header-img-comment_03.png" alt=""></div>
-                                    <div class="f-list pull-left clearfix">
-                                        <div class="pl-text clearfix"><a href="javascript:;" class="f-name">hahaha:</a>
-                                        </div>
-                                        <div class="date-dz"><span class="f-note pull-left comment-time">签名：12222222222222222</span>
-                                            <div class="date-dz-right pull-right comment-pl-block">
-                                                <a href="javascript:;" class="f-opt">发消息</a>
-                                                <span class="pull-left date-dz-line">|</span>
-                                                <a href="javascript:;" class="f-opt">TA的空间</a>
-                                                <span class="pull-left date-dz-line">|</span>
-                                                <a href="javascript:;" class="f-opt">取消关注</a>
-                                            </div>
-                                        </div>
-                                        <div class="hf-list-con"></div>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -193,30 +138,41 @@
             , arrow: 'hover' //始终显示箭头
         });
     });
+    $.ajax({
+        url:"/friend/0?offset=0&limit=10"
+        ,type:"get"
+        ,success:function (res) {
+            if (res.status === 0) {
+                var dom = $('.f-show');
+                dom.html("");
 
-    layui.use('table', function () {
-        var table = layui.table;
-        table.render({
-            elem: '.demo'
-            ,
-            skin: 'line' //行边框风格
-            ,
-            data: [{"id": 1, "用户": 2, "内容": 3}, {"id": 1, "用户": 2, "内容": 3}, {"id": 1, "用户": 2, "内容": 3}, {
-                "id": 1,
-                "用户": 2,
-                "内容": 3
-            }, {"id": 1, "用户": 2, "内容": 3}, {"id": 1, "用户": 2, "内容": 3}]
-            ,
-            page: false
-            ,
-            cols: [[
-                {field: "id", title: "id", width: 120}
-                , {field: "用户", title: "用户"}
-                , {field: "时间", title: "时间"}
-                , {field: "内容", title: "内容"}
-            ]]
-        });
+                res.data.forEach(function (friend) {
+                    dom.append("<div class=\"comment-show-con clearfix\">\n" +
+                        "<div class=\"comment-show-con-img pull-left\"><img\n" +
+                        "src=\""+ friend.icons+"&s=45\" alt=\"\" ></div>\n" +
+                        "<div class=\"f-list pull-left clearfix\">\n" +
+                        "<div class=\"pl-text clearfix\"><a href=\"javascript:;\" class=\"f-name\">"+friend.nickname+"</a>:\n" +
+                        "</div>\n" +
+                        "<div class=\"date-dz\"><span class=\"f-note pull-left comment-time\">签名："+friend.introduce +" </span>\n" +
+                        "<div class=\"date-dz-right pull-right comment-pl-block\">\n" +
+                        "<a href=\"javascript:;\" class=\"f-opt send\" data-id='"+friend.uid+"'>发消息</a>\n" +
+                        "<span class=\"pull-left date-dz-line\">|</span>\n" +
+                        "<a href=\"../"+friend.uid+"/my.html\" class=\"f-opt zone\" data-id='1' >TA的空间</a>\n" +
+                        "<span class=\"pull-left date-dz-line\">|</span>\n" +
+                        "<a href=\"javascript:;\" class=\"f-opt cancel\" data-id='"+friend.uid+"' data-name='"+friend.nickname+"'>取消关注</a>\n" +
+                        "</div>\n" +
+                        "</div>\n" +
+                        "<div class=\"hf-list-con\"></div>\n" +
+                        "</div>\n" +
+                        "</div>");
+                });
+            }
+
+        }
+        ,error:function (res) {
+        }
     });
+
     layui.use(['laypage'], function () {
         var laypage = layui.laypage
         //开启HASH

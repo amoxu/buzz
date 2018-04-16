@@ -194,8 +194,8 @@
     <result property="nickname" column="nickname"/>
     <result property="introduce" column="introduce"/>
   </resultMap>
-  <select id="selectSelective" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-    SELECT friends.suid,friends.duid,friends.ctime, user.uid,user.icons,nickname,introduce
+  <select id="selectSelective" resultMap="friendsMap" parameterType="java.lang.Integer">
+    SELECT user.uid,user.icons,nickname,introduce
     FROM buzz.friends
     LEFT JOIN buzz.user ON user.uid = friends.duid
     WHERE friends.suid = #{uid,jdbcType=INTEGER}

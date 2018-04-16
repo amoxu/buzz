@@ -68,5 +68,6 @@ public class AjaxResult<T> {
     public String toString() {
         return JSON.toJSONString(this);
     }
+
 }
 

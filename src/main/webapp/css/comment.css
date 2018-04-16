@@ -31,7 +31,7 @@ body{font-family: "Microsoft Yahei";}
 .comment-show-con-img {
     width: 48px;
     height: 48px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     margin-top: 5px;
 }
 .comment-show-con-list {

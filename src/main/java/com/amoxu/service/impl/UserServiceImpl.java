@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         user.setRid(1);
         user.setState(0);
         user.setNote(builder.getNote());
-        user.setIcons(ToolKit.md5Hex(user.getEmail()) + "?d=retro");
+        user.setIcons(StaticEnum.PREFIX_ICON + ToolKit.md5Hex(user.getEmail()) + "?d=retro");
 
         int code = 0;
 
@@ -191,9 +191,12 @@ public class UserServiceImpl implements UserService {
                 if (userState == 0 || !timeoff) {
                     /*
                     * 更新头像
+                    * 将邮箱md5更新为当前邮箱
                     * */
                     String[] split = user.getIcons().split("\\?d=");
                     String newIcon = ToolKit.md5Hex(user.getEmail());
+
+                    newIcon = StaticEnum.PREFIX_ICON + newIcon;
                     newIcon += "?d=";
                     newIcon += split[1];
                     user.setIcons(newIcon);
@@ -297,7 +300,7 @@ public class UserServiceImpl implements UserService {
         String md5 = ToolKit.md5Hex(user.getEmail());
 
         try {
-            url = md5 + "?d=" + URLEncoder.encode("https://icon.amoxuk.com/icon/" + md5 + ".jpg", "UTF-8");
+            url = StaticEnum.PREFIX_ICON + md5 + "?d=" + URLEncoder.encode("https://icon.amoxuk.com/icon/" + md5 + ".jpg", "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

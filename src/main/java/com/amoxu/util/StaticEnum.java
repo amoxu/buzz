@@ -1,11 +1,15 @@
 package com.amoxu.util;
 
 public final class StaticEnum {
+
+    public final static String PREFIX_ICON = "https://s.gravatar.com/avatar/";
+
     /*
      * 操作返回值
      * */
     public final static String OPT_SUCCESS = "操作成功";
     public final static String OPT_ERROR = "操作失败";
+    public final static String OPT_UNLOGIN = "用户未登录";
     /*用户状态
      * 1	已激活
      * 2	未激活

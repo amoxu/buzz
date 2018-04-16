@@ -3,6 +3,7 @@ package com.amoxu.mapper;
 import com.amoxu.entity.Friends;
 import com.amoxu.entity.FriendsExample;
 import com.amoxu.entity.FriendsKey;
+import com.amoxu.entity.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -30,5 +31,5 @@ public interface FriendsMapper {
 
     int updateByPrimaryKey(Friends record);
 
-    List<Friends> selectSelective(Integer uid);
+    List<User> selectSelective(Integer uid);
 }

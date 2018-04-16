@@ -24,6 +24,11 @@ Date.prototype.format = function (formatStr) {
     str = str.replace(/dd|DD/, this.getDate() > 9 ? this.getDate().toString() : '0' + this.getDate());
     return str;
 }
+String.prototype.find = function (str) {
+    return new RegExp(str).test(this);
+};
+
+
 
 function scrollFunction() {
     console.log(121);
