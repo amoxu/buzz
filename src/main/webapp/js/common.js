@@ -1,5 +1,3 @@
-
-
 (function () {
     $(".reply").on('click', function () {
         if ($(this).parent().next().html().length > 0) {
@@ -227,6 +225,7 @@ function addList(obj, now, oSize, nick) {
         $('.comment-show').siblings('.flex-text-wrap').find('.comment-input').prop('value', '').siblings('pre').find('span').text('');
     }
 }
+
 /*刷新页面时根据hash确定显示页面*/
 (function () {
     var hash = window.location.hash;

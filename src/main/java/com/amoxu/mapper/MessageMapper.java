@@ -2,8 +2,9 @@ package com.amoxu.mapper;
 
 import com.amoxu.entity.Message;
 import com.amoxu.entity.MessageExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface MessageMapper {
     int countByExample(MessageExample example);
@@ -27,4 +28,7 @@ public interface MessageMapper {
     int updateByPrimaryKeySelective(Message record);
 
     int updateByPrimaryKey(Message record);
+
+    List<Message> selectByExampleSelective(MessageExample example);
+
 }

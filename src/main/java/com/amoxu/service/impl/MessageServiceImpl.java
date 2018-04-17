@@ -64,9 +64,15 @@ public class MessageServiceImpl implements MessageService {
             } else {
                 int optId = ((User) subject.getPrincipal()).getUid();
                 MessageExample example = new MessageExample();
-                MessageExample.Criteria criteria = example.createCriteria();
-                criteria.andSuidEqualTo(optId);
-                criteria.andMidEqualTo(mid);
+
+                MessageExample.Criteria receive = example.createCriteria();
+                receive.andRuidEqualTo(optId);/*接收者可删除*/
+                receive.andMidEqualTo(mid);
+
+                MessageExample.Criteria sender = example.or();
+                sender.andSuidEqualTo(optId);
+                sender.andMidEqualTo(mid);
+
                 return 1 == msgMapper.deleteByExample(example);
             }
         } catch (Exception e) {
@@ -76,12 +82,13 @@ public class MessageServiceImpl implements MessageService {
 
     }
 
+    /*获取对应ID用户收到的消息*/
     @Override
     public PageResult<Message> getMessage(PageResult<Message> pageResult, int uid) {
 
         MessageExample example = new MessageExample();
         MessageExample.Criteria criteria = example.createCriteria();
-        criteria.andSuidEqualTo(uid);
+        criteria.andRuidEqualTo(uid);
         /**
          *  在这里不用关闭连接池，接着进行第二次查询
          *
@@ -96,7 +103,8 @@ public class MessageServiceImpl implements MessageService {
             /*然后配置分页*/
             example.setLimit(pageResult.getLimit());
             example.setOffset(pageResult.getOffset());
-            pageResult.setList(messageMapper.selectByExample(example));
+            example.setOrderByClause("message.ctime desc");/*根据发送时间排序 倒序*/
+            pageResult.setList(messageMapper.selectByExampleSelective(example));
 
         } finally {
             sqlSession.close();

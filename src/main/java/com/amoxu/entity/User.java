@@ -1,11 +1,26 @@
 package com.amoxu.entity;
 
+
+import com.dyuproject.protostuff.LinkedBuffer;
+import com.dyuproject.protostuff.ProtostuffIOUtil;
+import com.dyuproject.protostuff.runtime.RuntimeSchema;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable {
+public class User implements Cloneable, Serializable {
+    @Override
+    public User clone() {
+        User u = new User();
+        RuntimeSchema<User> schema = RuntimeSchema.createFrom(User.class);
+        byte[] bytes = ProtostuffIOUtil.toByteArray(this, schema, LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));
+        ProtostuffIOUtil.mergeFrom(bytes, u, schema);
+        return u;
+    }
+
     @Override
     public String toString() {
+
         return "User{" +
                 "uid=" + uid +
                 ", nickname='" + nickname + '\'' +

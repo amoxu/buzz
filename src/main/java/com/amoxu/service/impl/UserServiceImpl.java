@@ -116,12 +116,17 @@ public class UserServiceImpl implements UserService {
         return users.size() > 0 ? users.get(0) : null;
     }
 
+    /**
+     *
+     * 获取用户信息时，如果用户已登录，则返回当前用户在缓存中的信息，
+     * 注意要复制一个一个user对象，不要直接把subject中的对对象直接返回，避免在返回页面时渲染产生的影响。
+     * */
     @Override
     public User getUserInfo(Integer uid) {
         User user;
         if (uid == StaticEnum.SELF_ID) {
             Subject subject = SecurityUtils.getSubject();
-            user = (User) subject.getPrincipal();
+            user = ((User) subject.getPrincipal()).clone();
             logger.info(user);
         } else {
             user = mapper.selectByPrimaryKey(uid);

@@ -24,11 +24,36 @@ Date.prototype.format = function (formatStr) {
     str = str.replace(/dd|DD/, this.getDate() > 9 ? this.getDate().toString() : '0' + this.getDate());
     return str;
 }
+Date.prototype.time = function () {
+    return this.getFullYear()
+        + "-" + (this.getMonth() > 8 ? (this.getMonth() + 1) : "0" + (this.getMonth() + 1))
+        + "-" + (this.getDate() > 9 ? this.getDate() : "0" + this.getDate())
+        + " " + (this.getHours() > 9 ? this.getHours() : "0" + this.getHours())
+        + ":" + (this.getMinutes() > 9 ? this.getMinutes() : "0" + this.getMinutes())
+        + ":" + (this.getSeconds() > 9 ? this.getSeconds() : "0" + this.getSeconds());
+};
 String.prototype.find = function (str) {
     return new RegExp(str).test(this);
 };
 
-
+function getHashStringArgs() {
+//取得查询的hash，并去除开头的#号
+    var hashStrings = (window.location.hash.length > 0 ? window.location.hash.substring(1) : ""),
+//保持数据的对象
+        hashArgs = {},
+//取得每一项hash对
+        items = hashStrings.length > 0 ? hashStrings.split("&") : [], item = null, name = null, value = null, i = 0, len = items.length;
+//逐个将每一项添加到hashArgs中
+    for (i = 0; i < len; i++) {
+        item = items[i].split("=");
+        name = decodeURIComponent(item[0]);
+        value = decodeURIComponent(item[1]);
+        if (name.length > 0) {
+            hashArgs[name] = value;
+        }
+    }
+    return hashArgs;
+}
 
 function scrollFunction() {
     console.log(121);

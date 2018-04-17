@@ -27,6 +27,7 @@ body{font-family: "Microsoft Yahei";}
     width: 100%;
     border-top: 1px solid #EDEDED;
     padding: 10px 0;
+    margin-left: 15px;
 }
 .comment-show-con-img img {
     width: 48px;

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Controller
 public class MessageController {
@@ -41,6 +42,12 @@ public class MessageController {
             e.printStackTrace();
             ajaxResult.failed();
             ajaxResult.setMsg(StaticEnum.OPT_UNLOGIN);
+            return ajaxResult.toString();
+        }
+
+        if (ruid.equals(suid)) {
+            ajaxResult.failed();
+            ajaxResult.setMsg("不可以给自己留言哦~");
             return ajaxResult.toString();
         }
 
@@ -86,7 +93,7 @@ public class MessageController {
     @ResponseBody
     public String getMsg(PageResult<Message> pageResult, @PathVariable(value = "suid", required = false) Integer suid) {
 
-        AjaxResult<PageResult<Message>> ajaxResult = new AjaxResult<>();
+        AjaxResult<List<Message>> ajaxResult = new AjaxResult<>();
         int uid;
         if (suid != null) {
             uid = suid;
@@ -108,8 +115,11 @@ public class MessageController {
         logger.info(pageResult);
 
         ajaxResult.ok();
-        ajaxResult.setData(messageService.getMessage(pageResult, uid));
-        ajaxResult.setCount(ajaxResult.getData().getCount());
+        pageResult = messageService.getMessage(pageResult, uid);
+
+        ajaxResult.setData(pageResult.getList());
+
+        ajaxResult.setCount(pageResult.getCount());
         return ajaxResult.toString();
     }
 }

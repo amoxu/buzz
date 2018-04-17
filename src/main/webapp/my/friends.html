@@ -131,14 +131,17 @@
         var element = layui.element;
     });
 
-    page(0);
+
+
+    console.log(getHashStringArgs());
+    page(getHashStringArgs()['!offset']?getHashStringArgs()['!offset']:1);
     function page(pidx) {
         layui.use(['laypage'], function () {
             var laypage = layui.laypage;
             //开启HASH
 
             $.ajax({
-                url: "/friend?offset=" + pidx+ "&limit=" + 10
+                url: "/friend?offset=" + (pidx-1) * 10 + "&limit=" + 10
 
                 , type: "get"
                 , success: function (res) {
@@ -147,32 +150,36 @@
                         dom.html("");
                         $("#page").html("");
                         res.data.forEach(function (friend) {
-                            dom.append("<div class=\"comment-show-con clearfix\">\n" +
+                            dom.append(
+                                "<div class=\"comment-show-con clearfix\">\n" +
                                 "<div class=\"comment-show-con-img pull-left\"><img\n" +
                                 "src=\"" + friend.icons + "&s=45\" alt=\"\" ></div>\n" +
                                 "<div class=\"f-list pull-left clearfix\">\n" +
-                                "<div class=\"pl-text clearfix\"><a href=\"javascript:;\" class=\"f-name\">" + friend.nickname + "</a>:\n" +
+                                "<div class=\"pl-text clearfix\">" +
+                                "<a href=\"../user/"+friend.uid+"/my.html\" class=\"f-name\">" + friend.nickname + "</a>:\n" +
                                 "</div>\n" +
-                                "<div class=\"date-dz\"><span class=\"f-note pull-left comment-time\">签名：" + friend.introduce + " </span>\n" +
+                                "<div class=\"date-dz\">" +
+                                "<span class=\"f-note pull-left comment-time\">签名：" + friend.introduce + " </span>\n" +
                                 "<div class=\"date-dz-right pull-right comment-pl-block\">\n" +
                                 "<a href=\"javascript:;\" class=\"f-opt send\" data-id='" + friend.uid + "'>发消息</a>\n" +
                                 "<span class=\"pull-left date-dz-line\">|</span>\n" +
-                                "<a href=\"../" + friend.uid + "/my.html\" class=\"f-opt zone\" data-id='1' >TA的空间</a>\n" +
+                                "<a href=\"../user/" + friend.uid + "/my.html\" class=\"f-opt zone\" data-id='1' >TA的空间</a>\n" +
                                 "<span class=\"pull-left date-dz-line\">|</span>\n" +
                                 "<a href=\"javascript:;\" class=\"f-opt cancel\" data-id='" + friend.uid + "' data-name='" + friend.nickname + "'>取消关注</a>\n" +
                                 "</div>\n" +
                                 "</div>\n" +
                                 "<div class=\"hf-list-con\"></div>\n" +
                                 "</div>\n" +
-                                "</div>");
+                                "</div>"
+                            );
                         });
 
                         laypage.render({
-                            elem: 'test1'
+                            elem: 'page'
                             , count: res.count //数据总数，从服务端得到
                             , limit: 10
                             , groups: 4 /*	连续出现的页码个数	Number	5*/
-                            , curr:pidx /*必须加这个，否则分页不会走*/
+                            , curr: pidx /*必须加这个，否则分页不会走*/
                             , hash: 'offset'
                             , jump: function (obj, first) {
                                 //obj包含了当前分页的所有参数，比如：
@@ -188,15 +195,14 @@
 
                 }
                 , error: function (res) {
-                    layer.alert("错误码："+res.status);
-                    $("#page").html("Opps，错误码："+res.status);
+                    layer.alert("错误码：" + res.status);
+                    $("#page").html("Oops，错误码：" + res.status);
                 }
             });
 
 
         });
     }
-
 
 
 </script>

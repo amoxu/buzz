@@ -1,12 +1,12 @@
 package com.amoxu.service;
 
-import com.amoxu.entity.User;
-
-import java.util.List;
+import com.amoxu.entity.Friends;
+import com.amoxu.entity.PageResult;
 
 public interface FriendsService {
-    List<User> getFriends(Integer id, Integer limit, Integer offset);
 
 
     String removeRelation(Integer suid, Integer duid);
+
+    PageResult<Friends> getFriends(Integer id, PageResult<Friends> pageResult);
 }

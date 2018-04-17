@@ -39,7 +39,7 @@ public class MessageControllerTest {
 
         String s = mockMvc.perform(
                 MockMvcRequestBuilders.
-                        get("/msg?limit=10&offset=0")/*?limit=0&offset=0*/
+                        get("/msg/1?limit=10&offset=0")/*?limit=0&offset=0*/
         )
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();

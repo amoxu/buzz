@@ -1,6 +1,7 @@
 package com.amoxu.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.amoxu.entity.PageResult;
 import com.amoxu.service.FriendsService;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -26,14 +27,21 @@ public class FriendsServiceImplTest {
 
     @Test
     public void getFrineds() {
+        PageResult pageResult = new PageResult().setCount(10).setLimit(10).setOffset(0);
+
         logger.info(
-                JSON.toJSONString(friendsService.getFriends(1, 100, 0))
+                JSON.toJSONString(friendsService.getFriends(1, pageResult))
         );
+
     }
 
     @Test
     public void removeRelation() {
         logger.info(friendsService.removeRelation(23, 1));
 
+    }
+
+    @Test
+    public void getFriends() {
     }
 }

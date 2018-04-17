@@ -12,8 +12,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Jacey on 2017/6/30.
@@ -66,7 +65,13 @@ public class loginRealm extends AuthorizingRealm {
             //密码错误
             throw new IncorrectCredentialsException();
         }
+
+/*        Map<String, User> map = new HashMap<>();
+
+        map.put("user", userlogin);*/
+
         AuthenticationInfo aInfo = new SimpleAuthenticationInfo(userlogin, password, getName());
+
         //身份验证通过,返回一个身份信息
 
         return aInfo;
