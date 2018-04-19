@@ -17,7 +17,7 @@ var setting = {
         }
     }
     ,error:function (res) {
-        layer.msg('错误码：' + res.status);
+        layer.alert("错误码：" + res.status+"<br>"+res.statusText);
     }
     ,permission:function (res) {
 

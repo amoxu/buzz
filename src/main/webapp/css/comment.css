@@ -70,6 +70,9 @@ body{font-family: "Microsoft Yahei";}
     display: block;
     padding-top: 18px;
 }
+.comment-time {
+    font-size: smaller;
+}
 .comment-time, .comment-pl-block {
     padding-top: 7px;
 }

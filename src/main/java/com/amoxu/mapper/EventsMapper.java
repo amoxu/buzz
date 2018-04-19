@@ -2,8 +2,9 @@ package com.amoxu.mapper;
 
 import com.amoxu.entity.Events;
 import com.amoxu.entity.EventsExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface EventsMapper {
     int countByExample(EventsExample example);
@@ -27,4 +28,7 @@ public interface EventsMapper {
     int updateByPrimaryKeySelective(Events record);
 
     int updateByPrimaryKey(Events record);
+
+    List<Events> selectEventsByExample( @Param("onlineId") Integer onlineId,@Param("example") EventsExample example);
+
 }

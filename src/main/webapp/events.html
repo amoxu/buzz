@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/comment.css">
-
+    <script src="js/aes.js"></script>
+    <script rel="script" href="https://static.bosonnlp.com/javascripts/demo.js?aff700f"></script>
 
 </head>
 <body class="mbg">
@@ -48,8 +49,10 @@
                 <!--评论区域 end-->
                 <!--回复区域 begin-->
                 <div class="comment-show">
-                    <div class="comment-show-con clearfix">
-                    </div>
+                    <ul id="content">
+                    </ul>
+
+
                 </div>
                 <!--回复区域 end-->
             </div>
@@ -114,23 +117,83 @@
 
 <script>
     //注意：导航 依赖 element 模块，否则无法进行功能性操作
-    layui.use('element', function () {
+    layui.use(['element', 'layer'], function () {
         var element = layui.element;
     });
-    layui.use('carousel', function () {
-        var carousel = layui.carousel;
-        //建造实例
-        carousel.render({
-            elem: '#carousel'
-            , width: '100%' //设置容器宽度
-            , height: 200 //设置容器宽度
-            , arrow: 'hover' //始终显示箭头
+    layui.use('flow', function () {
+        var $ = layui.jquery; //不用额外加载jQuery，flow模块本身是有依赖jQuery的，直接用即可。
+        var flow = layui.flow;
+        flow.load({
+            elem: '#content' //指定列表容器
+            , done: function (page, next) { //到达临界点（默认滚动触发），触发下一页
+                setTimeout(function () {
+                    var lis = [];
+                    $.get('/event?limit=10&offset=' + (page-1)*10, function (res) {
+                        //假设你的列表返回在data集合中
+                        layui.each(res.data, function (index, result) {
+                            lis.push('<li><div class="comment-show-con clearfix">' +
+                                '<div class="comment-show-con-img pull-left">' +
+                                '<img src="'+result.user.icons+'" alt="">' +
+                                '</div> ' +
+                                '<div class="comment-show-con-list pull-left clearfix">' +
+                                '<div class="pl-text clearfix"> ' +
+                                '<a href="javascript:;" class="comment-size-name">'
+                                + result.user.nickname + //昵称
+                                '</a>' +
+                                ' <span class="my-pl-con">&nbsp;'
+                                + result.content + //内容
+                                '</span>' +
+                                ' </div> ' +
+                                '<div class="date-dz"> ' +
+                                '<span class="date-dz-left pull-left comment-time">'
+                                + result.ctime + // 时间
+                                '</span> ' +
+                                '<div class="date-dz-right pull-right comment-pl-block">' +
+                                '<a href="javascript:;" class="removeBlock" data-id="' + result.cid + '">删除</a> ' +
+                                '<a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left" data-id="' + result.cid + '">回复</a> ' +
+                                '<span class="pull-left date-dz-line">|</span> ' +
+                                '<a href="javascript:;" class="date-dz-z pull-left">' +
+                                '<i data-id="' + result.cid + '" class="date-dz-z-click-red"></i>赞 (<i class="z-num">'+result.likes+'</i>)</a> ' +
+                                '</div> </div><div class="hf-list-con"></div></div> </div></li>');
+                        });
+                        next(lis.join(''), page < res.count);
+                    });
+                }, 500);
+            }
         });
     });
     $(".events .plBtn").on('click', function () {
+        var dom = this;
         var content = $(this).siblings('.flex-text-wrap').find('.comment-input').val();
         console.log(content);
-        addList(this, Date.now().toFixed(), content, "hahaha:");
+        var loadIdx = layer.load(1);
+        if (content.length<1) {
+            layer.alert("请输入内容。");
+            return false;
+        }
+
+        $.ajax({
+            url: '/event'
+            , type: 'post'
+            , data: {"data": aes.encrypt(content)}
+            , success: function (res) {
+                layer.close(loadIdx);
+                if (res.status === 0) {
+                    /*清空输入框*/
+                    $(dom).siblings('.flex-text-wrap').find('.comment-input').val('');
+                    addList( res.data);
+                    layer.msg("发表成功");
+                } else {
+                    layer.alert(res.msg);
+                }
+                return false;
+            },
+            error: function (res) {
+                layer.close(loadIdx);
+                layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+                return false;
+            }
+        });
         return false;
     });
 </script>

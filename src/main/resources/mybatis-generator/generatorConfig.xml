@@ -38,7 +38,9 @@
         </javaClientGenerator>
 
 
-        <table tableName="permission" domainObjectName="Permission"/>
-
+        <table tableName="like_comments" domainObjectName="LikeComments"/>
+        <table tableName="like_events" domainObjectName="LikeEvents"/>
+        <table tableName="like_music_share" domainObjectName="LikeMusicShare"/>
+        <table tableName="like_topic_comment" domainObjectName="TikeTopicComment"/>
     </context>
 </generatorConfiguration>

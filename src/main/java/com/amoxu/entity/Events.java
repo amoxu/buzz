@@ -17,6 +17,45 @@ public class Events {
 
     private Date ctime;
 
+    @Override
+    public String toString() {
+        return "Events{" +
+                "cid=" + cid +
+                ", rcid=" + rcid +
+                ", uid=" + uid +
+                ", content='" + content + '\'' +
+                ", likes=" + likes +
+                ", feeling=" + feeling +
+                ", ctime=" + ctime +
+                ", userLike=" + userLike +
+                ", user=" + user +
+                '}';
+    }
+
+
+    public Boolean getUserLike() {
+        return userLike;
+    }
+
+    public Events setUserLike(Boolean userLike) {
+        this.userLike = userLike;
+        return this;
+    }
+
+    private Boolean userLike;
+
+    public User getUser() {
+        return user;
+    }
+
+
+    public Events setUser(User user) {
+        this.user = user;
+        return this;
+    }
+
+    private User user;
+
     public Integer getCid() {
         return cid;
     }
@@ -72,4 +111,7 @@ public class Events {
     public void setCtime(Date ctime) {
         this.ctime = ctime;
     }
+
+
+
 }
