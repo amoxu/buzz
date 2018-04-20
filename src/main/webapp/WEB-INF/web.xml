@@ -97,19 +97,19 @@
         <init-param>
             <!-- 用户名 -->
             <param-name>loginUsername</param-name>
-            <param-value>druid</param-value>
+            <param-value>amoxuk</param-value>
         </init-param>
         <init-param>
             <!-- 密码 -->
             <param-name>loginPassword</param-name>
-            <param-value>druid</param-value>
+            <param-value>950815x</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>DruidStatView</servlet-name>
         <url-pattern>/druid/*</url-pattern>
     </servlet-mapping>
-
+    <!--druid连接池性能监控-->
 
 
     <error-page>

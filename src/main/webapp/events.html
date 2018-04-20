@@ -50,6 +50,7 @@
                 <!--回复区域 begin-->
                 <div class="comment-show">
                     <ul id="content">
+                        <li><div class="comment-show-con clearfix"><div class="comment-show-con-img pull-left"><img src="https://s.gravatar.com/avatar/ab8138dfc78e29709d0f3651054b433c?d=https://icon.amoxuk.com/icon/ab8138dfc78e29709d0f3651054b433c.jpg" alt=""></div> <div class="comment-show-con-list pull-left clearfix"><div class="pl-text clearfix"> <a href="javascript:;" class="comment-size-name">amoxuk</a> <span class="my-pl-con">&nbsp;为伊消得人憔悴。</span> </div> <div class="date-dz"> <span class="date-dz-left pull-left comment-time">2018-04-20 20:16:07</span> <div class="date-dz-right pull-right comment-pl-block"><a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left" data-id="10153">回复</a> <span class="pull-left date-dz-line">|</span> <a data-id="10153" href="javascript:;" class="date-dz-z pull-left date-dz-z-click"><i class="date-dz-z-click-red red"></i>赞 (<i class="z-num">1</i>)</a> </div> </div><div class="hf-list-con"></div></div> </div></li>
                     </ul>
 
 
@@ -131,30 +132,36 @@
                     $.get('/event?limit=10&offset=' + (page-1)*10, function (res) {
                         //假设你的列表返回在data集合中
                         layui.each(res.data, function (index, result) {
-                            lis.push('<li><div class="comment-show-con clearfix">' +
-                                '<div class="comment-show-con-img pull-left">' +
-                                '<img src="'+result.user.icons+'" alt="">' +
-                                '</div> ' +
-                                '<div class="comment-show-con-list pull-left clearfix">' +
-                                '<div class="pl-text clearfix"> ' +
-                                '<a href="javascript:;" class="comment-size-name">'
-                                + result.user.nickname + //昵称
-                                '</a>' +
-                                ' <span class="my-pl-con">&nbsp;'
-                                + result.content + //内容
-                                '</span>' +
-                                ' </div> ' +
-                                '<div class="date-dz"> ' +
-                                '<span class="date-dz-left pull-left comment-time">'
-                                + result.ctime + // 时间
-                                '</span> ' +
-                                '<div class="date-dz-right pull-right comment-pl-block">' +
-                                '<a href="javascript:;" class="removeBlock" data-id="' + result.cid + '">删除</a> ' +
-                                '<a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left" data-id="' + result.cid + '">回复</a> ' +
-                                '<span class="pull-left date-dz-line">|</span> ' +
-                                '<a data-id="' + result.cid + '" href="javascript:;" class="date-dz-z pull-left" >' +
-                                '<i class="date-dz-z-click-red"></i>赞 (<i class="z-num">'+result.likes+'</i>)</a> ' +
-                                '</div> </div><div class="hf-list-con"></div></div> </div></li>');
+                            var tmp = '<li><div class="comment-show-con clearfix">' +
+                            '<div class="comment-show-con-img pull-left">' +
+                            '<img src="' + result.user.icons + '" alt="">' +
+                            '</div> ' +
+                            '<div class="comment-show-con-list pull-left clearfix">' +
+                            '<div class="pl-text clearfix"> ' +
+                            '<a href="javascript:;" class="comment-size-name">'
+                            + result.user.nickname + //昵称
+                            '</a>' +
+                            ' <span class="my-pl-con">&nbsp;'
+                            + result.content + //内容
+                            '</span>' +
+                            ' </div> ' +
+                            '<div class="date-dz"> ' +
+                            '<span class="date-dz-left pull-left comment-time">'
+                            + result.ctime + // 时间
+                            '</span> ' +
+                            '<div class="date-dz-right pull-right comment-pl-block">' +
+                           /* '<a href="javascript:;" class="removeBlock" data-id="' + result.cid + '">删除</a> ' +*/
+                            '<a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left" data-id="' + result.cid + '">回复</a> ' +
+                            '<span class="pull-left date-dz-line">|</span> ' +
+                            '<a data-id="' + result.cid + '" href="javascript:;" ';
+                            if (result.userLike) {
+                                tmp += 'class="date-dz-z pull-left date-dz-z-click"><i  class="date-dz-z-click-red red">';
+                            }else{
+                                tmp += 'class="date-dz-z pull-left"><i  class="date-dz-z-click-red">';
+                            }
+                            tmp+= '</i>赞 (<i class="z-num">' + result.likes + '</i>)</a> ' +
+                                '</div> </div><div class="hf-list-con"></div></div> </div></li>';
+                            lis.push(tmp);
                         });
                         next(lis.join(''), page < res.count);
                     });
@@ -168,6 +175,7 @@
         console.log(content);
         var loadIdx = layer.load(1);
         if (content.length<1) {
+            layer.close(loadIdx);
             layer.alert("请输入内容。");
             return false;
         }
@@ -202,34 +210,40 @@
     (function () {
         $('.commentAll').on('click', '.comment-show .date-dz-z', function () {
             var thumbNum = $(this).find('.z-num').html();
-            console.log(this)
             if (layui.sessionData('user') == null) {
                 layer.msg("点赞需要登录。");
                 return false;
             } else {
-
+                var dom = this;
                 $.ajax({
                     url: '/like/event/'+$(this).attr("data-id")
                     , type: 'post'
                     , success: function (res) {
                         layer.msg(res.msg);
+                        if (res.status ===  0) {
+                            /*操作成功*/
+                            if (res.count === 1) {
+                                /*点赞*/
+                                thumbNum++;
+                                $(dom).addClass('date-dz-z-click');
+                                $(dom).find('.z-num').html(thumbNum);
+                                $(dom).find('.date-dz-z-click-red').addClass('red');
+                            }else {
+                                /*取消点赞*/
+                                thumbNum--;
+                                $(dom).removeClass('date-dz-z-click red');
+                                $(dom).find('.z-num').html(thumbNum);
+                                $(dom).find('.date-dz-z-click-red').removeClass('red');
+                            }
+                        }else {
+                            layer.msg(res.msg);
+                        }
                     }
                     , error: function (res) {
-                        layer.msg(res.status);
+                        layer.msg("错误码：" + res.status + "<br>" + res.statusText);
                     }
                 });
                 return false;
-            }
-            if ($(this).is('.date-dz-z-click')) {
-                thumbNum--;
-                $(this).removeClass('date-dz-z-click red');
-                $(this).find('.z-num').html(thumbNum);
-                $(this).find('.date-dz-z-click-red').removeClass('red');
-            } else {
-                thumbNum++;
-                $(this).addClass('date-dz-z-click');
-                $(this).find('.z-num').html(thumbNum);
-                $(this).find('.date-dz-z-click-red').addClass('red');
             }
         });
     })();

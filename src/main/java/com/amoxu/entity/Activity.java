@@ -1,5 +1,7 @@
 package com.amoxu.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Activity {
@@ -8,9 +10,9 @@ public class Activity {
     private String name;
 
     private String content;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date ctime;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date stime;
 
     public Integer getEid() {

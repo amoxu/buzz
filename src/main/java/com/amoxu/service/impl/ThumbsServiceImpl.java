@@ -23,10 +23,11 @@ public class ThumbsServiceImpl implements ThumbsService {
     @Autowired
     private LikeTopicCommentMapper likeTopicCommentMapper;
 
+    private ProcCallResult callResult = new ProcCallResult();
     private ProcCallResult likeParam(int cid) {
         Subject subject = SecurityUtils.getSubject();
         Integer uid = ((User) subject.getPrincipal()).getUid();
-        ProcCallResult callResult = new ProcCallResult();
+
         callResult.setCid(cid);
         callResult.setUid(uid);
         return callResult;
@@ -34,9 +35,10 @@ public class ThumbsServiceImpl implements ThumbsService {
     @Override
     public boolean likeEvents(Integer cid) {
         /*点赞==1*//*取消点赞==0*/
-        return likeEventsMapper.callLikeProc(likeParam(cid)).getUid() == 1;
+        callResult = likeParam(cid);
+        likeEventsMapper.callLikeProc(callResult);
+        return callResult.getUid() == 1;
     }
-
     @Override
     public boolean likeComment(Integer cid) {
         return likeCommentsMapper.callLikeProc(likeParam(cid)).getUid() == 1;

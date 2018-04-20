@@ -74,7 +74,7 @@ public class LikeEventsMapperTest {
 
         likeEventsMapper.callLikeProc(callResult);
 
-        logger.info(callResult);
+        logger.info(callResult.getUid());
 
     }
 }

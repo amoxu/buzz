@@ -1,5 +1,7 @@
 package com.amoxu.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +18,9 @@ public class Events {
 
     private Double feeling;
 
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date ctime;
+
     private List<Events> comment;
 
     @Override
