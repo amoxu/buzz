@@ -1,10 +1,12 @@
 package com.amoxu.mapper.likes;
 
+import com.amoxu.entity.ProcCallResult;
 import com.amoxu.entity.likes.LikeEvents;
 import com.amoxu.entity.likes.LikeEventsExample;
 import com.amoxu.entity.likes.LikeEventsKey;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface LikeEventsMapper {
     int countByExample(LikeEventsExample example);
@@ -28,4 +30,7 @@ public interface LikeEventsMapper {
     int updateByPrimaryKeySelective(LikeEvents record);
 
     int updateByPrimaryKey(LikeEvents record);
+
+    ProcCallResult callLikeProc(ProcCallResult param);
+
 }

@@ -1,10 +1,12 @@
 package com.amoxu.mapper.likes;
 
+import com.amoxu.entity.ProcCallResult;
 import com.amoxu.entity.likes.LikeMusicShare;
 import com.amoxu.entity.likes.LikeMusicShareExample;
 import com.amoxu.entity.likes.LikeMusicShareKey;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface LikeMusicShareMapper {
     int countByExample(LikeMusicShareExample example);
@@ -28,4 +30,6 @@ public interface LikeMusicShareMapper {
     int updateByPrimaryKeySelective(LikeMusicShare record);
 
     int updateByPrimaryKey(LikeMusicShare record);
+
+    ProcCallResult callLikeProc(ProcCallResult callResult);
 }

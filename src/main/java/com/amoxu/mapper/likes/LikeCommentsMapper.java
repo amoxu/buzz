@@ -1,5 +1,6 @@
 package com.amoxu.mapper.likes;
 
+import com.amoxu.entity.ProcCallResult;
 import com.amoxu.entity.likes.LikeComments;
 import com.amoxu.entity.likes.LikeCommentsExample;
 import com.amoxu.entity.likes.LikeCommentsKey;
@@ -29,4 +30,6 @@ public interface LikeCommentsMapper {
     int updateByPrimaryKeySelective(LikeComments record);
 
     int updateByPrimaryKey(LikeComments record);
+
+    ProcCallResult callLikeProc(ProcCallResult callResult);
 }

@@ -15,6 +15,7 @@
         <param-name>log4jRefreshInterval</param-name>
         <param-value>60000</param-value>
     </context-param>
+
     <listener>
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
     </listener>
@@ -35,6 +36,8 @@
         <filter-name>CharacterEncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+
 
     <context-param>
         <param-name>webAppRootKey</param-name>
@@ -72,11 +75,6 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-
-
-
-
-
     <!-- name要和 applicationContext.xml中的对应的bean的id一致 -->
     <!--Shiro拦截器 shiro入口-->
     <filter>
@@ -87,19 +85,40 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
-
     <filter-mapping>
         <filter-name>shiroFilter</filter-name>
         <url-pattern>/*</url-pattern>
-
     </filter-mapping>
+
+    <!--druid连接池性能监控-->
+    <servlet>
+        <servlet-name>DruidStatView</servlet-name>
+        <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+        <init-param>
+            <!-- 用户名 -->
+            <param-name>loginUsername</param-name>
+            <param-value>druid</param-value>
+        </init-param>
+        <init-param>
+            <!-- 密码 -->
+            <param-name>loginPassword</param-name>
+            <param-value>druid</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DruidStatView</servlet-name>
+        <url-pattern>/druid/*</url-pattern>
+    </servlet-mapping>
+
+
+
     <error-page>
         <error-code>401</error-code>
-        <location>/WEB-INF/error.html</location>
+        <location>/WEB-INF/401.html</location>
     </error-page>
     <error-page>
         <error-code>404</error-code>
-        <location>/WEB-INF/lost.html</location>
+        <location>/WEB-INF/404.html</location>
     </error-page>
 
     <welcome-file-list>

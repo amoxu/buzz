@@ -152,8 +152,8 @@
                                 '<a href="javascript:;" class="removeBlock" data-id="' + result.cid + '">删除</a> ' +
                                 '<a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left" data-id="' + result.cid + '">回复</a> ' +
                                 '<span class="pull-left date-dz-line">|</span> ' +
-                                '<a href="javascript:;" class="date-dz-z pull-left">' +
-                                '<i data-id="' + result.cid + '" class="date-dz-z-click-red"></i>赞 (<i class="z-num">'+result.likes+'</i>)</a> ' +
+                                '<a data-id="' + result.cid + '" href="javascript:;" class="date-dz-z pull-left" >' +
+                                '<i class="date-dz-z-click-red"></i>赞 (<i class="z-num">'+result.likes+'</i>)</a> ' +
                                 '</div> </div><div class="hf-list-con"></div></div> </div></li>');
                         });
                         next(lis.join(''), page < res.count);
@@ -196,6 +196,43 @@
         });
         return false;
     });
+    <!--点赞-->
+
+
+    (function () {
+        $('.commentAll').on('click', '.comment-show .date-dz-z', function () {
+            var thumbNum = $(this).find('.z-num').html();
+            console.log(this)
+            if (layui.sessionData('user') == null) {
+                layer.msg("点赞需要登录。");
+                return false;
+            } else {
+
+                $.ajax({
+                    url: '/like/event/'+$(this).attr("data-id")
+                    , type: 'post'
+                    , success: function (res) {
+                        layer.msg(res.msg);
+                    }
+                    , error: function (res) {
+                        layer.msg(res.status);
+                    }
+                });
+                return false;
+            }
+            if ($(this).is('.date-dz-z-click')) {
+                thumbNum--;
+                $(this).removeClass('date-dz-z-click red');
+                $(this).find('.z-num').html(thumbNum);
+                $(this).find('.date-dz-z-click-red').removeClass('red');
+            } else {
+                thumbNum++;
+                $(this).addClass('date-dz-z-click');
+                $(this).find('.z-num').html(thumbNum);
+                $(this).find('.date-dz-z-click-red').addClass('red');
+            }
+        });
+    })();
 </script>
 </body>
 </html>

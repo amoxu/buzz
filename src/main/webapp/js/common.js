@@ -170,23 +170,7 @@
 
     });
 })();
-<!--点赞-->
-(function () {
-    $('.commentAll').on('click', '.comment-show .date-dz-z', function () {
-        var zNum = $(this).find('.z-num').html();
-        if ($(this).is('.date-dz-z-click')) {
-            zNum--;
-            $(this).removeClass('date-dz-z-click red');
-            $(this).find('.z-num').html(zNum);
-            $(this).find('.date-dz-z-click-red').removeClass('red');
-        } else {
-            zNum++;
-            $(this).addClass('date-dz-z-click');
-            $(this).find('.z-num').html(zNum);
-            $(this).find('.date-dz-z-click-red').addClass('red');
-        }
-    })
-})();
+
 
 /**
  * obj,now,oSize,nick
@@ -215,8 +199,8 @@ function addList(res) {
         '<a href="javascript:;" class="removeBlock" data-id="' + res.cid + '">删除</a> ' +
         '<a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left" data-id="' + res.cid + '">回复</a> ' +
         '<span class="pull-left date-dz-line">|</span> ' +
-        '<a href="javascript:;" class="date-dz-z pull-left">' +
-        '<i data-id="' + res.cid + '" class="date-dz-z-click-red"></i>赞 (<i class="z-num">'+res.likes+'</i>)</a> ' +
+        '<a data-id="' + res.cid + '"href="javascript:;" class="date-dz-z pull-left">' +
+        '<i  class="date-dz-z-click-red"></i>赞 (<i class="z-num">'+res.likes+'</i>)</a> ' +
         '</div> </div><div class="hf-list-con"></div></div> </div></li>';
     /*if (oSize.replace(/(^\s*)|(\s*$)/g, "") != '') {*/
     /*判断内容是否为空*/

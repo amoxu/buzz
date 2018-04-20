@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.amoxu.mapper.LikeCommentsMapper" >
+<mapper namespace="com.amoxu.mapper.likes.LikeCommentsMapper" >
   <resultMap id="BaseResultMap" type="com.amoxu.entity.likes.LikeComments" >
     <id column="uid" property="uid" jdbcType="INTEGER" />
     <id column="comments_id" property="commentsId" jdbcType="INTEGER" />

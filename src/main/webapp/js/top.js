@@ -108,8 +108,12 @@ $(".top-btn").on("click", function () {
         $(".logout").on('click', function () {
             layui.sessionData('unLogin', null);
             layui.sessionData("user", null);
-            window.location.href = "../logout";
-            layer.alert("退出成功");
+
+            layer.confirm("确定退出？",{icon: 3, title:'确定退出'},function (index) {
+                window.location.href = "../logout";
+                layer.close(index);
+            });
+            return false;
         });
     }
 
