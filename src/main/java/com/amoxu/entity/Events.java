@@ -1,6 +1,7 @@
 package com.amoxu.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class Events {
     private Integer cid;
@@ -16,6 +17,7 @@ public class Events {
     private Double feeling;
 
     private Date ctime;
+    private List<Events> comment;
 
     @Override
     public String toString() {
@@ -27,6 +29,7 @@ public class Events {
                 ", likes=" + likes +
                 ", feeling=" + feeling +
                 ", ctime=" + ctime +
+                ", comment=" + comment +
                 ", userLike=" + userLike +
                 ", user=" + user +
                 '}';
@@ -113,5 +116,12 @@ public class Events {
     }
 
 
+    public List<Events> getComment() {
+        return comment;
+    }
 
+    public Events setComment(List<Events> comment) {
+        this.comment = comment;
+        return this;
+    }
 }

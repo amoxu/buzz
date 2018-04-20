@@ -274,7 +274,6 @@
             `events`.uid,
             ``.content,
             `events`.likes,
-            `events`.feeling,
             `events`.ctime,
             `user`.uid,
             `user`.nickname,
@@ -291,7 +290,13 @@
                 <include refid="Update_By_Example_Where_Clause"/>
             </if>
             ORDER BY likes DESC
-            LIMIT 10)
+            <if test="example.limit!=0">
+                LIMIT 10
+            </if>
+            <if test="example.limit==0">
+                LIMIT 4
+            </if>
+            )
             UNION
         </if>
         (SELECT `events`.cid,
@@ -299,7 +304,6 @@
         `events`.uid,
         `events`.content,
         `events`.likes,
-        `events`.feeling,
         `events`.ctime,
         `user`.uid,
         `user`.nickname,
@@ -319,7 +323,12 @@
             WHERE events.rcid = 0
         </if>
         order by `events`.ctime DESC
-        limit ${example.offset}, ${example.limit}
+        <if test="example.limit!=0">
+            limit ${example.offset}, ${example.limit}
+        </if>
+        <if test="example.limit==0">
+            LIMIT 0
+        </if>
         )
 
     </select>
