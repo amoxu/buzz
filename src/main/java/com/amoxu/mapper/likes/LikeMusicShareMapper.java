@@ -1,8 +1,8 @@
-package com.amoxu.mapper;
+package com.amoxu.mapper.likes;
 
-import com.amoxu.entity.LikeMusicShare;
-import com.amoxu.entity.LikeMusicShareExample;
-import com.amoxu.entity.LikeMusicShareKey;
+import com.amoxu.entity.likes.LikeMusicShare;
+import com.amoxu.entity.likes.LikeMusicShareExample;
+import com.amoxu.entity.likes.LikeMusicShareKey;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

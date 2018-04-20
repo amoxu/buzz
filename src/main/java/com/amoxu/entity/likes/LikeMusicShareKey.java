@@ -1,4 +1,4 @@
-package com.amoxu.entity;
+package com.amoxu.entity.likes;
 
 public class LikeMusicShareKey {
     private Integer uid;

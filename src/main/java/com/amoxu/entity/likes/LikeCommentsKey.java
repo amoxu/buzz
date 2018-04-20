@@ -1,4 +1,4 @@
-package com.amoxu.entity;
+package com.amoxu.entity.likes;
 
 public class LikeCommentsKey {
     private Integer uid;

@@ -1,4 +1,4 @@
-package com.amoxu.entity;
+package com.amoxu.entity.likes;
 
 import java.util.ArrayList;
 import java.util.Date;

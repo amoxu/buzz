@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.amoxu.mapper.LikeMusicShareMapper" >
-  <resultMap id="BaseResultMap" type="com.amoxu.entity.LikeMusicShare" >
+<mapper namespace="com.amoxu.mapper.LikeEventsMapper" >
+  <resultMap id="BaseResultMap" type="com.amoxu.entity.likes.LikeEvents" >
     <id column="uid" property="uid" jdbcType="INTEGER" />
-    <id column="music_share_id" property="musicShareId" jdbcType="INTEGER" />
+    <id column="events_id" property="eventsId" jdbcType="INTEGER" />
     <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -65,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    uid, music_share_id, ctime
+    uid, events_id, ctime
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.LikeMusicShareExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.likes.LikeEventsExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from like_music_share
+    from like_events
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,38 +89,38 @@
       </if>
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.amoxu.entity.LikeMusicShareKey" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.amoxu.entity.likes.LikeEventsKey" >
     select 
     <include refid="Base_Column_List" />
-    from like_music_share
+    from like_events
     where uid = #{uid,jdbcType=INTEGER}
-      and music_share_id = #{musicShareId,jdbcType=INTEGER}
+      and events_id = #{eventsId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="com.amoxu.entity.LikeMusicShareKey" >
-    delete from like_music_share
+  <delete id="deleteByPrimaryKey" parameterType="com.amoxu.entity.likes.LikeEventsKey" >
+    delete from like_events
     where uid = #{uid,jdbcType=INTEGER}
-      and music_share_id = #{musicShareId,jdbcType=INTEGER}
+      and events_id = #{eventsId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.amoxu.entity.LikeMusicShareExample" >
-    delete from like_music_share
+  <delete id="deleteByExample" parameterType="com.amoxu.entity.likes.LikeEventsExample" >
+    delete from like_events
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.amoxu.entity.LikeMusicShare" >
-    insert into like_music_share (uid, music_share_id, ctime
+  <insert id="insert" parameterType="com.amoxu.entity.likes.LikeEvents" >
+    insert into like_events (uid, events_id, ctime
       )
-    values (#{uid,jdbcType=INTEGER}, #{musicShareId,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}
+    values (#{uid,jdbcType=INTEGER}, #{eventsId,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.amoxu.entity.LikeMusicShare" >
-    insert into like_music_share
+  <insert id="insertSelective" parameterType="com.amoxu.entity.likes.LikeEvents" >
+    insert into like_events
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="uid != null" >
         uid,
       </if>
-      <if test="musicShareId != null" >
-        music_share_id,
+      <if test="eventsId != null" >
+        events_id,
       </if>
       <if test="ctime != null" >
         ctime,
@@ -130,28 +130,28 @@
       <if test="uid != null" >
         #{uid,jdbcType=INTEGER},
       </if>
-      <if test="musicShareId != null" >
-        #{musicShareId,jdbcType=INTEGER},
+      <if test="eventsId != null" >
+        #{eventsId,jdbcType=INTEGER},
       </if>
       <if test="ctime != null" >
         #{ctime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.amoxu.entity.LikeMusicShareExample" resultType="java.lang.Integer" >
-    select count(*) from like_music_share
+  <select id="countByExample" parameterType="com.amoxu.entity.likes.LikeEventsExample" resultType="java.lang.Integer" >
+    select count(*) from like_events
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update like_music_share
+    update like_events
     <set >
       <if test="record.uid != null" >
         uid = #{record.uid,jdbcType=INTEGER},
       </if>
-      <if test="record.musicShareId != null" >
-        music_share_id = #{record.musicShareId,jdbcType=INTEGER},
+      <if test="record.eventsId != null" >
+        events_id = #{record.eventsId,jdbcType=INTEGER},
       </if>
       <if test="record.ctime != null" >
         ctime = #{record.ctime,jdbcType=TIMESTAMP},
@@ -162,28 +162,28 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update like_music_share
+    update like_events
     set uid = #{record.uid,jdbcType=INTEGER},
-      music_share_id = #{record.musicShareId,jdbcType=INTEGER},
+      events_id = #{record.eventsId,jdbcType=INTEGER},
       ctime = #{record.ctime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.amoxu.entity.LikeMusicShare" >
-    update like_music_share
+  <update id="updateByPrimaryKeySelective" parameterType="com.amoxu.entity.likes.LikeEvents" >
+    update like_events
     <set >
       <if test="ctime != null" >
         ctime = #{ctime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where uid = #{uid,jdbcType=INTEGER}
-      and music_share_id = #{musicShareId,jdbcType=INTEGER}
+      and events_id = #{eventsId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.amoxu.entity.LikeMusicShare" >
-    update like_music_share
+  <update id="updateByPrimaryKey" parameterType="com.amoxu.entity.likes.LikeEvents" >
+    update like_events
     set ctime = #{ctime,jdbcType=TIMESTAMP}
     where uid = #{uid,jdbcType=INTEGER}
-      and music_share_id = #{musicShareId,jdbcType=INTEGER}
+      and events_id = #{eventsId,jdbcType=INTEGER}
   </update>
 </mapper>

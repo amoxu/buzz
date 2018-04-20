@@ -1,8 +1,8 @@
-package com.amoxu.mapper;
+package com.amoxu.mapper.likes;
 
-import com.amoxu.entity.LikeTopicComment;
-import com.amoxu.entity.LikeTopicCommentExample;
-import com.amoxu.entity.LikeTopicCommentKey;
+import com.amoxu.entity.likes.LikeTopicComment;
+import com.amoxu.entity.likes.LikeTopicCommentExample;
+import com.amoxu.entity.likes.LikeTopicCommentKey;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

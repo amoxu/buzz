@@ -1,8 +1,8 @@
-package com.amoxu.entity;
+package com.amoxu.entity.likes;
 
 import java.util.Date;
 
-public class LikeMusicShare extends LikeMusicShareKey {
+public class LikeTopicComment extends LikeTopicCommentKey {
     private Date ctime;
 
     public Date getCtime() {

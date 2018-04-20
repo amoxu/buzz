@@ -16,9 +16,9 @@ import java.util.List;
 
 @Controller
 public class EventsController {
-    @Resource(name = "eventServiceImpl")
+    @Resource
     private EventService eventService;
-    @Resource(name = "messageServiceImpl")
+    @Resource
     private MessageService messageService;
 
 

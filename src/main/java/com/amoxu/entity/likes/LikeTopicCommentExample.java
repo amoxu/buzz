@@ -1,10 +1,10 @@
-package com.amoxu.entity;
+package com.amoxu.entity.likes;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class LikeMusicShareExample {
+public class LikeTopicCommentExample {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -15,7 +15,7 @@ public class LikeMusicShareExample {
 
     private Integer offset;
 
-    public LikeMusicShareExample() {
+    public LikeTopicCommentExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -185,63 +185,63 @@ public class LikeMusicShareExample {
             return (Criteria) this;
         }
 
-        public Criteria andMusicShareIdIsNull() {
-            addCriterion("music_share_id is null");
+        public Criteria andTopicCommentTidIsNull() {
+            addCriterion("topic_comment_tid is null");
             return (Criteria) this;
         }
 
-        public Criteria andMusicShareIdIsNotNull() {
-            addCriterion("music_share_id is not null");
+        public Criteria andTopicCommentTidIsNotNull() {
+            addCriterion("topic_comment_tid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMusicShareIdEqualTo(Integer value) {
-            addCriterion("music_share_id =", value, "musicShareId");
+        public Criteria andTopicCommentTidEqualTo(Integer value) {
+            addCriterion("topic_comment_tid =", value, "topicCommentTid");
             return (Criteria) this;
         }
 
-        public Criteria andMusicShareIdNotEqualTo(Integer value) {
-            addCriterion("music_share_id <>", value, "musicShareId");
+        public Criteria andTopicCommentTidNotEqualTo(Integer value) {
+            addCriterion("topic_comment_tid <>", value, "topicCommentTid");
             return (Criteria) this;
         }
 
-        public Criteria andMusicShareIdGreaterThan(Integer value) {
-            addCriterion("music_share_id >", value, "musicShareId");
+        public Criteria andTopicCommentTidGreaterThan(Integer value) {
+            addCriterion("topic_comment_tid >", value, "topicCommentTid");
             return (Criteria) this;
         }
 
-        public Criteria andMusicShareIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("music_share_id >=", value, "musicShareId");
+        public Criteria andTopicCommentTidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("topic_comment_tid >=", value, "topicCommentTid");
             return (Criteria) this;
         }
 
-        public Criteria andMusicShareIdLessThan(Integer value) {
-            addCriterion("music_share_id <", value, "musicShareId");
+        public Criteria andTopicCommentTidLessThan(Integer value) {
+            addCriterion("topic_comment_tid <", value, "topicCommentTid");
             return (Criteria) this;
         }
 
-        public Criteria andMusicShareIdLessThanOrEqualTo(Integer value) {
-            addCriterion("music_share_id <=", value, "musicShareId");
+        public Criteria andTopicCommentTidLessThanOrEqualTo(Integer value) {
+            addCriterion("topic_comment_tid <=", value, "topicCommentTid");
             return (Criteria) this;
         }
 
-        public Criteria andMusicShareIdIn(List<Integer> values) {
-            addCriterion("music_share_id in", values, "musicShareId");
+        public Criteria andTopicCommentTidIn(List<Integer> values) {
+            addCriterion("topic_comment_tid in", values, "topicCommentTid");
             return (Criteria) this;
         }
 
-        public Criteria andMusicShareIdNotIn(List<Integer> values) {
-            addCriterion("music_share_id not in", values, "musicShareId");
+        public Criteria andTopicCommentTidNotIn(List<Integer> values) {
+            addCriterion("topic_comment_tid not in", values, "topicCommentTid");
             return (Criteria) this;
         }
 
-        public Criteria andMusicShareIdBetween(Integer value1, Integer value2) {
-            addCriterion("music_share_id between", value1, value2, "musicShareId");
+        public Criteria andTopicCommentTidBetween(Integer value1, Integer value2) {
+            addCriterion("topic_comment_tid between", value1, value2, "topicCommentTid");
             return (Criteria) this;
         }
 
-        public Criteria andMusicShareIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("music_share_id not between", value1, value2, "musicShareId");
+        public Criteria andTopicCommentTidNotBetween(Integer value1, Integer value2) {
+            addCriterion("topic_comment_tid not between", value1, value2, "topicCommentTid");
             return (Criteria) this;
         }
 

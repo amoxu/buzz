@@ -1,8 +1,8 @@
-package com.amoxu.mapper;
+package com.amoxu.mapper.likes;
 
-import com.amoxu.entity.LikeEvents;
-import com.amoxu.entity.LikeEventsExample;
-import com.amoxu.entity.LikeEventsKey;
+import com.amoxu.entity.likes.LikeEvents;
+import com.amoxu.entity.likes.LikeEventsExample;
+import com.amoxu.entity.likes.LikeEventsKey;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

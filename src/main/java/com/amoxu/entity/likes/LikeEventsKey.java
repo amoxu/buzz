@@ -1,4 +1,4 @@
-package com.amoxu.entity;
+package com.amoxu.entity.likes;
 
 public class LikeEventsKey {
     private Integer uid;
