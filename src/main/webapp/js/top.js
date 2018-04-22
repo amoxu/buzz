@@ -1,4 +1,3 @@
-
 window.onscroll = function () {
     scrollFunction()
 };
@@ -42,7 +41,8 @@ function getHashStringArgs() {
 //保持数据的对象
         hashArgs = {},
 //取得每一项hash对
-        items = hashStrings.length > 0 ? hashStrings.split("&") : [], item = null, name = null, value = null, i = 0, len = items.length;
+        items = hashStrings.length > 0 ? hashStrings.split("&") : [], item = null, name = null, value = null, i = 0,
+        len = items.length;
 //逐个将每一项添加到hashArgs中
     for (i = 0; i < len; i++) {
         item = items[i].split("=");
@@ -72,7 +72,7 @@ $(".top-btn").on("click", function () {
 /*设置本地存储，当用户登录显示用户个人中心*/
 (function () {
 
-    var Login = layui.sessionData('unLogin');
+    var Login = $.cookie('unLogin');
 
     if (null == Login || !Login.statue) {
         /*
@@ -106,10 +106,11 @@ $(".top-btn").on("click", function () {
             "                </dl>";
         $(".layui-layout-right").html(login);
         $(".logout").on('click', function () {
-            layui.sessionData('unLogin', null);
-            layui.sessionData("user", null);
 
-            layer.confirm("确定退出？",{icon: 3, title:'确定退出'},function (index) {
+            layer.confirm("确定退出？", {icon: 3, title: '确定退出'}, function (index) {
+
+                $.removeCookie('unLogin');
+                $.removeCookie('user');
                 window.location.href = "../logout";
                 layer.close(index);
             });
@@ -117,9 +118,12 @@ $(".top-btn").on("click", function () {
         });
     }
 
-    layui.use('element', function () {
+    layui.use(['layer','element'], function () {
         var element = layui.element;
+        var layer = layui.layer;
         element.init();
     });
 
 })();
+
+

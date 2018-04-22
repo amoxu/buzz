@@ -23,22 +23,6 @@ public class Events {
 
     private List<Events> comment;
 
-    @Override
-    public String toString() {
-        return "Events{" +
-                "cid=" + cid +
-                ", rcid=" + rcid +
-                ", uid=" + uid +
-                ", content='" + content + '\'' +
-                ", likes=" + likes +
-                ", feeling=" + feeling +
-                ", ctime=" + ctime +
-                ", comment=" + comment +
-                ", userLike=" + userLike +
-                ", user=" + user +
-                '}';
-    }
-
 
     public Boolean getUserLike() {
         return userLike;
@@ -51,17 +35,27 @@ public class Events {
 
     private Boolean userLike;
 
-    public User getUser() {
-        return user;
+
+    private User sendUser;
+
+    @Override
+    public String toString() {
+        return "Events{" +
+                "cid=" + cid +
+                ", rcid=" + rcid +
+                ", uid=" + uid +
+                ", content='" + content + '\'' +
+                ", likes=" + likes +
+                ", feeling=" + feeling +
+                ", ctime=" + ctime +
+                ", comment=" + comment +
+                ", userLike=" + userLike +
+                ", sendUser=" + sendUser +
+                ", receiveUser=" + receiveUser +
+                '}';
     }
 
-
-    public Events setUser(User user) {
-        this.user = user;
-        return this;
-    }
-
-    private User user;
+    private User receiveUser;
 
     public Integer getCid() {
         return cid;
@@ -126,6 +120,24 @@ public class Events {
 
     public Events setComment(List<Events> comment) {
         this.comment = comment;
+        return this;
+    }
+
+    public User getSendUser() {
+        return sendUser;
+    }
+
+    public Events setSendUser(User sendUser) {
+        this.sendUser = sendUser;
+        return this;
+    }
+
+    public User getReceiveUser() {
+        return receiveUser;
+    }
+
+    public Events setReceiveUser(User receiveUser) {
+        this.receiveUser = receiveUser;
         return this;
     }
 }

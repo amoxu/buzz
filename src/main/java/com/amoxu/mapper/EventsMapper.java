@@ -30,5 +30,6 @@ public interface EventsMapper {
     int updateByPrimaryKey(Events record);
 
     List<Events> selectEventsByExample( @Param("onlineId") Integer onlineId,@Param("example") EventsExample example);
+    List<Events> selectEventsByExample2( @Param("onlineId") Integer onlineId,@Param("example") EventsExample example);
 
 }

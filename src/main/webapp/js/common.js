@@ -1,16 +1,19 @@
+function zone(id) {
+    return '"../user/' + id + '/my.html"';
+}
+
 (function () {
     $(".reply").on('click', function () {
         if ($(this).parent().next().html().length > 0) {
             $(".commentAll").html("");
             $(this).parent().next().html("");
             $('.content').flexText();
-
         } else {
             $(".commentAll").html("");
             $(this).parent().next().html(
                 "                            <!--评论区域 begin-->\n" +
                 "                            <div class=\"reviewArea clearfix\">\n" +
-                "                                <textarea class=\"content comment-input\" placeholder=\"请输入评论。\" ></textarea>\n" +
+                "                                <textarea class=\"content comment-input\" placeholder=\"请输入评论。\"  ></textarea>\n" +
                 "                                <a href=\"javascript:;\" class=\"plBtn\">评论</a>\n" +
                 "                            </div>\n" +
                 "                            <!--评论区域 end-->\n" +
@@ -37,47 +40,22 @@
         }*/
 
 
-<!--点击评论创建评论条-->
-
+<!--包括主栏目和子栏目 点击回复动态创建回复块-->
 (function () {
-    $('.commentAll').on('click', '.plBtn', function () {
-        var myDate = new Date();
-        //获取当前年
-        var year = myDate.getFullYear();
-        //获取当前月
-        var month = myDate.getMonth() + 1;
-        //获取当前日
-        var date = myDate.getDate();
-        var h = myDate.getHours();       //获取当前小时数(0-23)
-        var m = myDate.getMinutes();     //获取当前分钟数(0-59)
-        if (m < 10) m = '0' + m;
-        var s = myDate.getSeconds();
-        if (s < 10) s = '0' + s;
-        var now = year + '-' + month + "-" + date + " " + h + ':' + m + ":" + s;
-        //获取输入内容
-        var oSize = $(this).siblings('.flex-text-wrap').find('.comment-input').val();
-        console.log(oSize);
-        //动态创建评论模块
-        oHtml = '<div class="comment-show-con clearfix"><div class="comment-show-con-img pull-left"><img src="images/header-img-comment_03.png" alt=""></div> <div class="comment-show-con-list pull-left clearfix"><div class="pl-text clearfix"> <a href="javascript:;" class="comment-size-name">David Beckham : </a> <span class="my-pl-con">&nbsp;' + oSize + '</span> </div> <div class="date-dz"> <span class="date-dz-left pull-left comment-time">' + now + '</span> <div class="date-dz-right pull-right comment-pl-block"><a href="javascript:;" class="removeBlock">删除</a> <a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left">回复</a> <span class="pull-left date-dz-line">|</span> <a href="javascript:;" class="date-dz-z pull-left"><i class="date-dz-z-click-red"></i>赞 (<i class="z-num">666</i>)</a> </div> </div><div class="hf-list-con"></div></div> </div>';
-        if (oSize.replace(/(^\s*)|(\s*$)/g, "") != '') {
-            $(this).parents('.reviewArea ').siblings('.comment-show').prepend(oHtml);
-            $(this).siblings('.flex-text-wrap').find('.comment-input').prop('value', '').siblings('pre').find('span').text('');
-        }
-    })
-})();
-
-
-<!--点击回复动态创建回复块-->
-
-(function () {
-
     $('.commentAll').on('click', '.comment-show .pl-hf', function () {
+        if (!$.cookie("user")) {
+            layer.msg("请登录后评论");
+            return false;
+        }
         //获取回复人的名字
         var fhName = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.pl-text').find('.comment-size-name').html();
         //回复@
         var fhN = '回复@' + fhName + "：";
         //var oInput = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.hf-con');
-        var fhHtml = '<div class="hf-con pull-left"> <textarea class="content comment-input hf-input" placeholder="' + fhN + '"></textarea> <a href="javascript:;" class="hf-pl">评论</a></div>';
+        var fhHtml = '<div class="hf-con pull-left"> ' +
+            '<textarea class="content comment-input hf-input" data-name="' + fhName +
+            '" placeholder="' + fhN + '"></textarea> <a href="javascript:;" class="hf-pl" data-id="'
+            + $(this).attr('data-id') + '">评论</a></div>';
         //显示回复
         if ($(this).is('.hf-con-block')) {
             $(this).parents('.date-dz-right').parents('.date-dz').append(fhHtml);
@@ -86,7 +64,7 @@
             $(this).parents('.date-dz-right').siblings('.hf-con').find('.pre').css('padding', '6px 15px');
             //console.log($(this).parents('.date-dz-right').siblings('.hf-con').find('.pre'))
             //input框自动聚焦
-            /*$(this).parents('.date-dz-right').siblings('.hf-con').find('.hf-input').val('').focus().val();*/
+            $(this).parents('.date-dz-right').siblings('.hf-con').find('.hf-input').val('').focus().val();
         } else {
             $(this).addClass('hf-con-block');
             $(this).parents('.date-dz-right').siblings('.hf-con').remove();
@@ -95,42 +73,104 @@
 })();
 
 <!--评论回复块创建-->
-
+/*OLD   过时 暂时无用*/
 (function () {
 
     $('.commentAll').on('click', '.comment-show .hf-pl', function () {
+        if (window.location.href.includes('events.html')) {
+            return false;
+        }
         var oThis = $(this);
         //获取输入内容
+        console.log("this is in js page");
+
         var oHfVal = $(this).siblings('.flex-text-wrap').find('.hf-input').val();
         console.log(oHfVal);
 
         if (oHfVal.replace(/^ +| +$/g, '') === '' || oHfVal.trim().length < 1) {
             /*输入内容为空*/
         } else {
-            var data =  {
+            var data = {
                 receiveName: "往事1995"
                 , content: "123456"
                 , time: Date.now()
                 , sendName: "烟雨江南"
-                , like: 100
+                , likes: 100
             };
-
-            var oAt = '回复<a href="javascript:void(0);" class="atName">@' + data.receiveName + '</a> : ' + data.content;
-            var oHtml = '<div class="all-pl-con"><div class="pl-text hfpl-text clearfix">' +
-                '<a href="javascript:void(0);" class="comment-size-name">' + data.sendName + '</a><span class="my-pl-con">' + oAt +
-                '</span></div><div class="date-dz"> <span class="date-dz-left pull-left comment-time">' + data.time +
-                '</span> <div class="date-dz-right pull-right comment-pl-block"> ' +
-                ' <a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left">回复</a> ' +
-                '<span class="pull-left date-dz-line">|</span> <a href="javascript:;" class="date-dz-z pull-left">' +
-                '<i class="date-dz-z-click-red"></i>赞 (<i class="z-num">' + data.like + '</i>)</a> </div> </div></div>';
-            oThis.parents('.hf-con').parents('.comment-show-con-list')
-                .find('.hf-list-con').css('display', 'block')
-                .prepend(oHtml) && oThis.parents('.hf-con').siblings('.date-dz-right')
-                .find('.pl-hf').addClass('hf-con-block') && oThis.parents('.hf-con').remove();
-
+            /*addReply(data, oThis);*/
         }
     })
 })();
+
+/*添加回复列表*/
+function addReply(oHtml, dom) {
+    dom.parents('.hf-con').parents('.comment-show-con-list')
+        .find('.hf-list-con').css('display', 'block')
+        .prepend(oHtml) && dom.parents('.hf-con').siblings('.date-dz-right')
+        .find('.pl-hf').addClass('hf-con-block') && dom.parents('.hf-con').remove();
+}
+
+/*构造子回复列表*/
+function buildReply(data, uid, receiveUserName) {
+    var str = '';
+    if (arguments.length === 1) {
+        if (data instanceof Array) {
+            $.each(data, function (idx, data) {
+                var likeClazz = "";
+                if (data.userLike) {
+                    likeClazz = 'class="date-dz-z pull-left date-dz-z-click"><i  class="date-dz-z-click-red red">';
+                } else {
+                    likeClazz = 'class="date-dz-z pull-left"><i  class="date-dz-z-click-red">';
+                }
+                str += "<li class=\"all-pl-con\">" +
+                    "<div class=\"pl-text hfpl-text clearfix\">" +
+                    "<a href=" + zone(data.uid) + " class=\"comment-size-name\">" +
+                    data.sendUser.nickname +
+                    "</a><span class=\"my-pl-con\">回复<a href=" + zone(data.receiveUser.uid) + " class=\"atName\">@" +
+                    data.receiveUser.nickname +
+                    "</a> : " +
+                    data.content +
+                    "</span></div><div class=\"date-dz\"> <span class=\"date-dz-left pull-left comment-time\">" +
+                    data.ctime +
+                    "</span> <div class=\"date-dz-right pull-right comment-pl-block\">  " +
+                    "<a href=\"javascript:;\" class=\"date-dz-pl pl-hf pull-left hf-con-block\" data-id='" +
+                    data.cid +
+                    "'>回复</a> " +
+                    "<span class=\"pull-left date-dz-line\">|</span> " +
+                    '<a data-id="' + data.cid + '" href="javascript:;" ' +
+                    likeClazz +
+                    '</i>赞 (<i class="z-num">' + data.likes + '</i>)</a> </div> </div>';
+            });
+        }
+        return str;
+    } else {
+        var likeClazz = "";
+        if (data.userLike) {
+            likeClazz = 'class="date-dz-z pull-left date-dz-z-click"><i  class="date-dz-z-click-red red">';
+        } else {
+            likeClazz = 'class="date-dz-z pull-left"><i  class="date-dz-z-click-red">';
+        }
+        str = "<li class=\"all-pl-con\">" +
+            "<div class=\"pl-text hfpl-text clearfix\">" +
+            "<a href=" + zone(data.sendUser.uid) + " class=\"comment-size-name\">" +
+            data.sendUser.nickname +
+            "</a><span class=\"my-pl-con\">回复<a href=" + zone(uid) + " class=\"atName\">@" +
+            receiveUserName +
+            "</a> : " +
+            data.content +
+            "</span></div><div class=\"date-dz\"> <span class=\"date-dz-left pull-left comment-time\">" +
+            data.ctime +
+            "</span> <div class=\"date-dz-right pull-right comment-pl-block\">  " +
+            "<a href=\"javascript:;\" class=\"date-dz-pl pl-hf pull-left hf-con-block\" data-id='" +
+            data.cid +
+            "'>回复</a> " +
+            "<span class=\"pull-left date-dz-line\">|</span> " +
+            '<a data-id="' + data.cid + '" href="javascript:;" ' +
+            likeClazz +
+            '</i>赞 (<i class="z-num">' + data.likes + '</i>)</a> </div> </div>';
+        return str;
+    }
+}
 
 
 <!--删除评论块-->
@@ -157,12 +197,12 @@ function addList(res) {
     //发布动态
     var oHtml = '<li><div class="comment-show-con clearfix">' +
         '<div class="comment-show-con-img pull-left">' +
-        '<img src="' + res.user.icons + '" alt="">' +
+        '<img src="' + res.sendUser.icons + '" alt="">' +
         '</div> ' +
         '<div class="comment-show-con-list pull-left clearfix">' +
         '<div class="pl-text clearfix"> ' +
         '<a href="javascript:;" class="comment-size-name">'
-        + res.user.nickname + //昵称
+        + res.sendUser.nickname + //昵称
         '</a>' +
         ' <span class="my-pl-con">&nbsp;'
         + res.content + //内容
@@ -183,9 +223,7 @@ function addList(res) {
     /*if (oSize.replace(/(^\s*)|(\s*$)/g, "") != '') {*/
     /*判断内容是否为空*/
     $('.comment-show ul').prepend(oHtml);//添加回复
-    //清空输入框
-    /*    $('.comment-show').siblings('.flex-text-wrap').find('.comment-input').prop('value', '').siblings('pre').find('span').text('');*/
-    /* }*/
+
 }
 
 /*刷新页面时根据hash确定显示页面*/

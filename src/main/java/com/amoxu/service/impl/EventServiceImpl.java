@@ -43,12 +43,13 @@ public class EventServiceImpl implements EventService {
         events.setCtime(new Date());
         events.setFeeling(1.3);
         int i = eventsMapper.insertSelective(events);
-        /*设置返回信息的头像和id*/
+        /*设置发送人 返回信息的头像和id*/
         Subject subject = SecurityUtils.getSubject();
         User user = (User) subject.getPrincipal();
-        events.setUser(new User());
-        events.getUser().setNickname(user.getNickname());
-        events.getUser().setIcons(user.getIcons());
+        events.setSendUser(new User());
+        events.getSendUser().setNickname(user.getNickname());
+        events.getSendUser().setIcons(user.getIcons());
+
         logger.info(i);
         logger.info(events);
         if (i > 0) {
@@ -116,7 +117,7 @@ public class EventServiceImpl implements EventService {
                 criteria.andRcidEqualTo(events.get(i).getCid());
                 eventsExample.setOffset(0);
                 eventsExample.setLimit(0); /*查询首页子列表时不需要限制数量*/
-                events.set(i, events.get(i).setComment(mapper.selectEventsByExample(uid, eventsExample)));
+                events.set(i, events.get(i).setComment(mapper.selectEventsByExample2(uid, eventsExample)));
             }
             pageResult.setList(events);
 
@@ -128,7 +129,7 @@ public class EventServiceImpl implements EventService {
                 criteria.andRcidEqualTo(events.get(i).getCid());
                 eventsExample.setOffset(0);
                 eventsExample.setLimit(0); /*查询首页子列表时不需要限制数量*/
-                events.set(i, events.get(i).setComment(mapper.selectEventsByExample(null, eventsExample)));
+                events.set(i, events.get(i).setComment(mapper.selectEventsByExample2(null, eventsExample)));
                 logger.info(events.get(i));
 
             }

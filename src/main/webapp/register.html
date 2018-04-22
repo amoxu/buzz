@@ -110,6 +110,7 @@
 
 
 <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/jquery.flexText.js"></script>
 <script src="js/common.js"></script>
 <script src="layui/layui.js"></script>
@@ -126,12 +127,12 @@
     });
     $(".btn").on('click', function () {
         var newTable = {
-            "email":$("#email").val(),
+            "email": $("#email").val(),
             "nickname": $("#nickname").val(),
             "password": aes.encrypt($("#password").val()),
             "note": $("#verify").val()
         };
-        if (!newTable.email||!newTable.nickname || !newTable.password || !newTable.note) {
+        if (!newTable.email || !newTable.nickname || !newTable.password || !newTable.note) {
             layer.msg('请先输入必填项。', {icon: 5});
             return false;
         }
@@ -142,7 +143,7 @@
         $.ajax({
             type: 'post'
             , url: "/user/reg"
-            , data: {"data":aes.encrypt(JSON.stringify(newTable))}
+            , data: {"data": aes.encrypt(JSON.stringify(newTable))}
             , contentType: 'application/x-www-form-urlencoded;charset=UTF-8'
             , success: function (res) {
                 if (1 === res["status"]) {
@@ -151,7 +152,7 @@
                     return false;
                 } else {
 
-                    layui.sessionData('unLogin', {key: 'statue', value: true});
+                    $.cookie('unLogin', {  'statue': true});
                     layer.open({
                         type: 2,
                         title: '选择爱好',
@@ -162,13 +163,13 @@
                         , end: function () {
                             layer.open({
                                 title: '注册成功'
-                                ,content: '请前往邮箱激活账号。'
-                                ,end:function () {
+                                , content: '请前往邮箱激活账号。'
+                                , end: function () {
                                     layer.msg("跳转中...");
                                     setTimeout(function () {
                                         window.history.back();
                                         window.location.refresh();
-                                    },1000);
+                                    }, 1000);
                                 }
                             });
 
@@ -180,7 +181,7 @@
 
             }
             , error: function (res) {
-                layer.msg("错误码：" + res.status+"<br>"+res.statusText);
+                layer.msg("错误码：" + res.status + "<br>" + res.statusText);
                 setTimeout(" $(\"#reset\").click();", 2000)
 
             }

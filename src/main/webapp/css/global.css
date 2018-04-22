@@ -2158,10 +2158,11 @@ a:hover,a:focus{color:#74777b;}*/
 .form-top-right {
     float: left;
     width: 25%;
-/*    padding-top: 5px;*/
+    /*    padding-top: 5px;*/
     line-height: 100px;
     text-align: right;
 }
+
 .fa {
     font-size: 66px;
     color: #0F4FA8;
@@ -2214,6 +2215,7 @@ input[type="text"], input[type="password"], textarea.form-control {
     background: #fff;
 
 }
+
 .form-control {
     display: block;
     width: 100%;
@@ -2259,10 +2261,12 @@ input[type="text"], input[type="password"], textarea.form-control {
     color: #fff;
     text-shadow: none;
 }
+
 .form-bottom form button.btn {
     margin: 5px 0 5px 0;
     width: 100%;
 }
+
 button.btn {
     height: 50px;
     margin: 0;
@@ -2288,6 +2292,7 @@ button.btn {
     -ms-transition: all .3s;
     transition: all .3s;
 }
+
 .btn {
     display: inherit;
     padding: 6px 12px;

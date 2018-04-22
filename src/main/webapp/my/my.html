@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="../css/comment.css">
 
 
-
 </head>
 <body class="mbg">
 
@@ -157,6 +156,8 @@
 </div>
 
 <script type="text/javascript" src="../js/jquery-1.12.0.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+
 <script type="text/javascript" src="../js/jquery.flexText.js"></script>
 <script src="../js/common.js"></script>
 <script src="../layui/layui.js"></script>
@@ -169,14 +170,14 @@
     layui.use(['element', 'jquery'], function () {
         var element = layui.element;
         var $ = layui.jquery;
-        var userInfo = layui.sessionData("user").user;
+        var userInfo = $.cookie("user").user;
         if ($.isEmptyObject(userInfo)) {
             /*0表示自身ID*/
             $.get("/user/info/0", function (res) {
-                layui.sessionData("user", {key:'user',value:res});
+                $.cookie("user", { 'user': res});
                 setting.show(res);
             });
-        }else {
+        } else {
             setting.show(userInfo);
         }
 

@@ -7,9 +7,17 @@
 </head>
 <body>
 <script>
-  console.log(window.btoa(aes.encrypt(JSON.stringify({"username":"amoxu","password":"4AvG+1zfQxv3GvbOlrF3CA==","captcha":"capw"}))));
+    console.log(window.btoa(aes.encrypt(JSON.stringify({
+        "username": "amoxu",
+        "password": "4AvG+1zfQxv3GvbOlrF3CA==",
+        "captcha": "capw"
+    }))));
 
-  console.log(aes.decrypt(window.atob(window.btoa(aes.encrypt(JSON.stringify({"username":"amoxu","password":"4AvG+1zfQxv3GvbOlrF3CA==","captcha":"capw"}))))));
+    console.log(aes.decrypt(window.atob(window.btoa(aes.encrypt(JSON.stringify({
+        "username": "amoxu",
+        "password": "4AvG+1zfQxv3GvbOlrF3CA==",
+        "captcha": "capw"
+    }))))));
 </script>
 </body>
 </html>

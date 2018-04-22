@@ -90,7 +90,7 @@
                                     </div>
                                 </div>
                                 <button type="submit" class="btn">修改</button>
-                                <a  class="btn" href="./findpwd-1.html">上一步</a>
+                                <a class="btn" href="./findpwd-1.html">上一步</a>
                             </form>
                             <p class="float_right"><a href="./login.html">返回登录</a></p>
                         </div>
@@ -113,6 +113,7 @@
 
 
 <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/jquery.flexText.js"></script>
 <script src="js/common.js"></script>
 <script src="layui/layui.js"></script>
@@ -135,7 +136,7 @@
             "password": aes.encrypt($("#password").val()),
             "note": $("#verify").val()
         };
-        if (!newTable.nickname ||!newTable.email || !newTable.password || !newTable.note) {
+        if (!newTable.nickname || !newTable.email || !newTable.password || !newTable.note) {
             layer.msg('请先输入必填项。', {icon: 5});
             return false;
         }
@@ -146,7 +147,7 @@
         $.ajax({
             type: 'post'
             , url: "/user/password/2"
-            , data: {"data":aes.encrypt(JSON.stringify(newTable))}
+            , data: {"data": aes.encrypt(JSON.stringify(newTable))}
             , contentType: 'application/x-www-form-urlencoded;charset=UTF-8'
             , success: function (res) {
                 $("input").val("");
@@ -157,14 +158,14 @@
                 } else {
                     layer.open({
                         title: '操作成功'
-                        ,content: '请前往登录'
+                        , content: '请前往登录'
                     });
                     return false;
                 }
 
             }
             , error: function (res) {
-                layer.msg("错误码：" + res.status+"<br>"+res.statusText);
+                layer.msg("错误码：" + res.status + "<br>" + res.statusText);
                 setTimeout(" $(\"#reset\").click();", 2000)
 
             }

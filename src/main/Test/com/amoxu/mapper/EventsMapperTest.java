@@ -34,15 +34,15 @@ public class EventsMapperTest {
         pageResult.setLimit(20);
         pageResult.setOffset(0);
         EventsExample eventsExample = new EventsExample();
-        EventsExample.Criteria criteria = eventsExample.createCriteria();
-        criteria.andRcidEqualTo(11);
+       /* EventsExample.Criteria criteria = eventsExample.createCriteria();
+        criteria.andRcidEqualTo(11);*/
         SqlSession sqlSession = sqlSessionFactory.openSession();
         EventsMapper mapper = sqlSession.getMapper(EventsMapper.class);
 
         pageResult.setCount(mapper.countByExample(eventsExample));
         eventsExample.setOffset(pageResult.getOffset());
         eventsExample.setLimit(pageResult.getLimit());
-        List<Events> eventsList = eventsMapper.selectEventsByExample(1,eventsExample);
+        List<Events> eventsList = mapper.selectEventsByExample2(1,eventsExample);
         logger.info(eventsList);
         logger.info(JSON.toJSONString(eventsList));
 

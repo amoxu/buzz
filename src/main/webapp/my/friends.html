@@ -121,6 +121,8 @@
 </div>
 
 <script type="text/javascript" src="../js/jquery-1.12.0.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+
 <script src="../layui/layui.js"></script>
 <script src="../js/top.js"></script>
 <script src="../js/zone.js"></script>
@@ -132,16 +134,16 @@
     });
 
 
-
     console.log(getHashStringArgs());
-    page(getHashStringArgs()['!offset']?getHashStringArgs()['!offset']:1);
+    page(getHashStringArgs()['!offset'] ? getHashStringArgs()['!offset'] : 1);
+
     function page(pidx) {
         layui.use(['laypage'], function () {
             var laypage = layui.laypage;
             //开启HASH
 
             $.ajax({
-                url: "/friend?offset=" + (pidx-1) * 10 + "&limit=" + 10
+                url: "/friend?offset=" + (pidx - 1) * 10 + "&limit=" + 10
 
                 , type: "get"
                 , success: function (res) {
@@ -156,7 +158,7 @@
                                 "src=\"" + friend.icons + "&s=45\" alt=\"\" ></div>\n" +
                                 "<div class=\"f-list pull-left clearfix\">\n" +
                                 "<div class=\"pl-text clearfix\">" +
-                                "<a href=\"../user/"+friend.uid+"/my.html\" class=\"f-name\">" + friend.nickname + "</a>:\n" +
+                                "<a href=\"../user/" + friend.uid + "/my.html\" class=\"f-name\">" + friend.nickname + "</a>:\n" +
                                 "</div>\n" +
                                 "<div class=\"date-dz\">" +
                                 "<span class=\"f-note pull-left comment-time\">签名：" + friend.introduce + " </span>\n" +

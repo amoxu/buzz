@@ -98,6 +98,7 @@
 
 
 <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/jquery.flexText.js"></script>
 <script src="js/common.js"></script>
 <script src="layui/layui.js"></script>
@@ -114,7 +115,7 @@
     });
     $("button.btn").on('click', function () {
         var newTable = {
-            "email":$("#email").val(),
+            "email": $("#email").val(),
             "note": $("#verify").val()
         };
         if (!newTable.email || !newTable.note) {
@@ -128,7 +129,7 @@
         $.ajax({
             type: 'post'
             , url: "/user/password/1"
-            , data: {"data":aes.encrypt(JSON.stringify(newTable))}
+            , data: {"data": aes.encrypt(JSON.stringify(newTable))}
             , contentType: 'application/x-www-form-urlencoded;charset=UTF-8'
             , success: function (res) {
                 $("input").val("");
@@ -139,7 +140,7 @@
                 } else {
                     layer.open({
                         title: '找回密码'
-                        ,content: '请先前往邮箱获取邮箱验证码，然后在该页面点击下一步修改密码。'
+                        , content: '请先前往邮箱获取邮箱验证码，然后在该页面点击下一步修改密码。'
                     });
                     return false;
 
@@ -147,7 +148,7 @@
 
             }
             , error: function (res) {
-                layer.msg("错误码：" + res.status+"<br>"+res.statusText);
+                layer.msg("错误码：" + res.status + "<br>" + res.statusText);
                 setTimeout(" $(\"#reset\").click();", 2000)
 
             }

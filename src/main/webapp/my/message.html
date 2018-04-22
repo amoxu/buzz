@@ -115,6 +115,8 @@
 </div>
 
 <script type="text/javascript" src="../js/jquery-1.12.0.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+
 <script src="../layui/layui.js"></script>
 <script src="../js/top.js"></script>
 <script src="../js/zone.js"></script>
@@ -125,13 +127,14 @@
         var element = layui.element;
     });
     console.log();
-    page(getHashStringArgs()['!offset']?getHashStringArgs()['!offset']:1);
+    page(getHashStringArgs()['!offset'] ? getHashStringArgs()['!offset'] : 1);
+
     function page(pidx) {
         layui.use(['laypage'], function () {
             var laypage = layui.laypage;
             //开启HASH
             $.ajax({
-                url: "/msg?offset=" + (pidx-1) * 10 + "&limit=" + 10
+                url: "/msg?offset=" + (pidx - 1) * 10 + "&limit=" + 10
                 , type: "get"
                 , success: function (res) {
                     if (res.status === 0) {
@@ -142,22 +145,22 @@
                             dom.append(
                                 "<div class=\"comment-show-con clearfix\">\n" +
                                 "<div class=\"comment-show-con-img pull-left\">\n" +
-                                "<img src=\""+message.user.icons+"\" alt=\"\">\n" +
+                                "<img src=\"" + message.user.icons + "\" alt=\"\">\n" +
                                 "</div>\n" +
                                 "<div class=\"f-list pull-left clearfix\">\n" +
                                 "<div class=\"pl-text clearfix\">" +
-                                "<a href= \"../user/"+message.suid+"/my.html\" class=\"f-name\">"+message.user.nickname+"</a>:\n" +
+                                "<a href= \"../user/" + message.suid + "/my.html\" class=\"f-name\">" + message.user.nickname + "</a>:\n" +
                                 "</div>\n" +
                                 "<div class=\"date-dz\">\n" +
-                                "<span class=\"f-note pull-left comment-time\">留言："+message.content+"</span>\n" +
+                                "<span class=\"f-note pull-left comment-time\">留言：" + message.content + "</span>\n" +
                                 "<div class=\"date-dz-right pull-right comment-pl-block\">\n" +
-                                "<a class=\"f-opt time\">"+new Date(message.ctime).time()+"</a>\n" +
-                                "<span class=\"pull-left date-dz-line\">&nbsp;</span>"+
+                                "<a class=\"f-opt time\">" + new Date(message.ctime).time() + "</a>\n" +
+                                "<span class=\"pull-left date-dz-line\">&nbsp;</span>" +
                                 "<a href=\"javascript:;\" class=\"f-opt send\" data-id='" + message.suid + "'>回复</a>\n"
-                                +"<span class=\"pull-left date-dz-line\">|</span>"+
+                                + "<span class=\"pull-left date-dz-line\">|</span>" +
                                 "<a href=\"javascript:;\" class=\"f-opt delete-msg\" data-id='" + message.mid + "'>删除</a>\n" +
                                 "<span class=\"pull-left date-dz-line\">|</span>\n" +
-                                "<a href=\"../user/"+message.suid+"/my.html\" class=\"f-opt zone\">TA的空间</a>\n" +
+                                "<a href=\"../user/" + message.suid + "/my.html\" class=\"f-opt zone\">TA的空间</a>\n" +
                                 "</div>\n" +
                                 "</div>\n" +
                                 "<div class=\"hf-list-con\"></div>\n" +

@@ -99,11 +99,12 @@
 
 
 </div>
-
 <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/jquery.flexText.js"></script>
-<script src="js/common.js"></script>
 <script src="layui/layui.js"></script>
+
+<script src="js/common.js"></script>
 <script src="js/top.js"></script>
 
 <script>
@@ -133,7 +134,7 @@
         $.ajax({
             type: 'post'
             , url: "/user/login"
-            , data: {"data":aes.encrypt(JSON.stringify(newTable))}
+            , data: {"data": aes.encrypt(JSON.stringify(newTable))}
 
             , contentType: 'application/x-www-form-urlencoded;charset=UTF-8'
             , success: function (res) {
@@ -144,8 +145,8 @@
                     return false;
                 } else {
                     layer.msg("登录成功！");
-                    layui.sessionData('unLogin', {key: 'statue', value: true});
-                    layui.sessionData("user", {key:'user',value:res});
+                    $.cookie('unLogin', {'statue': true});
+                    $.cookie("user", {'user': res});
                     self.location = window.history.back();
                     window.location.refresh();
                 }
@@ -153,7 +154,7 @@
 
             }
             , error: function (res) {
-                layer.msg("错误码：" + res.status+"<br>"+res.statusText);
+                layer.msg("错误码：" + res.status + "<br>" + res.statusText);
 
                 setTimeout(" $(\"#reset\").click();", 2000)
             }

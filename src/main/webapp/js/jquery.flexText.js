@@ -46,7 +46,7 @@
         }
 
         // Mirror pre/span & textarea contents
-        ,_mirror: function () {
+        , _mirror: function () {
             this.$span.text(this.$textarea.val());
         }
     };

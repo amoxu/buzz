@@ -284,7 +284,7 @@
 
                     </div>
                     <div id="head-icon" class="setting" hidden>
-                        <p id="gravatar-tips" class=" layui-btn layui-btn-normal " style="margin: 5px" >
+                        <p id="gravatar-tips" class=" layui-btn layui-btn-normal " style="margin: 5px">
                             Gravatar用户?
                         </p>
 
@@ -293,7 +293,8 @@
                             <div class="layui-upload-list">
                                 <img class="layui-upload-img" id="demo1" style="width: 180px;height: 180px;">
                                 <p>
-                                    <button class="layui-btn-normal layui-btn " id="upload" style="display:none;">上传</button>
+                                    <button class="layui-btn-normal layui-btn " id="upload" style="display:none;">上传
+                                    </button>
                                 </p>
                             </div>
                         </div>
@@ -315,6 +316,7 @@
 </div>
 
 <script type="text/javascript" src="../js/jquery-1.12.0.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
 <script src="../layui/layui.js"></script>
 <script src="../js/top.js"></script>
 <script src="../js/common.js"></script>
@@ -335,7 +337,6 @@
         laydate.render({
             elem: '#date'
         });
-
 
 
         form.verify({
@@ -375,7 +376,7 @@
                 , data: data.field
                 , success: function (res) {
                     if (res.status === 0) {
-                        layui.sessionData("user", {key: 'permission', value: data.field});
+                        $.cookie("user", { 'permission': data.field});
                     }
                     layer.msg(res.msg);
                     setting.reload();
@@ -441,14 +442,14 @@
     });
     layui.use(['element', 'jquery'], function () {
 
-      var element = layui.element;
+        var element = layui.element;
         var $ = layui.jquery;
 
         $("#gravatar-tips").on('click', function () {
             layer.open({
-                title:"Gravatar:"
-                ,btn:['关闭']
-                ,content:"<p >我们的头像是基于Gravatar，可以通过邮箱名在共享你在Gravatar设置的头像。\n" +
+                title: "Gravatar:"
+                , btn: ['关闭']
+                , content: "<p >我们的头像是基于Gravatar，可以通过邮箱名在共享你在Gravatar设置的头像。\n" +
                 "                            <br>如果你已经注册了Gravatar并且设置了头像，那么你需要到进行设置\n" +
                 "                            <br>如果你没有注册过，可以直接通过上传修改你在本站的头像。\n" +
                 "                            <br>前往修改/注册:<a href=\"https://en.gravatar.com/\" target=\"_blank\">https://en.gravatar.com/</a>\n" +
@@ -459,7 +460,7 @@
         });
 
 
-        var p = layui.sessionData('user').permission;
+        var p = $.cookie('user').permission;
         if (true || $.isEmptyObject(p)) {
             $.ajax({
                 async: true
@@ -467,7 +468,7 @@
                 , type: 'get'
                 , success: function (data) {
                     if (data.status === 0) {
-                        layui.sessionData('user', {
+                        $.cookie('user', {
                             key: 'permission'
                             , value: data['data']
                         });
@@ -493,7 +494,7 @@
     layui.use('upload', function () {
         var $ = layui.jquery
             , upload = layui.upload;
-        var userInfo = layui.sessionData("user").user;
+        var userInfo = $.cookie("user").user;
         if ($.isEmptyObject(userInfo) && !userInfo) {
 
             layer.alert("请重新登录。");
@@ -503,7 +504,7 @@
         var uploadInst = upload.render({
             elem: '#smfile'
             //'https://sm.ms/api/upload'
-            , url: 'https://icon.amoxuk.com/icon?'+(userInfo['data'].icons).split("?")[0]
+            , url: 'https://icon.amoxuk.com/icon?' + (userInfo['data'].icons).split("?")[0]
             , field: 'smfile'
             , auto: false
             , bindAction: '#upload' //指向一个按钮触发上传
@@ -526,26 +527,26 @@
                     //上传成功
                     /*todo 保存至服务器*/
                     $.ajax({
-                        async:false
-                        ,url:"/user/icon"
-                        ,type:'post'
-                        ,data:{"data":res.data}
-                        ,success:function (res) {
+                        async: false
+                        , url: "/user/icon"
+                        , type: 'post'
+                        , data: {"data": res.data}
+                        , success: function (res) {
                             layer.closeAll(); //关闭加载层
                             layer.alert(res.msg);
                             setting.reload();
 
                             return false;
                         }
-                        ,error:function (res) {
+                        , error: function (res) {
                             layer.closeAll(); //关闭加载层
-                            layer.alert("错误码："+res.status);
+                            layer.alert("错误码：" + res.status);
                             return false;
                         }
                     });
                     return false;
-                }else {
-                    return layer.alert('上传失败，'+res.msg);
+                } else {
+                    return layer.alert('上传失败，' + res.msg);
                 }
 
             }
