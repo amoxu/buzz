@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.amoxu.mapper.CommentsMapper" >
-  <resultMap id="BaseResultMap" type="com.amoxu.entity.Comments" >
-    <id column="cid" property="cid" jdbcType="INTEGER" />
-    <result column="rcid" property="rcid" jdbcType="INTEGER" />
-    <result column="uid" property="uid" jdbcType="INTEGER" />
-    <result column="mid" property="mid" jdbcType="INTEGER" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="likes" property="likes" jdbcType="INTEGER" />
-    <result column="feeling" property="feeling" jdbcType="DOUBLE" />
-    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+  <resultMap id="BaseResultMap" type="com.amoxu.entity.Comments">
+    <id column="cid" property="cid" jdbcType="INTEGER"/>
+    <result column="rcid" property="rcid" jdbcType="INTEGER"/>
+    <result column="uid" property="uid" jdbcType="INTEGER"/>
+    <result column="mid" property="mid" jdbcType="INTEGER"/>
+    <result column="content" property="content" jdbcType="VARCHAR"/>
+    <result column="likes" property="likes" jdbcType="INTEGER"/>
+    <result column="feeling" property="feeling" jdbcType="DOUBLE"/>
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
+    <association property="user" javaType="User" columnPrefix="u_">
+      <result property="nickname" column="nickname"/>
+      <result property="icons" column="icons"/>
+    </association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,15 +74,17 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    cid, rcid, uid, mid, content, likes, feeling, ctime
+    comments.cid, comments.rcid, comments.uid, comments.mid, comments.content, comments.likes, comments.feeling, comments.ctime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.CommentsExample" >
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List" />
+    <include refid="Base_Column_List"/>
+    ,user.uid AS u_uid,user.nickname AS u_nickname,user.icons as u_icons
     from comments
+    LEFT JOIN buzz.user ON user.uid=comments.uid
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>

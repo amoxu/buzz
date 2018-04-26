@@ -2189,7 +2189,7 @@ input[type="text"], input[type="password"], textarea.form-control {
     height: 44px;
     margin: 0;
     vertical-align: middle;
-    background: #f8f8f8;
+    /*background: #f8f8f8;*/
     border: 3px solid #ddd;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;

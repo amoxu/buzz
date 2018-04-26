@@ -510,7 +510,7 @@ public class MusicExample {
 
         protected Criterion(String condition, Object value, String typeHandler) {
             super();
-            this.condition = condition;
+            this.condition = "music." + condition;
             this.value = value;
             this.typeHandler = typeHandler;
             if (value instanceof List<?>) {

@@ -82,4 +82,30 @@ public class Comments {
     public void setCtime(Date ctime) {
         this.ctime = ctime;
     }
+
+    @Override
+    public String toString() {
+        return "Comments{" +
+                "cid=" + cid +
+                ", rcid=" + rcid +
+                ", uid=" + uid +
+                ", mid=" + mid +
+                ", content='" + content + '\'' +
+                ", likes=" + likes +
+                ", feeling=" + feeling +
+                ", ctime=" + ctime +
+                ", user=" + user +
+                '}';
+    }
+
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public Comments setUser(User user) {
+        this.user = user;
+        return this;
+    }
 }

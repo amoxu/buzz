@@ -2,7 +2,23 @@
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
-      <configuration />
+      <configuration process_explicitly_annotated="false">
+        <fileset id="web application context" name="MVC application context" removed="true">
+          <file>file://$MODULE_DIR$/src/main/resources/spring/applicationContext-service.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/spring/applicationContext-mail.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/spring/applicationContext-shiro.xml</file>
+          <file>file://$MODULE_DIR$/../music163/src/main/webmagic/resources/spring/applicationContext-dao.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/spring/applicationContext-dao.xml</file>
+          <file>file://$MODULE_DIR$/../music163/src/main/webmagic/resources/spring/applicationContext-trsaction.xml</file>
+          <file>file://$MODULE_DIR$/../music163/src/main/webmagic/resources/spring/applicationContext-shiro.xml</file>
+          <file>file://$MODULE_DIR$/../music163/src/main/webmagic/resources/spring/applicationContext-service.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/spring/applicationContext-trsaction.xml</file>
+        </fileset>
+        <fileset id="web dispatcher servlet context" name="MVC dispatcher servlet context" removed="true">
+          <file>file://$MODULE_DIR$/src/main/resources/spring/springmvc.xml</file>
+          <file>file://$MODULE_DIR$/../music163/src/main/webmagic/resources/spring/springmvc.xml</file>
+        </fileset>
+      </configuration>
     </facet>
     <facet type="web" name="Web">
       <configuration>
@@ -42,7 +58,6 @@
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.8.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shiro:shiro-web:1.2.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shiro:shiro-spring:1.2.3" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-web:4.3.9.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:4.3.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-test:4.3.9.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
@@ -94,5 +109,9 @@
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-sandbox:4.7.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-analyzers-common:4.7.2" level="project" />
     <orderEntry type="library" name="Maven: org.python:jython-standalone:2.7.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp:okhttp:2.7.5" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-web:4.3.9.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.10.3" level="project" />
   </component>
 </module>
