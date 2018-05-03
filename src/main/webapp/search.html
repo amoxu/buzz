@@ -74,7 +74,7 @@
                                 <thead>
                                 <tr>
                                     <th lay-data="{field:'cid', width: 120}">ID</th>
-                                    <th lay-data="{field:'user.nickname', width: 120}">用户名</th>
+                                    <th lay-data="{field:'user',templet: '<div>{{d.user.nickname}}</div>', width: 120}">用户名</th>
                                     <th lay-data="{field:'ctime', width: 120}">时间</th>
                                     <th lay-data="{field:'content'}">内容</th>
                                 </tr>
@@ -88,9 +88,9 @@
                                 <tr>
                                     <th lay-data="{field:'sid', width: 120}">ID</th>
                                     <th lay-data="{field:'name', width: 120}">歌名</th>
-                                    <th lay-data="{field:'singer.name', width: 120}">歌手</th>
-                                    <th lay-data="{field:'link', width: 120}">收听</th>
-                                    <th lay-data="{field:'source.name'}">来源</th>
+                                    <th lay-data="{field:'singer',templet: '<div>{{d.singer.name}}</div>', width: 120}">歌手</th>
+                                    <th lay-data="{field:'link', width: 120,templet: '<div><a target=\'_blank\' href =\'{{d.link}}\'><i class=\'layui-icon\'>&#xe652;</i></a></div>'}">收听</th>
+                                    <th lay-data="{field:'source',templet: '<div>{{d.source.name}}</div>'}">来源</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -112,9 +112,9 @@
                                    lay-data="{id:'user',limit:10,skin:'line',page:{groups:4,curr:0,hash:'offset',layout: ['prev', 'page', 'next']}}">
                                 <thead>
                                 <tr>
-                                    <th lay-data="{field:'id', width: 120}">ID</th>
+                                    <th lay-data="{field:'uid', width: 120}">ID</th>
                                     <th lay-data="{field:'nickname', width: 120}">用户名</th>
-                                    <th lay-data="{field:'location', width: 120}">地区</th>
+                                    <th lay-data="{field:'city', width: 120}">地区</th>
                                     <th lay-data="{field:'introduce'}">介绍</th>
                                 </tr>
                                 </thead>

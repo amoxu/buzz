@@ -63,6 +63,9 @@ body {
     display: block; /*width: 500px;padding: 20px;border: 1px solid #ededed;margin: 20px auto;*/
 }
 
+a[data-name='topic'] {
+    color: #EF5350;
+}
 .plBtn {
     width: 75px;
     height: 36px;
@@ -84,7 +87,7 @@ body {
 
 /*----------评论区域 begin----------*/
 .comment-show {
-    margin-top: 20px;
+    /*margin-top: 20px;*/
 }
 
 .comment-show-con {
@@ -121,7 +124,7 @@ body {
 .hf-list-con {
     float: left;
     width: 100%;
-    background-color: #eaeaec;
+    background-color: rgba(0,0,0,0.02);
     margin-top: 7px;
 }
 

@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SearchServiceImpl implements SearchService {
     @Autowired
@@ -73,8 +75,13 @@ public class SearchServiceImpl implements SearchService {
                 pageResult.setCount(userMapper.countByExample(userExample));
                 userExample.setLimit(pageResult.getLimit());
                 userExample.setOffset(pageResult.getOffset());
+                List<User> users = userMapper.selectByExample(userExample);
+                for (int i =0 ;i<users.size();i++) {
+                    users.get(i).setRoles(null).setRid(null).setState(null).setPassword(null).setNote(null)
+                            .setEmail(null).setUserState(null).setCtime(null).setBirth(null);
+                }
+                pageResult.setList(users);
 
-                pageResult.setList(userMapper.selectByExample(userExample));
                 break;
             default :
                 break;

@@ -2025,11 +2025,15 @@ a:hover,a:focus{color:#74777b;}*/
     padding: .85em 1.3em .65em;
     font-size: 1.2em;
     background: none;
-    border-width: 2.7px;
-    border-style: solid;
-    border-color: #a0a0a0;
+    border: 2.7px solid #a0a0a0;
     border-radius: 4px;
     color: #787878;
+    height: 53.55px;
+    max-width: 10em;
+    overflow: hidden;
+    white-space: nowrap;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }
 
 .button_shadow:hover, .button_border:hover {

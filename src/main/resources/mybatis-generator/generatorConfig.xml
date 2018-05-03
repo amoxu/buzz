@@ -16,35 +16,34 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/music163?useSSL=true"
+                        connectionURL="jdbc:mysql://localhost:3306/buzz?useSSL=true"
                         userId="root" password="950815x">
         </jdbcConnection>
 
         <javaModelGenerator targetPackage="com.amoxu.entity"
-                            targetProject="F:\JWP\buzz\src\main\java\com\webmagic\music163">
+                            targetProject="F:\JWP\buzz\src\main\java">
                             <!--targetProject="F:\mybatis-generator-core-1.3.2\lib">-->
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <sqlMapGenerator targetPackage="com.amoxu.mapper"
-                         targetProject="F:\JWP\buzz\src\main\java\com\webmagic\music163">
+                         targetProject="F:\JWP\buzz\src\main\java">
                        <!--  targetProject="F:\mybatis-generator-core-1.3.2\lib">-->
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <javaClientGenerator type="XMLMAPPER"
                              targetPackage="com.amoxu.mapper"
-                             targetProject="F:\JWP\buzz\src\main\java\com\webmagic\music163">
+                             targetProject="F:\JWP\buzz\src\main\java">
                             <!-- targetProject="F:\mybatis-generator-core-1.3.2\lib">-->
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
 
 
-        <table tableName="album" domainObjectName="Album"/>
-        <table tableName="artist" domainObjectName="Artist"/>
-        <table tableName="comments" domainObjectName="Comments"/>
-        <table tableName="song" domainObjectName="Song"/>
+        <table tableName="topic" domainObjectName="Topic"/>
+        <table tableName="topic_comment" domainObjectName="TopicComment"/>
+
     </context>
 </generatorConfiguration>

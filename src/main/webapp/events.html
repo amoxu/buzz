@@ -174,7 +174,8 @@
                     $.get('/event?limit=10&offset=' + (page - 1) * 10, function (res) {
                         //假设你的列表返回在data集合中
                         layui.each(res.data, function (index, result) {
-                            var tmp = '<li><div class="comment-show-con clearfix">' +
+                            var tmp = '<li><div class=" card clearfix">' +
+                           // var tmp = '<li><div class="comment-show-con card clearfix">' +
                                 '<div class="comment-show-con-img pull-left">' +
                                 '<img src="' + result.sendUser.icons + '" alt="">' +
                                 '</div> ' +

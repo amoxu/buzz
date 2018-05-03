@@ -2,24 +2,14 @@ package com.amoxu.entity;
 
 import java.util.Date;
 
-public class TopicTalk {
-    private Integer id;
-
+public class Topic {
     private Integer tid;
 
     private Integer uid;
 
-    private String content;
+    private String topic;
 
     private Date ctime;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Integer getTid() {
         return tid;
@@ -37,12 +27,12 @@ public class TopicTalk {
         this.uid = uid;
     }
 
-    public String getContent() {
-        return content;
+    public String getTopic() {
+        return topic;
     }
 
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
+    public void setTopic(String topic) {
+        this.topic = topic == null ? null : topic.trim();
     }
 
     public Date getCtime() {

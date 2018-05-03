@@ -1,5 +1,7 @@
 package com.amoxu.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.Date;
 
 public class Comments {
@@ -74,7 +76,7 @@ public class Comments {
     public void setFeeling(Double feeling) {
         this.feeling = feeling;
     }
-
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     public Date getCtime() {
         return ctime;
     }
@@ -90,7 +92,7 @@ public class Comments {
                 ", rcid=" + rcid +
                 ", uid=" + uid +
                 ", mid=" + mid +
-                ", content='" + content + '\'' +
+                ", content='" + content +
                 ", likes=" + likes +
                 ", feeling=" + feeling +
                 ", ctime=" + ctime +

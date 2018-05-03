@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.amoxu.mapper.TopicsMapper" >
-  <resultMap id="BaseResultMap" type="com.amoxu.entity.Topics" >
+<mapper namespace="com.amoxu.mapper.TopicMapper" >
+  <resultMap id="BaseResultMap" type="com.amoxu.entity.Topic" >
     <id column="tid" property="tid" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
     <result column="topic" property="topic" jdbcType="VARCHAR" />
     <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -65,15 +66,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    tid, topic, ctime
+    tid, uid, topic, ctime
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.TopicsExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.TopicExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from topics
+    from topic
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,30 +93,33 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from topics
+    from topic
     where tid = #{tid,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from topics
+    delete from topic
     where tid = #{tid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.amoxu.entity.TopicsExample" >
-    delete from topics
+  <delete id="deleteByExample" parameterType="com.amoxu.entity.TopicExample" >
+    delete from topic
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.amoxu.entity.Topics" >
-    insert into topics (tid, topic, ctime
-      )
-    values (#{tid,jdbcType=INTEGER}, #{topic,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}
-      )
+  <insert id="insert" parameterType="com.amoxu.entity.Topic" >
+    insert into topic (tid, uid, topic, 
+      ctime)
+    values (#{tid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{topic,jdbcType=VARCHAR}, 
+      #{ctime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.amoxu.entity.Topics" >
-    insert into topics
+  <insert id="insertSelective" parameterType="com.amoxu.entity.Topic" >
+    insert into topic
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="tid != null" >
         tid,
+      </if>
+      <if test="uid != null" >
+        uid,
       </if>
       <if test="topic != null" >
         topic,
@@ -128,6 +132,9 @@
       <if test="tid != null" >
         #{tid,jdbcType=INTEGER},
       </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
       <if test="topic != null" >
         #{topic,jdbcType=VARCHAR},
       </if>
@@ -136,17 +143,20 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.amoxu.entity.TopicsExample" resultType="java.lang.Integer" >
-    select count(*) from topics
+  <select id="countByExample" parameterType="com.amoxu.entity.TopicExample" resultType="java.lang.Integer" >
+    select count(*) from topic
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update topics
+    update topic
     <set >
       <if test="record.tid != null" >
         tid = #{record.tid,jdbcType=INTEGER},
+      </if>
+      <if test="record.uid != null" >
+        uid = #{record.uid,jdbcType=INTEGER},
       </if>
       <if test="record.topic != null" >
         topic = #{record.topic,jdbcType=VARCHAR},
@@ -160,17 +170,21 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update topics
+    update topic
     set tid = #{record.tid,jdbcType=INTEGER},
+      uid = #{record.uid,jdbcType=INTEGER},
       topic = #{record.topic,jdbcType=VARCHAR},
       ctime = #{record.ctime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.amoxu.entity.Topics" >
-    update topics
+  <update id="updateByPrimaryKeySelective" parameterType="com.amoxu.entity.Topic" >
+    update topic
     <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
       <if test="topic != null" >
         topic = #{topic,jdbcType=VARCHAR},
       </if>
@@ -180,9 +194,10 @@
     </set>
     where tid = #{tid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.amoxu.entity.Topics" >
-    update topics
-    set topic = #{topic,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.amoxu.entity.Topic" >
+    update topic
+    set uid = #{uid,jdbcType=INTEGER},
+      topic = #{topic,jdbcType=VARCHAR},
       ctime = #{ctime,jdbcType=TIMESTAMP}
     where tid = #{tid,jdbcType=INTEGER}
   </update>

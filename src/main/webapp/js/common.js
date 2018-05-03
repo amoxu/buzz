@@ -2,27 +2,21 @@ function zone(id) {
     return '"../user/' + id + '/my.html"';
 }
 
+/*主评论回复 创建回复模块*/
 (function () {
     $(".reply").on('click', function () {
-        if ($(this).parent().next().html().length > 0) {
-            $(".commentAll").html("");
-            $(this).parent().next().html("");
+        var dom = $(this).parent().next().children(".reviewArea");
+        if (dom.html().length > 0) {
+            dom.html("");
             $('.content').flexText();
         } else {
-            $(".commentAll").html("");
-            $(this).parent().next().html(
-                "                            <!--评论区域 begin-->\n" +
-                "                            <div class=\"reviewArea clearfix\">\n" +
-                "                                <textarea class=\"content comment-input\" placeholder=\"请输入评论。\"  ></textarea>\n" +
-                "                                <a href=\"javascript:;\" class=\"plBtn\">评论</a>\n" +
-                "                            </div>\n" +
-                "                            <!--评论区域 end-->\n" +
-                "                            <!--回复区域 begin-->\n" +
-                "                            <div class=\"comment-show\">\n" +
-                "                                <div class=\"comment-show-con clearfix\">\n" +
-                "                                </div>\n" +
-                "                            </div>\n" +
-                "                            <!--回复区域 end-->\n");
+
+           var name =  $(this).parents('.layui-row').siblings('.card_nick').find('a').html();
+           var dataId = $(this).find('a').attr('data-id');
+            dom.html(
+                "<textarea class=\"content comment-input\" placeholder=\"请输入评论。\" data-name=\""+name+"\"></textarea>\n" +
+                "<a href=\"javascript:;\" class=\"plBtn\" data-id=\""+dataId+"\">评论</a>\n"
+            );
             $('.content').flexText();
         }
 
@@ -195,7 +189,7 @@ function buildReply(data, uid, receiveUserName) {
  */
 function addList(res) {
     //发布动态
-    var oHtml = '<li><div class="comment-show-con clearfix">' +
+    var oHtml = '<li><div class="card clearfix">' +
         '<div class="comment-show-con-img pull-left">' +
         '<img src="' + res.sendUser.icons + '" alt="">' +
         '</div> ' +
@@ -222,7 +216,9 @@ function addList(res) {
         '</div> </div><div class="hf-list-con"></div></div> </div></li>';
     /*if (oSize.replace(/(^\s*)|(\s*$)/g, "") != '') {*/
     /*判断内容是否为空*/
-    $('.comment-show ul').prepend(oHtml);//添加回复
+
+    $('#content').prepend(oHtml);
+
 
 }
 
