@@ -23,7 +23,8 @@ public class SearchServiceImplTest {
         PageResult pageResult = new PageResult();
         pageResult.setOffset(0);
         pageResult.setLimit(10);
-        PageResult pageResult1 = searchService.search(1014, "amo", pageResult);
+
+        PageResult pageResult1 = searchService.search(1001, "乐热评", pageResult);
         logger.info(JSON.toJSONString(pageResult1));
 
     }

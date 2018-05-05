@@ -1,6 +1,7 @@
 package com.amoxu.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.util.Date;
 import java.util.List;
@@ -21,22 +22,21 @@ public class Events {
     @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date ctime;
 
+    @JSONField(serialzeFeatures = SerializerFeature.WriteNullBooleanAsFalse)
+    private Boolean userLike;
+
+    private User sendUser;
     private List<Events> comment;
+    private User receiveUser;
 
 
     public Boolean getUserLike() {
         return userLike;
     }
-
     public Events setUserLike(Boolean userLike) {
         this.userLike = userLike;
         return this;
     }
-
-    private Boolean userLike;
-
-
-    private User sendUser;
 
     @Override
     public String toString() {
@@ -55,7 +55,6 @@ public class Events {
                 '}';
     }
 
-    private User receiveUser;
 
     public Integer getCid() {
         return cid;

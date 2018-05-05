@@ -19,6 +19,14 @@
     <listener>
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
     </listener>
+    <!--不拦截静态文件-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+        <url-pattern>*.js</url-pattern>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+
     <!--spring为我们提供的乱码过滤器-->
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>

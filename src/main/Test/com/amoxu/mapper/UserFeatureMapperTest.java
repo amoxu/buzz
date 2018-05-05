@@ -13,8 +13,9 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-service.xml"
-        , "classpath:spring/applicationContext-dao.xml"
-        , "classpath:spring/applicationContext-trsaction.xml"
+        ,"classpath:spring/applicationContext-dao.xml"
+        ,"classpath:spring/applicationContext-mail.xml"
+        ,"classpath:spring/applicationContext-trsaction.xml"
 })
 public class UserFeatureMapperTest {
     private Logger logger = Logger.getLogger(getClass());

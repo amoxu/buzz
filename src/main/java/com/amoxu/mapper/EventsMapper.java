@@ -28,8 +28,10 @@ public interface EventsMapper {
     int updateByPrimaryKeySelective(Events record);
 
     int updateByPrimaryKey(Events record);
-
+    /*已登录的*/
     List<Events> selectEventsByExample( @Param("onlineId") Integer onlineId,@Param("example") EventsExample example);
-    List<Events> selectEventsByExample2( @Param("onlineId") Integer onlineId,@Param("example") EventsExample example);
+
+    /*未登录 onlineID = null */
+    List<Events> selectEventsByExample2(@Param("onlineId") Integer onlineId, @Param("example") EventsExample example);
 
 }

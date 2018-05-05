@@ -10,6 +10,7 @@
     <result column="likes" property="likes" jdbcType="INTEGER" />
     <result column="feeling" property="feeling" jdbcType="DOUBLE" />
     <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="base_cid" property="baseCid" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    cid, rcid, uid, ttid, content, likes, feeling, ctime
+    cid, rcid, uid, ttid, content, likes, feeling, ctime, base_cid
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.TopicCommentExample" >
     select
@@ -113,10 +114,12 @@
   <insert id="insert" parameterType="com.amoxu.entity.TopicComment" >
     insert into topic_comment (cid, rcid, uid, 
       ttid, content, likes, 
-      feeling, ctime)
+      feeling, ctime, base_cid
+      )
     values (#{cid,jdbcType=INTEGER}, #{rcid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, 
       #{ttid,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{likes,jdbcType=INTEGER}, 
-      #{feeling,jdbcType=DOUBLE}, #{ctime,jdbcType=TIMESTAMP})
+      #{feeling,jdbcType=DOUBLE}, #{ctime,jdbcType=TIMESTAMP}, #{baseCid,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.amoxu.entity.TopicComment" >
     insert into topic_comment
@@ -145,6 +148,9 @@
       <if test="ctime != null" >
         ctime,
       </if>
+      <if test="baseCid != null" >
+        base_cid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="cid != null" >
@@ -170,6 +176,9 @@
       </if>
       <if test="ctime != null" >
         #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="baseCid != null" >
+        #{baseCid,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -206,6 +215,9 @@
       <if test="record.ctime != null" >
         ctime = #{record.ctime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.baseCid != null" >
+        base_cid = #{record.baseCid,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -220,7 +232,8 @@
       content = #{record.content,jdbcType=VARCHAR},
       likes = #{record.likes,jdbcType=INTEGER},
       feeling = #{record.feeling,jdbcType=DOUBLE},
-      ctime = #{record.ctime,jdbcType=TIMESTAMP}
+      ctime = #{record.ctime,jdbcType=TIMESTAMP},
+      base_cid = #{record.baseCid,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -249,6 +262,9 @@
       <if test="ctime != null" >
         ctime = #{ctime,jdbcType=TIMESTAMP},
       </if>
+      <if test="baseCid != null" >
+        base_cid = #{baseCid,jdbcType=INTEGER},
+      </if>
     </set>
     where cid = #{cid,jdbcType=INTEGER}
   </update>
@@ -260,7 +276,211 @@
       content = #{content,jdbcType=VARCHAR},
       likes = #{likes,jdbcType=INTEGER},
       feeling = #{feeling,jdbcType=DOUBLE},
-      ctime = #{ctime,jdbcType=TIMESTAMP}
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      base_cid = #{baseCid,jdbcType=INTEGER}
     where cid = #{cid,jdbcType=INTEGER}
   </update>
+
+
+  <resultMap id="userCommonInfoMap" type="com.amoxu.entity.User">
+    <result property="nickname" column="nickname"/>
+    <result property="icons" column="icons"/>
+    <result property="uid" column="uid"/>
+  </resultMap>
+  <resultMap id="receiveUserMap" type="com.amoxu.entity.User">
+    <result property="nickname" column="nickname"/>
+    <result property="uid" column="uid"/>
+  </resultMap>
+  <resultMap id="listMap" type="com.amoxu.entity.TopicComment">
+    <id column="cid" property="cid" jdbcType="INTEGER" />
+    <result column="rcid" property="rcid" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="ttid" property="ttid" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="likes" property="likes" jdbcType="INTEGER" />
+
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="base_cid" property="baseCid" jdbcType="INTEGER" />
+    <result column="userLike" property="userLike"/>
+    <result column="topic" property="topic"/>
+    <association property="sendUser" resultMap="userCommonInfoMap"></association>
+    <association property="receiveUser" resultMap="receiveUserMap" columnPrefix="rc_"></association>
+    <collection property="reply" column="{onlineId=userLike,base=cid}" select="selectMainChild" fetchType="eager" />
+  </resultMap>
+  <select id="selectMain" resultMap="listMap" parameterType="map">
+    /* 查询首页 按时间排序*/
+    SELECT
+    topic_comment.cid,
+    topic_comment.rcid,
+    topic_comment.uid,
+    topic_comment.ttid,
+    topic_comment.content,
+    topic_comment.likes,
+    topic_comment.feeling,
+    topic_comment.ctime,
+    topic.topic,
+    `user`.uid,
+    `user`.nickname,
+    `user`.icons
+
+    , like_topic_comment.uid as userLike
+
+    FROM topic_comment
+    LEFT JOIN topic ON topic_comment.ttid = topic.tid
+    LEFT JOIN like_topic_comment ON topic_comment.cid = like_topic_comment.topic_comment_tid AND like_topic_comment.uid=
+    <if test="onlineId != null">
+      #{onlineId}
+    </if>
+    <if test="onlineId == null">
+      0
+    </if>
+    LEFT JOIN `user` on `user`.uid = `topic_comment`.uid
+
+    WHERE topic_comment.rcid = 0
+    <foreach collection="example.oredCriteria" item="criteria" separator="or">
+      <if test="criteria.valid">
+        <foreach collection="criteria.criteria" item="criterion">
+          <choose>
+            <when test="criterion.noValue">
+              and ${criterion.condition}
+            </when>
+            <when test="criterion.singleValue">
+              and ${criterion.condition} #{criterion.value}
+            </when>
+            <when test="criterion.betweenValue">
+              and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+            </when>
+            <when test="criterion.listValue">
+              and ${criterion.condition}
+              <foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+                #{listItem}
+              </foreach>
+            </when>
+          </choose>
+        </foreach>
+      </if>
+    </foreach>
+    <if test="example.orderByClause != null">
+      order by ${example.orderByClause}
+    </if>
+    <if test="example.limit!=0">
+      limit ${example.offset}, ${example.limit}
+    </if>
+  </select>
+  <sql id="My_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" suffix=")" prefixOverrides="and">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                           separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <select id="selectMainChild" resultMap="listMap" parameterType="map">
+    /*查询首页子列表 热评*/
+
+    <if test="base !=0">
+      SELECT
+
+      tc.cid,
+      tc.rcid,
+      tc.uid,
+      tc.ttid,
+      tc.content,
+      tc.likes,
+      tc.feeling,
+      tc.ctime
+
+      ,u1.nickname
+
+      ,reply.uid AS rc_uid
+      ,u2.nickname AS rc_nickname
+
+      , like_topic_comment.uid as userLike
+
+      FROM
+      topic_comment AS tc
+      LEFT JOIN `user` AS u1 ON u1.uid = tc.uid
+
+      LEFT JOIN like_topic_comment ON tc.cid = like_topic_comment.topic_comment_tid AND like_topic_comment.uid =
+      <if test="onlineId != null">
+        #{onlineId}
+      </if>
+      <if test="onlineId == null">
+        0
+      </if>
+
+      LEFT JOIN topic_comment AS reply ON tc.rcid = reply.cid
+      LEFT JOIN `user` AS u2 ON u2.uid = reply.uid
+
+      WHERE tc.base_cid=#{base}
+      ORDER BY likes DESC, tc.ctime DESC
+
+      LIMIT 4
+    </if>
+
+
+  </select>
+
+  <select id="selectChild" resultMap="listMap" parameterType="map">
+    /*有回复ID 查询子列表*/
+    SELECT
+    topic_comment.cid,
+    topic_comment.rcid,
+    topic_comment.uid,
+    topic_comment.ttid,
+    topic_comment.content,
+    topic_comment.likes,
+    topic_comment.feeling,
+    topic_comment.ctime,
+
+    `user`.uid,
+    `user`.nickname,
+    `user`.icons
+
+    , like_topic_comment.uid as userLike
+
+    FROM topic_comment
+
+    LEFT JOIN like_topic_comment ON topic_comment.cid = like_topic_comment.topic_comment_tid AND like_topic_comment.uid=
+    <if test="onlineId != null">
+      #{onlineId}
+    </if>
+    <if test="onlineId == null">
+      0
+    </if>
+    LEFT JOIN `user` on `user`.uid = `topic_comment`.uid
+
+    <include refid="My_By_Example_Where_Clause"/>
+
+    <if test="example.orderByClause != null">
+      order by ${example.orderByClause}
+    </if>
+    <if test="example.limit!=0">
+      limit ${example.offset}, ${example.limit}
+    </if>
+  </select>
+
 </mapper>

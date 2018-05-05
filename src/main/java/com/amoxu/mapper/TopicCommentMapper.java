@@ -2,8 +2,9 @@ package com.amoxu.mapper;
 
 import com.amoxu.entity.TopicComment;
 import com.amoxu.entity.TopicCommentExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TopicCommentMapper {
     int countByExample(TopicCommentExample example);
@@ -27,4 +28,11 @@ public interface TopicCommentMapper {
     int updateByPrimaryKeySelective(TopicComment record);
 
     int updateByPrimaryKey(TopicComment record);
+
+    List<TopicComment> selectMain(@Param("onlineId") Integer o, @Param("example") TopicCommentExample example);
+
+    List<TopicComment> selectMainChild(@Param("onlineId") Integer o, @Param("base") Integer i);
+
+    List<TopicComment> selectChild(@Param("onlineId") Integer o, @Param("example") TopicCommentExample example);
+
 }

@@ -56,27 +56,4 @@ public class ThumbsController {
         }
         return ajaxResult.toString();
     }
-
-    @RequiresAuthentication
-    @RequestMapping(
-            value = "/likes/{type}/{cid}"
-            , method = RequestMethod.GET
-            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
-    )
-    @ResponseBody
-    public String testLogin(@PathVariable("cid") Integer cid, @PathVariable("type") String type) {
-        AjaxResult<String> ajaxResult = new AjaxResult<>();
-        return ajaxResult.toString();
-    }
-
-    @RequestMapping(
-            value = "/likess/{type}/{cid}"
-            , method = RequestMethod.GET
-            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
-    )
-    @ResponseBody
-    public String testUnLogin(@PathVariable("cid") Integer cid, @PathVariable("type") String type) {
-        AjaxResult<String> ajaxResult = new AjaxResult<>();
-        return ajaxResult.toString();
-    }
 }

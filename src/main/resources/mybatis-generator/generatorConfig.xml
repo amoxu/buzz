@@ -42,8 +42,8 @@
 
 
 
+
         <table tableName="topic" domainObjectName="Topic"/>
-        <table tableName="topic_comment" domainObjectName="TopicComment"/>
 
     </context>
 </generatorConfiguration>

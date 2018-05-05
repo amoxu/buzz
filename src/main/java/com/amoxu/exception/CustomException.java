@@ -10,7 +10,7 @@ public class CustomException extends Exception {
     //异常信息
     public String message;
 
-    public CustomException(String message) {
+    CustomException(String message) {
         super(message);
         AjaxResult<String> ajaxResult = new AjaxResult<>();
         ajaxResult.failed();
@@ -26,5 +26,8 @@ public class CustomException extends Exception {
     public void setMessage(String message) {
         this.message = message;
     }
+
+
 }
+
 

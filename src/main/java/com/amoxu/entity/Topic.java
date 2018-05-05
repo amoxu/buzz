@@ -11,6 +11,8 @@ public class Topic {
 
     private Date ctime;
 
+    private Double coefficient;
+
     public Integer getTid() {
         return tid;
     }
@@ -41,5 +43,13 @@ public class Topic {
 
     public void setCtime(Date ctime) {
         this.ctime = ctime;
+    }
+
+    public Double getCoefficient() {
+        return coefficient;
+    }
+
+    public void setCoefficient(Double coefficient) {
+        this.coefficient = coefficient;
     }
 }

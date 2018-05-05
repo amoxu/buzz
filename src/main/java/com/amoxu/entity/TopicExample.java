@@ -374,6 +374,66 @@ public class TopicExample {
             addCriterion("ctime not between", value1, value2, "ctime");
             return (Criteria) this;
         }
+
+        public Criteria andCoefficientIsNull() {
+            addCriterion("coefficient is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoefficientIsNotNull() {
+            addCriterion("coefficient is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoefficientEqualTo(Double value) {
+            addCriterion("coefficient =", value, "coefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoefficientNotEqualTo(Double value) {
+            addCriterion("coefficient <>", value, "coefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoefficientGreaterThan(Double value) {
+            addCriterion("coefficient >", value, "coefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoefficientGreaterThanOrEqualTo(Double value) {
+            addCriterion("coefficient >=", value, "coefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoefficientLessThan(Double value) {
+            addCriterion("coefficient <", value, "coefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoefficientLessThanOrEqualTo(Double value) {
+            addCriterion("coefficient <=", value, "coefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoefficientIn(List<Double> values) {
+            addCriterion("coefficient in", values, "coefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoefficientNotIn(List<Double> values) {
+            addCriterion("coefficient not in", values, "coefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoefficientBetween(Double value1, Double value2) {
+            addCriterion("coefficient between", value1, value2, "coefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoefficientNotBetween(Double value1, Double value2) {
+            addCriterion("coefficient not between", value1, value2, "coefficient");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

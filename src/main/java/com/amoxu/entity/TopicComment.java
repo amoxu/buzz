@@ -1,6 +1,10 @@
 package com.amoxu.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+
 import java.util.Date;
+import java.util.List;
 
 public class TopicComment {
     private Integer cid;
@@ -17,7 +21,65 @@ public class TopicComment {
 
     private Double feeling;
 
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date ctime;
+
+    private Integer baseCid;/*主页内容cid*/
+    @JSONField(serialzeFeatures = SerializerFeature.WriteNullNumberAsZero)
+    private Integer userLike;/*用户是否点赞 >0 表示点赞了*/
+    private String topic;/*话题*/
+    private List<TopicComment> reply;/*回复列表*/
+    private User sendUser;/*发送用户*/
+    private User receiveUser;/*接收用户*/
+
+
+    public Integer getUserLike() {
+        return userLike;
+    }
+
+    public TopicComment setUserLike(Integer userLike) {
+        this.userLike = userLike;
+        return this;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public TopicComment setTopic(String topic) {
+        this.topic = topic;
+        return this;
+    }
+
+    public List<TopicComment> getReply() {
+        return reply;
+    }
+
+    public TopicComment setReply(List<TopicComment> reply) {
+        this.reply = reply;
+        return this;
+    }
+
+    public User getSendUser() {
+        return sendUser;
+    }
+
+    public TopicComment setSendUser(User sendUser) {
+        this.sendUser = sendUser;
+        return this;
+    }
+
+    public User getReceiveUser() {
+        return receiveUser;
+    }
+
+    public TopicComment setReceiveUser(User receiveUser) {
+        this.receiveUser = receiveUser;
+        return this;
+    }
+
+
+
 
     public Integer getCid() {
         return cid;
@@ -81,5 +143,13 @@ public class TopicComment {
 
     public void setCtime(Date ctime) {
         this.ctime = ctime;
+    }
+
+    public Integer getBaseCid() {
+        return baseCid;
+    }
+
+    public void setBaseCid(Integer baseCid) {
+        this.baseCid = baseCid;
     }
 }

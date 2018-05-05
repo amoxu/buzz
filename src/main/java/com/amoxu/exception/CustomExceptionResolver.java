@@ -54,6 +54,8 @@ public class CustomExceptionResolver implements HandlerExceptionResolver {
             /*用户未登录*/
             customException = new CustomException(StaticEnum.OPT_UNLOGIN);
             e.printStackTrace();
+        } else if (e instanceof UnLoginException) {
+            customException = new CustomException(e.getMessage());
         } else {
             customException = new CustomException("未知错误");
             e.printStackTrace();

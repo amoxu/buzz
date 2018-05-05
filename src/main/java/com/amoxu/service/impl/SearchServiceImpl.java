@@ -1,16 +1,19 @@
 package com.amoxu.service.impl;
 
 import com.amoxu.entity.*;
-import com.amoxu.mapper.CommentsMapper;
-import com.amoxu.mapper.MusicMapper;
-import com.amoxu.mapper.SingerMapper;
-import com.amoxu.mapper.UserMapper;
+import com.amoxu.mapper.*;
 import com.amoxu.service.SearchService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -23,6 +26,14 @@ public class SearchServiceImpl implements SearchService {
     private MusicMapper musicMapper;
     @Autowired
     private SingerMapper singerMapper;
+    @Autowired
+    private TopicCommentMapper topicCommentMapper;
+    @Autowired
+    private TopicMapper topicMapper;
+
+    @Autowired
+    SqlSessionFactory sqlSessionFactory;
+
     Logger logger = Logger.getLogger(getClass());
 
     @Override
@@ -31,7 +42,7 @@ public class SearchServiceImpl implements SearchService {
             case 222:/*评论*/
                 CommentsExample example = new CommentsExample();
                 CommentsExample.Criteria criteria = example.createCriteria();
-                criteria.andContentLike("%"+key+"%");
+                criteria.andContentLike("%" + key + "%");
                 pageResult.setCount(commentsMapper.countByExample(example));
 
                 example.setLimit(pageResult.getLimit());
@@ -42,7 +53,7 @@ public class SearchServiceImpl implements SearchService {
             case 100:/*歌曲*/
                 MusicExample musicExample = new MusicExample();
                 MusicExample.Criteria musicCriteria = musicExample.createCriteria();
-                musicCriteria.andNameLike("%"+key+"%");
+                musicCriteria.andNameLike("%" + key + "%");
                 pageResult.setCount(musicMapper.countByExample(musicExample));
                 musicExample.setLimit(pageResult.getLimit());
                 musicExample.setOffset(pageResult.getOffset());
@@ -52,7 +63,7 @@ public class SearchServiceImpl implements SearchService {
             case 10:/*歌手*/
                 SingerExample singerExample = new SingerExample();
                 SingerExample.Criteria singerCriteria = singerExample.createCriteria();
-                singerCriteria.andNameLike("%"+key+"%");
+                singerCriteria.andNameLike("%" + key + "%");
                 pageResult.setCount(singerMapper.countByExample(singerExample));
                 singerExample.setLimit(pageResult.getLimit());
                 singerExample.setOffset(pageResult.getOffset());
@@ -71,19 +82,64 @@ public class SearchServiceImpl implements SearchService {
 
                     logger.debug("转换失败");
                 }
-                userCriteria.andNicknameLike("%"+key+"%");
+                userCriteria.andNicknameLike("%" + key + "%");
                 pageResult.setCount(userMapper.countByExample(userExample));
                 userExample.setLimit(pageResult.getLimit());
                 userExample.setOffset(pageResult.getOffset());
                 List<User> users = userMapper.selectByExample(userExample);
-                for (int i =0 ;i<users.size();i++) {
+                for (int i = 0; i < users.size(); i++) {
                     users.get(i).setRoles(null).setRid(null).setState(null).setPassword(null).setNote(null)
                             .setEmail(null).setUserState(null).setCtime(null).setBirth(null);
                 }
                 pageResult.setList(users);
 
                 break;
-            default :
+            case 1001:/*话题*/
+                /*获取话题ID*/
+                TopicExample topicExample = new TopicExample();
+                TopicExample.Criteria topicExampleCriteria = topicExample.createCriteria();
+                topicExampleCriteria.andTopicLike("%" + key + "%");
+                List<Topic> topics = topicMapper.selectByExample(topicExample);
+                if (topics.size() == 0) {
+                    pageResult.setList(Collections.EMPTY_LIST);
+                    break;
+                }
+                List<Integer> list = new ArrayList<>();
+                for (Topic topic : topics) {
+                    list.add(topic.getTid());
+                }
+
+                /*==========================================================*/
+
+                TopicCommentExample commentExample = new TopicCommentExample();
+                TopicCommentExample.Criteria criteria1 = commentExample.createCriteria();
+                criteria1.andTtidIn(list);
+                criteria1.andBaseCidEqualTo(0);
+                SqlSession sqlSession = sqlSessionFactory.openSession();
+                TopicCommentMapper mapper = sqlSession.getMapper(TopicCommentMapper.class);
+                pageResult.setCount(mapper.countByExample(commentExample));
+
+                commentExample.setOrderByClause("ctime desc");
+                commentExample.setOffset(pageResult.getOffset());
+                commentExample.setLimit(pageResult.getLimit());
+                List<TopicComment> topicComments;
+
+                /*============================ceshi==================*/
+
+                /*============================ceshi==================*/
+
+                Subject subject = SecurityUtils.getSubject();
+                if (subject.isAuthenticated()) {
+                    Integer uid = ((User) subject.getPrincipal()).getUid();
+                     topicComments = mapper.selectMain(uid, commentExample);
+                    pageResult.setList(topicComments);
+                } else {
+                    topicComments = mapper.selectMain(null, commentExample);
+                    pageResult.setList(topicComments);
+                }
+                sqlSession.close();
+                break;
+            default:
                 break;
         }
 

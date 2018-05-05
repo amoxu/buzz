@@ -614,6 +614,66 @@ public class TopicCommentExample {
             addCriterion("ctime not between", value1, value2, "ctime");
             return (Criteria) this;
         }
+
+        public Criteria andBaseCidIsNull() {
+            addCriterion("base_cid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBaseCidIsNotNull() {
+            addCriterion("base_cid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBaseCidEqualTo(Integer value) {
+            addCriterion("base_cid =", value, "baseCid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBaseCidNotEqualTo(Integer value) {
+            addCriterion("base_cid <>", value, "baseCid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBaseCidGreaterThan(Integer value) {
+            addCriterion("base_cid >", value, "baseCid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBaseCidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("base_cid >=", value, "baseCid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBaseCidLessThan(Integer value) {
+            addCriterion("base_cid <", value, "baseCid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBaseCidLessThanOrEqualTo(Integer value) {
+            addCriterion("base_cid <=", value, "baseCid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBaseCidIn(List<Integer> values) {
+            addCriterion("base_cid in", values, "baseCid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBaseCidNotIn(List<Integer> values) {
+            addCriterion("base_cid not in", values, "baseCid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBaseCidBetween(Integer value1, Integer value2) {
+            addCriterion("base_cid between", value1, value2, "baseCid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBaseCidNotBetween(Integer value1, Integer value2) {
+            addCriterion("base_cid not between", value1, value2, "baseCid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
@@ -692,7 +752,7 @@ public class TopicCommentExample {
         }
 
         protected Criterion(String condition, Object value) {
-            this(condition, value, null);
+            this("topic_comment."+condition, value, null);
         }
 
         protected Criterion(String condition, Object value, Object secondValue, String typeHandler) {

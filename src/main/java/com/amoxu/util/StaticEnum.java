@@ -41,6 +41,12 @@ public final class StaticEnum {
     public final static String MAIL_ACTIVE_SUC = "激活超时";
     public final static String MAIL_VER_ERROR = "验证失败";
 
+    /**
+     * 字数长度限制
+     */
+    public final static String WORD_LENGTH_LONG = "字数过长";
+    public final static String WORD_LENGTH_SHORT = "字数过短";
+
 
 
 }
