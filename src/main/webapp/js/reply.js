@@ -37,7 +37,7 @@ function zone(id) {
         var fhHtml = '<div class="hf-con pull-left"> ' +
             '<textarea class="content comment-input hf-input" data-name="' + fhName +
             '" placeholder="' + fhN + '"></textarea> <a href="javascript:;" class="hf-pl" data-id="'
-            + $(this).find('a').attr('data-id') + '">评论</a></div>';
+            + $(this).attr('data-id') + '">评论</a></div>';
         //显示回复
         if (!$(this).is('.hf-con-block')) {
             $(this).parents('.card_detail').find('.reviewArea').html(fhHtml);

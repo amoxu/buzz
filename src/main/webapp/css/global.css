@@ -1253,7 +1253,9 @@ a {
     color: rgb(235, 115, 80);
     text-decoration: none;
 }
-
+.card-side {
+    margin: 14px;
+}
 .card {
     margin: 14px;
     padding: 14px;
