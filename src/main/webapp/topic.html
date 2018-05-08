@@ -205,7 +205,23 @@
 
             }
         });
-
+        <!--分享-->
+        (function () {
+            $('#content.comment').on('click', '.share', function () {
+                var dom = $(this);
+                var did = dom.attr('data-id');
+                var text = "给你分享一个来自乐热评的消息：" +
+                    dom.parents('.card_detail').find('.card_text').text() +
+                    "<br/>点击查看原文：http://localhost/topic/comment.html?id=" + did;
+                layer.prompt({
+                    formType: 2,
+                    value: text,
+                    title: '复制内容分享',
+                }, function (value, index, elem) {
+                    layer.close(index);
+                });
+            });
+        })();
         <!--点赞-->
         (function () {
             $('#content').on('click', '.like,a.date-dz-z', function () {
@@ -261,6 +277,13 @@
                 }
             });
         })();
+        <!--话题-->
+        (function () {
+            $('#content').on('click', '.topic', function () {
+                var cid = $(this).attr('data-id');
+                flowLoad('/topic/' + cid);
+            });
+        })();
         function flowLoad(url) {
             /*对搜索 点击的内容进行流加载*/
             $('#content').html("");
@@ -285,7 +308,7 @@
                                         '<a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1">' + result.sendUser.nickname + '</a>' +
                                         '</div>' +
                                         '<div class="card_time">' + result.ctime + '</div>' +
-                                        '<a href="javascript:;" data-id="' + result.ttid + '">#' + result.topic + '#</a>' +
+                                        '<a href="javascript:;" class="topic" data-id="' + result.ttid + '">#' + result.topic + '#</a>' +
                                         '<div class="card_text ws14">' + result.content + '</div>' +
                                         '<div class="layui-row">' +
                                         '<ul class="inline">' +
@@ -431,6 +454,7 @@
                 return false;
             }
         });
+
     });
 </script>
 </body>
