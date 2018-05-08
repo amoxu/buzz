@@ -21,4 +21,6 @@ public interface TopicService {
     AjaxResult<TopicComment> replyComment(Integer rcid, Integer bcid, String data);
 
     AjaxResult commentDetail(Integer cid, PageResult<TopicComment> pageResult);
+
+    AjaxResult<List<TopicComment>> getDetailMain(Integer cid);
 }

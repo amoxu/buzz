@@ -319,7 +319,7 @@
     <result column="topic" property="topic"/>
     <association property="sendUser" resultMap="userCommonInfoMap"></association>
     <association property="receiveUser" resultMap="receiveUserMap" columnPrefix="rc_"></association>
-    <collection property="comment" column="{onlineId=userLike,base=cid}" select="selectMainChild" fetchType="eager" />
+    <collection property="comment" column="{onlineId=userLike,base=cid,target=rcid}" select="selectMainChild" fetchType="lazy" />
   </resultMap>
   <select id="selectMain" resultMap="listMap" parameterType="map">
     /* 查询首页 按时间排序*/
@@ -415,7 +415,8 @@
   <select id="selectMainChild" resultMap="listMap" parameterType="map">
     /*查询首页子列表 热评*/
 
-    <if test="base !=0">
+    <if test="base !=0 and target==0">
+
       SELECT
 
       tc.cid,
@@ -474,6 +475,9 @@
     `user`.nickname,
     `user`.icons
 
+    ,comment.uid AS rc_uid
+    ,u2.nickname AS rc_nickname
+
     , like_topic_comment.uid as userLike
 
     FROM topic_comment
@@ -486,6 +490,9 @@
       0
     </if>
     LEFT JOIN `user` on `user`.uid = `topic_comment`.uid
+
+    LEFT JOIN topic_comment AS comment ON topic_comment.rcid = comment.cid
+    LEFT JOIN `user` AS u2 ON u2.uid = comment.uid
 
     <include refid="My_By_Example_Where_Clause"/>
 

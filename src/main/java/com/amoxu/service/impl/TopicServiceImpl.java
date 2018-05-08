@@ -226,17 +226,83 @@ public class TopicServiceImpl implements TopicService {
         return result;
     }
 
+    /**
+     * 分页获取子回复列表
+     *
+     * */
     @Override
     public AjaxResult commentDetail(Integer cid, PageResult<TopicComment> pageResult) {
         AjaxResult<List<TopicComment>> ajaxResult = new AjaxResult<>();
         logger.info(pageResult);
 
+        TopicCommentExample example = new TopicCommentExample();
+        TopicCommentExample.Criteria criteria = example.createCriteria();
+        criteria.andBaseCidEqualTo(cid);
 
+        int count = commentMapper.countByExample(example);//获取分页总数
 
-        ajaxResult.setData(pageResult.getList());
-        ajaxResult.setCount(pageResult.getCount());
+        example.setLimit(pageResult.getLimit());
+        example.setOffset(pageResult.getOffset());
+        example.setOrderByClause("topic_comment.ctime desc");
+        List<TopicComment> topicComments;
+
+        /*判断用户登录，用于获取点赞信息*/
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated) {
+            User u = (User) subject.getPrincipal();
+            Integer uid = u.getUid();
+            topicComments = commentMapper.selectChild(uid, example);
+        } else {
+             topicComments = commentMapper.selectChild(null, example);
+        }
+
+        ajaxResult.setData(topicComments);
+        ajaxResult.setCount(count);
+
         ajaxResult.ok();
         return ajaxResult;
     }
 
+    /**
+     * 获取主评+热评
+     * 单条
+     * 使用在详细页面
+     * */
+    @Override
+    public AjaxResult<List<TopicComment>> getDetailMain(Integer cid) {
+        TopicCommentExample commentExample = new TopicCommentExample();
+        TopicCommentExample.Criteria commentExampleCriteria = commentExample.createCriteria();
+        commentExample.setLimit(1);
+        commentExample.setOffset(0);
+
+        commentExampleCriteria.andBaseCidEqualTo(0);
+        commentExampleCriteria.andCidEqualTo(cid);
+
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+
+        List<TopicComment> topicComments;
+
+        if (authenticated) {
+            User u = (User) subject.getPrincipal();
+            Integer uid = u.getUid();
+            topicComments = commentMapper.selectMain(uid, commentExample);
+        } else {
+            topicComments = commentMapper.selectMain(null, commentExample);
+        }
+
+
+        /*
+         * 构造返回数据
+         *
+         * */
+        AjaxResult<List<TopicComment>> ajaxResult = new AjaxResult<>();
+        ajaxResult.ok();
+        ajaxResult.setData(topicComments);
+        ajaxResult.setCount(topicComments.size());
+
+        return ajaxResult;
+
+    }
 }

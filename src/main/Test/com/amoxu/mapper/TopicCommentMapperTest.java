@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
 import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-service.xml"
@@ -26,14 +25,22 @@ public class TopicCommentMapperTest {
     @Test
     public void selectMain() {
 
-        TopicCommentExample example = new TopicCommentExample();
-        TopicCommentExample.Criteria criteria = example.createCriteria();
-        criteria.andTtidIn(Arrays.asList(0, 1, 2));
-        example.setLimit(10);
-        example.setOffset(0);
-        example.setOrderByClause("topic_comment.ctime desc");
+        TopicCommentExample commentExample = new TopicCommentExample();
+        TopicCommentExample.Criteria commentExampleCriteria = commentExample.createCriteria();
 
-        List<TopicComment> topicComments = mapper.selectMain(null, example);
+        commentExampleCriteria.andBaseCidEqualTo(0);
+
+        commentExample.setOrderByClause("likes desc");
+
+
+        commentExample.setOffset(0);
+        commentExample.setLimit(10);
+
+        List<TopicComment> topicComments;
+
+
+        topicComments = mapper.selectMain(null, commentExample);
+
 
         logger.info(topicComments);
         logger.info(JSON.toJSONString(topicComments));
@@ -43,14 +50,14 @@ public class TopicCommentMapperTest {
     public void selectChild() {
         TopicCommentExample example = new TopicCommentExample();
         TopicCommentExample.Criteria criteria = example.createCriteria();
-        criteria.andBaseCidEqualTo(2);
-        example.setLimit(10);
-        example.setOffset(0);
+        criteria.andBaseCidEqualTo(16);
+        example.setLimit(5);
+        example.setOffset(5);
         example.setOrderByClause("topic_comment.ctime desc");
 
         List<TopicComment> topicComments = mapper.selectChild(null, example);
 
-        logger.info(topicComments);
+
         logger.info(JSON.toJSONString(topicComments));
     }
 

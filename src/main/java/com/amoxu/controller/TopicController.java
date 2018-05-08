@@ -71,6 +71,17 @@ public class TopicController {
         ajaxResult.setData(comment);
         return ajaxResult.toString();
     }
+    @RequestMapping(value = "/comment/reply/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+    @ResponseBody
+    public String commentReply(PageResult<TopicComment> pageResult, @PathVariable("id") Integer cid) {
+        return topicService.commentDetail(cid, pageResult).toString();
+    }
+
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+    @ResponseBody
+    public String comment(@PathVariable("id") Integer cid) {
+        return topicService.getDetailMain(cid).toString();
+    }
 
     @RequestMapping(value = "/{bcid}/{rcid}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
     @ResponseBody
@@ -98,10 +109,6 @@ public class TopicController {
         return ajaxResult.toString();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
-    @ResponseBody
-    public String comment(PageResult<TopicComment> pageResult, @PathVariable("id") Integer cid) {
-        return topicService.commentDetail(cid, pageResult).toString();
-    }
+
 
 }

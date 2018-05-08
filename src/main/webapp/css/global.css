@@ -1256,6 +1256,9 @@ a {
 .card-side {
     margin: 14px;
 }
+.new-tab {
+    border-top: none !important;
+}
 .card {
     margin: 14px;
     padding: 14px;

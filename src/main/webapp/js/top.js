@@ -1,6 +1,7 @@
 window.onscroll = function () {
     scrollFunction()
 };
+/*页面添加返回顶部按钮*/
 (function () {
     var btn = "<ul class='layui-fixbar'><li class=\"top-btn layui-icon layui-fixbar-top \" lay-type=\"top\">&#xe619;</li></ul>";
     $('body').append(btn);
@@ -38,12 +39,12 @@ String.prototype.find = function (str) {
 function getHashStringArgs() {
 //取得查询的hash，并去除开头的#号
     var hashStrings = (window.location.hash.length > 0 ? window.location.hash.substring(1) : ""),
-//保持数据的对象
-        hashArgs = {},
-//取得每一项hash对
-        items = hashStrings.length > 0 ? hashStrings.split("&") : [], item = null, name = null, value = null, i = 0,
-        len = items.length;
-//逐个将每一项添加到hashArgs中
+    //保持数据的对象
+    hashArgs = {},
+    //取得每一项hash对
+    items = hashStrings.length > 0 ? hashStrings.split("&") : [], item = null, name = null, value = null, i = 0,
+    len = items.length;
+    //逐个将每一项添加到hashArgs中
     for (i = 0; i < len; i++) {
         item = items[i].split("=");
         name = decodeURIComponent(item[0]);
@@ -53,6 +54,21 @@ function getHashStringArgs() {
         }
     }
     return hashArgs;
+}
+/*获取地址中的参数*/
+function getHashData(key) {
+    let url = window.location.href ? window.location.href : "";
+    url = url.split(/[?,&]/);
+    console.log(url);
+    for (let i = 0; i<url.length; i++) {
+        let item = url[i].split('=');
+        let name = decodeURIComponent(item[0]);
+        let value = decodeURIComponent(item[1]);
+        if (name === key) {
+            return value;
+        }
+    }
+   return null;
 }
 
 function scrollFunction() {

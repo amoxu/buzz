@@ -196,32 +196,5 @@ function addList(res) {
 
 }
 
-/*刷新页面时根据hash确定显示页面*/
-(function () {
-    var hash = window.location.hash;
-    if (hash.includes("#")) {
-        $(".setting:not(.layui-row)").hide();
-        $(hash).show();
-    }
-})();
-/*根据点击内容隐藏和显示对应div*/
-(function () {
-    $(".setting a").on("click", function () {
-        /*var hash = window.location.hash;*/
-        $(".setting:not(.layui-row)").hide();
-        $(this.hash).show();
-    });
-})();
-/*根据hash改变修改显示和隐藏对应div*/
-(function () {
-    window.onhashchange = function () {
-        if (window.location.hash.includes("#")) {
-            $(".setting:not(.layui-row)").hide();
-            $(window.location.hash).show();
-        }
-    };
-})();
-
-
 
 
