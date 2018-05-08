@@ -226,4 +226,17 @@ public class TopicServiceImpl implements TopicService {
         return result;
     }
 
+    @Override
+    public AjaxResult commentDetail(Integer cid, PageResult<TopicComment> pageResult) {
+        AjaxResult<List<TopicComment>> ajaxResult = new AjaxResult<>();
+        logger.info(pageResult);
+
+
+
+        ajaxResult.setData(pageResult.getList());
+        ajaxResult.setCount(pageResult.getCount());
+        ajaxResult.ok();
+        return ajaxResult;
+    }
+
 }

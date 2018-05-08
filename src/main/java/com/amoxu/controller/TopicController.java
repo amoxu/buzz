@@ -97,4 +97,11 @@ public class TopicController {
         ajaxResult.ok();
         return ajaxResult.toString();
     }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+    @ResponseBody
+    public String comment(PageResult<TopicComment> pageResult, @PathVariable("id") Integer cid) {
+        return topicService.commentDetail(cid, pageResult).toString();
+    }
+
 }

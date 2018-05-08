@@ -175,7 +175,7 @@
             } else {
                 var loadIdx = layer.load(1);
                 var rcid = oThis.attr("data-id");
-                var bcid = oThis.parents('.commentAll').siblings('.inline').find('.comment>a').attr("data-id");
+                var bcid = oThis.parents('.commentAll').siblings('.inline').find('.comment').attr("data-id");
                 if (!bcid) {
                     bcid = rcid;
                 }

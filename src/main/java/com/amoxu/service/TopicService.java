@@ -19,4 +19,6 @@ public interface TopicService {
     TopicComment publishComment(String data) throws UnLoginException;
 
     AjaxResult<TopicComment> replyComment(Integer rcid, Integer bcid, String data);
+
+    AjaxResult commentDetail(Integer cid, PageResult<TopicComment> pageResult);
 }
