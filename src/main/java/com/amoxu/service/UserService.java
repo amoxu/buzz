@@ -1,6 +1,7 @@
 package com.amoxu.service;
 
 import com.amoxu.entity.User;
+import com.amoxu.exception.UnLoginException;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface UserService {
 
     User getLoginUser(String user, String pwd);
 
-    User getUserInfo(Integer uid);
+    User getUserInfo(Integer uid) throws UnLoginException;
 
     int updateUserPassword(String oldPasswor, String newPasswor);
 

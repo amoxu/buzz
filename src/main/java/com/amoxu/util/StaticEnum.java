@@ -44,9 +44,8 @@ public final class StaticEnum {
     /**
      * 字数长度限制
      */
-    public final static String WORD_LENGTH_LONG = "字数过长";
-    public final static String WORD_LENGTH_SHORT = "字数过短";
+    public final static String WORD_TOPIC_LENGTH = "字数不少于2个并且不超过32个";
 
 
-
+    public static final String EMPTY_WORD = "输入内容不能为空";
 }

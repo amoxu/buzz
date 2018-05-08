@@ -62,4 +62,13 @@ public class TopicCommentMapperTest {
         logger.info(JSON.toJSONString(topicComments));
 
     }
+    @Test
+    public void selectPk() {
+
+
+        TopicComment topicComment = mapper.selectByPrimaryKey(16);
+
+        logger.info(JSON.toJSONString(topicComment));
+
+    }
 }

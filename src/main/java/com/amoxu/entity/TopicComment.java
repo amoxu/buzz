@@ -28,7 +28,7 @@ public class TopicComment {
     @JSONField(serialzeFeatures = SerializerFeature.WriteNullNumberAsZero)
     private Integer userLike;/*用户是否点赞 >0 表示点赞了*/
     private String topic;/*话题*/
-    private List<TopicComment> reply;/*回复列表*/
+    private List<TopicComment> comment;/*回复列表*/
     private User sendUser;/*发送用户*/
     private User receiveUser;/*接收用户*/
 
@@ -51,12 +51,12 @@ public class TopicComment {
         return this;
     }
 
-    public List<TopicComment> getReply() {
-        return reply;
+    public List<TopicComment> getComment() {
+        return comment;
     }
 
-    public TopicComment setReply(List<TopicComment> reply) {
-        this.reply = reply;
+    public TopicComment setComment(List<TopicComment> comment) {
+        this.comment = comment;
         return this;
     }
 
@@ -151,5 +151,25 @@ public class TopicComment {
 
     public void setBaseCid(Integer baseCid) {
         this.baseCid = baseCid;
+    }
+
+    @Override
+    public String toString() {
+        return "TopicComment{" +
+                "cid=" + cid +
+                ", rcid=" + rcid +
+                ", uid=" + uid +
+                ", ttid=" + ttid +
+                ", content='" + content + '\'' +
+                ", likes=" + likes +
+                ", feeling=" + feeling +
+                ", ctime=" + ctime +
+                ", baseCid=" + baseCid +
+                ", userLike=" + userLike +
+                ", topic='" + topic + '\'' +
+                ", comment=" + comment +
+                ", sendUser=" + sendUser +
+                ", receiveUser=" + receiveUser +
+                '}';
     }
 }

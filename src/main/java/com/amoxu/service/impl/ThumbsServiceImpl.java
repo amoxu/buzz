@@ -2,6 +2,7 @@ package com.amoxu.service.impl;
 
 import com.amoxu.entity.ProcCallResult;
 import com.amoxu.entity.User;
+import com.amoxu.exception.UnLoginException;
 import com.amoxu.mapper.likes.LikeCommentsMapper;
 import com.amoxu.mapper.likes.LikeEventsMapper;
 import com.amoxu.mapper.likes.LikeMusicShareMapper;
@@ -24,8 +25,11 @@ public class ThumbsServiceImpl implements ThumbsService {
     private LikeTopicCommentMapper likeTopicCommentMapper;
 
     private ProcCallResult callResult = new ProcCallResult();
-    private ProcCallResult likeParam(int cid) {
+    private ProcCallResult likeParam(int cid) throws UnLoginException {
         Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            throw new UnLoginException();
+        }
         Integer uid = ((User) subject.getPrincipal()).getUid();
 
         callResult.setCid(cid);
@@ -33,24 +37,30 @@ public class ThumbsServiceImpl implements ThumbsService {
         return callResult;
     }
     @Override
-    public boolean likeEvents(Integer cid) {
+    public boolean likeEvents(Integer cid)  throws UnLoginException {
         /*点赞==1*//*取消点赞==0*/
         callResult = likeParam(cid);
         likeEventsMapper.callLikeProc(callResult);
         return callResult.getUid() == 1;
     }
     @Override
-    public boolean likeComment(Integer cid) {
-        return likeCommentsMapper.callLikeProc(likeParam(cid)).getUid() == 1;
+    public boolean likeComment(Integer cid) throws UnLoginException {
+        callResult = likeParam(cid);
+        likeCommentsMapper.callLikeProc(callResult);
+        return callResult.getUid() == 1;
     }
 
     @Override
-    public boolean likeShare(Integer cid) {
-        return likeMusicShareMapper.callLikeProc(likeParam(cid)).getUid() == 1;
+    public boolean likeShare(Integer cid) throws UnLoginException {
+        callResult = likeParam(cid);
+        likeMusicShareMapper.callLikeProc(callResult);
+        return callResult.getUid() == 1;
     }
 
     @Override
-    public boolean likeTopic(Integer cid) {
-        return likeTopicCommentMapper.callLikeProc(likeParam(cid)).getUid() == 1;
+    public boolean likeTopic(Integer cid) throws UnLoginException {
+        callResult = likeParam(cid);
+        likeTopicCommentMapper.callLikeProc(callResult);
+        return callResult.getUid() == 1;
     }
 }

@@ -27,19 +27,34 @@
     <!--使用annotation-driven 注解驱动，就可以代替 注解映射器 和 注解适配器 的配置-->
     <!--conversion-service 向处理器适配器中注入【自定义的参数绑定组件】。-->
     <!--validator 向处理器适配器，注入 校验器-->
-    <mvc:annotation-driven conversion-service="conversionService">
-    </mvc:annotation-driven>
+    <mvc:annotation-driven/>
+    <!--   <<<<<<<<<<<<<<<<<<<<<<<<fastjson pojo转json>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        <mvc:annotation-driven>
+            <mvc:message-converters>
+                <bean
+                        class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>application/json;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+            </mvc:message-converters>
+        </mvc:annotation-driven>
 
-    <!--自定义参数绑定组件-->
-    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-        <!-- 转换器 -->
-        <property name="converters">
-            <set>
-                <!-- 日期类型转换 -->
-                <bean class="com.amoxu.controller.converter.CustomDateConverter"/>
-            </set>
-        </property>
-    </bean>
+        <mvc:default-servlet-handler />
+
+        <bean id="fastJsonpResponseBodyAdvice" class="com.alibaba.fastjson.support.spring.FastJsonpResponseBodyAdvice">
+            <constructor-arg>
+                <list>
+                    <value>callback</value>
+                    <value>jsonp</value>
+                </list>
+            </constructor-arg>
+        </bean>
+    -->
+
+
 
     <!--组件扫描，可以扫描 controller、Service、...
     并注册添加到 spring 容器中

@@ -1,11 +1,13 @@
 package com.amoxu.service;
 
+import com.amoxu.exception.UnLoginException;
+
 public interface ThumbsService {
-    boolean likeEvents(Integer cid);
+    boolean likeEvents(Integer cid) throws UnLoginException;
 
-    boolean likeComment(Integer cid);
+    boolean likeComment(Integer cid) throws UnLoginException;
 
-    boolean likeShare(Integer cid);
+    boolean likeShare(Integer cid) throws UnLoginException;
 
-    boolean likeTopic(Integer cid);
+    boolean likeTopic(Integer cid) throws UnLoginException;
 }

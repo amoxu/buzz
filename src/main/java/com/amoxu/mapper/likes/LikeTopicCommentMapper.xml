@@ -1,30 +1,30 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.amoxu.mapper.likes.LikeTopicCommentMapper" >
-  <resultMap id="BaseResultMap" type="com.amoxu.entity.likes.LikeTopicComment" >
-    <id column="uid" property="uid" jdbcType="INTEGER" />
-    <id column="topic_comment_tid" property="topicCommentTid" jdbcType="INTEGER" />
-    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.amoxu.mapper.likes.LikeTopicCommentMapper">
+  <resultMap id="BaseResultMap" type="com.amoxu.entity.likes.LikeTopicComment">
+    <id column="uid" jdbcType="INTEGER" property="uid" />
+    <id column="cid" jdbcType="INTEGER" property="cid" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -35,25 +35,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -64,126 +64,134 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
-    uid, topic_comment_tid, ctime
+  <sql id="Base_Column_List">
+    uid, cid, ctime
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.likes.LikeTopicCommentExample" >
+  <select id="selectByExample" parameterType="com.amoxu.entity.likes.LikeTopicCommentExample" resultMap="BaseResultMap">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from like_topic_comment
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
-    <if test="limit != null" >
-      <if test="offset != null" >
+    <if test="limit != null">
+      <if test="offset != null">
         limit ${offset}, ${limit}
       </if>
-      <if test="offset == null" >
+      <if test="offset == null">
         limit ${limit}
       </if>
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.amoxu.entity.likes.LikeTopicCommentKey" >
+  <select id="selectByPrimaryKey" parameterType="com.amoxu.entity.likes.LikeTopicCommentKey" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from like_topic_comment
     where uid = #{uid,jdbcType=INTEGER}
-      and topic_comment_tid = #{topicCommentTid,jdbcType=INTEGER}
+      and cid = #{cid,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="com.amoxu.entity.likes.LikeTopicCommentKey" >
+  <delete id="deleteByPrimaryKey" parameterType="com.amoxu.entity.likes.LikeTopicCommentKey">
     delete from like_topic_comment
     where uid = #{uid,jdbcType=INTEGER}
-      and topic_comment_tid = #{topicCommentTid,jdbcType=INTEGER}
+      and cid = #{cid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.amoxu.entity.likes.LikeTopicCommentExample" >
+  <delete id="deleteByExample" parameterType="com.amoxu.entity.likes.LikeTopicCommentExample">
     delete from like_topic_comment
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.amoxu.entity.likes.LikeTopicComment" >
-    insert into like_topic_comment (uid, topic_comment_tid, ctime
+  <insert id="insert" parameterType="com.amoxu.entity.likes.LikeTopicComment">
+    insert into like_topic_comment (uid, cid, ctime
       )
-    values (#{uid,jdbcType=INTEGER}, #{topicCommentTid,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}
+    values (#{uid,jdbcType=INTEGER}, #{cid,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.amoxu.entity.likes.LikeTopicComment" >
+  <insert id="insertSelective" parameterType="com.amoxu.entity.likes.LikeTopicComment">
     insert into like_topic_comment
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="uid != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uid != null">
         uid,
       </if>
-      <if test="topicCommentTid != null" >
-        topic_comment_tid,
+      <if test="cid != null">
+        cid,
       </if>
-      <if test="ctime != null" >
+      <if test="ctime != null">
         ctime,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="uid != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uid != null">
         #{uid,jdbcType=INTEGER},
       </if>
-      <if test="topicCommentTid != null" >
-        #{topicCommentTid,jdbcType=INTEGER},
+      <if test="cid != null">
+        #{cid,jdbcType=INTEGER},
       </if>
-      <if test="ctime != null" >
+      <if test="ctime != null">
         #{ctime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.amoxu.entity.likes.LikeTopicCommentExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.amoxu.entity.likes.LikeTopicCommentExample" resultType="java.lang.Integer">
     select count(*) from like_topic_comment
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map">
     update like_topic_comment
-    <set >
-      <if test="record.uid != null" >
+    <set>
+      <if test="record.uid != null">
         uid = #{record.uid,jdbcType=INTEGER},
       </if>
-      <if test="record.topicCommentTid != null" >
-        topic_comment_tid = #{record.topicCommentTid,jdbcType=INTEGER},
+      <if test="record.cid != null">
+        cid = #{record.cid,jdbcType=INTEGER},
       </if>
-      <if test="record.ctime != null" >
+      <if test="record.ctime != null">
         ctime = #{record.ctime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map">
     update like_topic_comment
     set uid = #{record.uid,jdbcType=INTEGER},
-      topic_comment_tid = #{record.topicCommentTid,jdbcType=INTEGER},
+      cid = #{record.cid,jdbcType=INTEGER},
       ctime = #{record.ctime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.amoxu.entity.likes.LikeTopicComment" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.amoxu.entity.likes.LikeTopicComment">
     update like_topic_comment
-    <set >
-      <if test="ctime != null" >
+    <set>
+      <if test="ctime != null">
         ctime = #{ctime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where uid = #{uid,jdbcType=INTEGER}
-      and topic_comment_tid = #{topicCommentTid,jdbcType=INTEGER}
+      and cid = #{cid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.amoxu.entity.likes.LikeTopicComment" >
+  <update id="updateByPrimaryKey" parameterType="com.amoxu.entity.likes.LikeTopicComment">
     update like_topic_comment
     set ctime = #{ctime,jdbcType=TIMESTAMP}
     where uid = #{uid,jdbcType=INTEGER}
-      and topic_comment_tid = #{topicCommentTid,jdbcType=INTEGER}
+      and cid = #{cid,jdbcType=INTEGER}
   </update>
+
+  <select id="callLikeProc" statementType="CALLABLE" resultType="com.amoxu.entity.ProcCallResult"
+          parameterType="com.amoxu.entity.ProcCallResult">
+    CALL opt_like_topic_comment(
+    #{cid,mode=IN},
+    #{uid,mode=INOUT,jdbcType=INTEGER}
+    )
+  </select>
 </mapper>

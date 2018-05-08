@@ -3,6 +3,7 @@ package com.amoxu.service.impl;
 import com.amoxu.entity.AjaxResult;
 import com.amoxu.entity.User;
 import com.amoxu.entity.UserExample;
+import com.amoxu.exception.UnLoginException;
 import com.amoxu.mapper.UserMapper;
 import com.amoxu.service.UserService;
 import com.amoxu.util.ToolKit;
@@ -71,7 +72,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserInfo() {
+    public void getUserInfo() throws UnLoginException {
         User userInfo = userService.getUserInfo(1);
         int uid = userInfo.getUid();
         AjaxResult<List<User>> result = new AjaxResult<>();

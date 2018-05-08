@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>开始使用layui</title>
+    <title>话题-乐热评</title>
     <link rel="stylesheet" href="layui/css/layui.css">
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" type="text/css" href="./alicon/iconfont.css">
@@ -44,36 +44,33 @@
                 <i class="icon iconfont icon-zhuti" style="color: salmon;"></i>
                 话题
             </h1>
-            <p class="child-desc">最热评最热评最热评最热评最热评最热评最热评</p>
+            <p class="child-desc">一个人的故事有一千种声音，总会有一种是你想发现的。</p>
         </div>
         <hr>
         <div class="layui-row btn-group">
-            <button class="child-btn button_border" data-button="red" data-name="hot">最新</button>
+            <button class="child-btn button_border" data-button="red" data-name="new">最新</button>
             <button class="child-btn button_border" data-button="green" data-name="hot">热门</button>
             <button class="child-btn button_border" data-button="blue" data-name="rand">随机</button>
             <button class="child-btn button_border" data-button="purple" data-name="focus">关注</button>
         </div>
-        <div class="layui-row btn-group">
-            <button class="child-btn button_border" data-button="purple" data-name="hot-0">最新按错了看卡死才</button>
-            <button class="child-btn button_border" data-button="blue" data-name="hot-1">张学友</button>
-            <button class="child-btn button_border" data-button="red" data-name="hot-2">突然好想你</button>
-            <button class="child-btn button_border" data-button="green" data-name="hot-3">我们究竟怎么了</button>
+        <div class="layui-row btn-group" data-type="push">
+
         </div>
 
-        <div class="btn-group child-btn  ">
-            <span class="topic-search" id="topic-search">
-                <input id="searchInput" class="search-input" type="text" placeholder="搜索话题">
-                <button class="search-btn btn">搜索</button>
-                <button class="search-btn btn">讨论</button>
-                <button class="search-btn btn">创建话题</button>
-            </span>
+        <div class="btn-group child-btn">
+<span class="topic-search" id="topic-search">
+<input id="searchInput" class="search-input" type="text" placeholder="搜索话题">
+<button class="search-btn btn">搜索</button>
+<button class="search-btn btn">讨论</button>
+<button class="search-btn btn">创建话题</button>
+</span>
         </div>
         <hr>
     </div>
 
     <div class="layui-row">
         <div class="layui-col-md9">
-            <div id="content">
+            <div id="content" class="comment">
 
             </div>
         </div>
@@ -127,293 +124,249 @@
 
 
 </div>
+<script src="layui/layui.js"></script>
 
 
 <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
 <script src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/jquery.flexText.js"></script>
-<script src="js/common.js"></script>
-<script src="layui/layui.js"></script>
+<script src="js/reply.js"></script>
 <script src="js/top.js"></script>
 
 <script>
     //注意：导航 依赖 element 模块，否则无法进行功能性操作
     layui.use(['element', 'layer'], function () {
         var element = layui.element;
-    });
-
-    var type = "new";
-
-    $('.commentAll').on('click', '.reviewArea .plBtn', function () {
-        var oThis = $(this);
-        //获取输入内容
-        console.log("this is in self page");
-        var content = oThis.siblings('.flex-text-wrap').find('.comment-input').val();
-        var receiveName = oThis.siblings('.flex-text-wrap').find('.comment-input').attr("data-name");
-        console.log(content);
-        if (content.replace(/^ +| +$/g, '') === '' || content.trim().length < 1) {
-            /*输入内容为空*/
-            layer.msg("输入内容为空。");
-            return false;
-        } else {
-            var loadIdx = layer.load(1);
-            $.ajax({
-                url: '/topic/' + oThis.attr("data-id")
-                , type: 'post'
-                , data: {"data": aes.encrypt(content)}
-                , success: function (res) {
-                    layer.close(loadIdx);
-                    if (res.status === 0) {
-                        layer.msg("发表成功");
-                        var oHtml = buildReply(res.data,
-                            oThis.attr('data-id'),
-                            receiveName
-                        );
-                        addReply(oHtml, oThis);
-
-                        return false;
-                    } else {
-                        layer.alert(res.msg);
-                    }
-                    return false;
-                },
-                error: function (res) {
-                    layer.close(loadIdx);
-                    layer.alert("错误码：" + res.status + "<br>" + res.statusText);
-                    return false;
-                }
-            });
-
-
-        }
-    });
-
-    layui.use('flow', function () {
-        var $ = layui.jquery; //不用额外加载jQuery，flow模块本身是有依赖jQuery的，直接用即可。
-        var flow = layui.flow;
-        flow.load({
-            elem: '#content' //指定列表容器
-            , done: function (page, next) { //到达临界点（默认滚动触发），触发下一页
-                setTimeout(function () {
-                    var lis = [];
-                    $.get('/topic/'+type+'?limit=10&offset=' + (page - 1) * 10, function (res) {
-                        //假设你的列表返回在data集合中
-                        layui.each(res.data, function (index, result) {
-                            var tmp = '<li><div class=" card clearfix">' +
-                                // var tmp = '<li><div class="comment-show-con card clearfix">' +
-                                '<div class="comment-show-con-img pull-left">' +
-                                '<img src="' + result.sendUser.icons + '" alt="">' +
-                                '</div> ' +
-                                '<div class="comment-show-con-list pull-left clearfix">' +
-                                '<div class="pl-text clearfix"> ' +
-                                '<a href="javascript:;" class="comment-size-name">'
-                                + result.sendUser.nickname + //昵称
-                                '</a>' +
-                                ' <span class="my-pl-con">&nbsp;'
-                                + result.content + //内容
-                                '</span>' +
-                                ' </div> ' +
-                                '<div class="date-dz"> ' +
-                                '<span class="date-dz-left pull-left comment-time">'
-                                + result.ctime + // 时间
-                                '</span> ' +
-                                '<div class="date-dz-right pull-right comment-pl-block">' +
-                                /* '<a href="javascript:;" class="removeBlock" data-id="' + result.cid + '">删除</a> ' +*/
-                                '<a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left" data-id="' + result.cid + '">回复</a> ' +
-                                '<span class="pull-left date-dz-line">|</span> ' +
-                                '<a data-id="' + result.cid + '" href="javascript:;" ';
-                            if (result.userLike) {
-                                tmp += 'class="date-dz-z pull-left date-dz-z-click"><i  class="date-dz-z-click-red red">';
-                            } else {
-                                tmp += 'class="date-dz-z pull-left"><i  class="date-dz-z-click-red">';
-                            }
-                            tmp += '</i>赞 (<i class="z-num">' + result.likes + '</i>)</a> ' +
-                                '</div> </div>';
-                            /*子评论模块*/
-
-                            if (result.comment.length > 0) {
-                                var child = buildReply(result.comment);
-                                tmp += '<ul class="hf-list-con" style="display: block;">' +
-                                    child +
-                                    '</ul>';
-                            } else {
-                                tmp += '<ul class="hf-list-con"></ul>';
-
-                            }
-                            tmp += '</div></div></li>';
-
-                            lis.push(tmp);
-
-                        });
-                        next(lis.join(''), page < res.count);
-                    });
-                }, 500);
-            }
-        });
-    });
-    $(".events .plBtn").on('click', function () {
-        if (!$.cookie("user")) {
-            layer.msg("请登录后发动态");
-            return false;
-        }
-        var dom = this;
-        var content = $(this).siblings('.flex-text-wrap').find('.comment-input').val();
-        console.log(content);
-        var loadIdx = layer.load(1);
-        if (content.length < 1) {
-            layer.close(loadIdx);
-            layer.alert("请输入内容。");
-            return false;
-        }
-
+        var layer = layui.layer;
         $.ajax({
-            url: '/topic'
-            , type: 'post'
-            , data: {"data": aes.encrypt(content)}
+            url: '/topic/head'
+            , type: 'get'
             , success: function (res) {
-                layer.close(loadIdx);
                 if (res.status === 0) {
-                    /*清空输入框*/
-                    $(dom).siblings('.flex-text-wrap').find('.comment-input').val('');
-                    addList(res.data);
-                    layer.msg("发表成功");
-                } else {
-                    layer.alert(res.msg);
+                    var color = ['purple', 'blue', 'red', 'green'];
+
+                    var tmp = '';
+                    $.each(res.data, function (idx, val) {
+                        tmp += '<button class="child-btn button_border" data-button="' + color[idx] + '" data-name="' + val.tid + '">' + val.topic + '</button>';
+                    });
+                    $('[data-type=push]').html(tmp);
                 }
-                return false;
-            },
-            error: function (res) {
-                layer.close(loadIdx);
-                layer.alert("错误码：" + res.status + "<br>" + res.statusText);
-                return false;
+                else {
+                    layer.msg(res.msg);
+                }
+            }
+            , error: function (res) {
+                layer.msg("错误码：" + res.status);
             }
         });
-        return false;
-    });
-    <!--点赞-->
-    (function () {
-        $('.commentAll').on('click', '.comment-show .date-dz-z', function () {
-            var thumbNum = $(this).find('.z-num').html();
-            if ($.cookie('user') == null) {
-                layer.msg("点赞需要登录。");
+
+        var type = "new";
+
+        $('#content.comment').on('click', '.hf-pl', function () {
+            var oThis = $(this);
+            //获取输入内容
+            console.log("this is in self page");
+            var content = oThis.siblings('.flex-text-wrap').find('.comment-input').val();
+            console.log(content);
+            if (content.replace(/^ +| +$/g, '') === '' || content.trim().length < 1) {
+                /*输入内容为空*/
+                layer.msg("输入内容为空。");
                 return false;
             } else {
-                var dom = this;
+                var loadIdx = layer.load(1);
+                var rcid = oThis.attr("data-id");
+                var bcid = oThis.parents('.commentAll').siblings('.inline').find('.comment>a').attr("data-id");
+                if (!bcid) {
+                    bcid = rcid;
+                }
                 $.ajax({
-                    url: '/like/topic/' + $(this).attr("data-id")
+                    url: '/topic/' + bcid+"/"+ rcid
                     , type: 'post'
-                    , success: function (res) {
-                        layer.msg(res.msg);
-                        if (res.status === 0) {
-                            /*操作成功*/
-                            if (res.count === 1) {
-                                /*点赞*/
-                                thumbNum++;
-                                $(dom).addClass('date-dz-z-click');
-                                $(dom).find('.z-num').html(thumbNum);
-                                $(dom).find('.date-dz-z-click-red').addClass('red');
-                            } else {
-                                /*取消点赞*/
-                                thumbNum--;
-                                $(dom).removeClass('date-dz-z-click red');
-                                $(dom).find('.z-num').html(thumbNum);
-                                $(dom).find('.date-dz-z-click-red').removeClass('red');
-                            }
-                        } else {
-                            layer.msg(res.msg);
-                        }
-                    }
-                    , error: function (res) {
-                        layer.msg("错误码：" + res.status + "<br>" + res.statusText);
-                    }
-                });
-                return false;
-            }
-        });
-    })();
-    $('.search-btn').on('click', function () {
-        var word = $(this).html();
-
-        var topic = $('#searchInput').val();
-        if (topic.length < 1) {
-            layer.msg("请输入内容");
-            return false;
-        }
-        if (word === '搜索') {
-            var loadIdx = layer.load(1);
-            $.ajax({
-                url: '/search/topic/' + topic
-                , type: 'get'
-                , success: function (res) {
-                    layer.close(loadIdx);
-                    if (res.status === 0) {
-                        layer.msg("发表成功");
-
-                    } else {
-                        layer.alert(res.msg);
-                    }
-                    return false;
-                }
-                , error: function (res) {
-                    layer.close(loadIdx);
-                    layer.alert("错误码：" + res.status + "<br>" + res.statusText);
-                    return false;
-                }
-            });
-        } else if (word === '创建话题') {
-            var loadIdx = layer.load(1);
-            layer.confirm('确定创建话题：' + topic, function (index) {
-                $.ajax({
-                    url: '/topic/create/' + topic
-                    , type: 'get'
+                    , data: {"data": aes.encrypt(content)}
                     , success: function (res) {
                         layer.close(loadIdx);
                         if (res.status === 0) {
                             layer.msg("发表成功");
-
+                            var oHtml = buildReply(res.data);
+                            addReply(oHtml, oThis);
+                            return false;
                         } else {
                             layer.alert(res.msg);
                         }
                         return false;
-                    }
-                    , error: function (res) {
+                    },
+                    error: function (res) {
                         layer.close(loadIdx);
                         layer.alert("错误码：" + res.status + "<br>" + res.statusText);
                         return false;
                     }
                 });
-                layer.close(index);
-            });
-        } else if (word === '讨论') {
 
-            layer.open({
-                type: 1 //Page层类型
-                , btn: ["确定", "取消"]
-                , title: ''
-                , skin: 'layui-layer-prompt'
-                , content:
-                "<label class=\"layui-form-label\">讨论话题</label>" +
-                "<input type=\"text\" name=\"identity\" placeholder=\"\" autocomplete=\"off\" class=\"layui-input\" value='"+topic+"'>" +
-                "<label class=\"layui-form-label\">发布内容</label>" +
-                "<textarea placeholder=\"请输入内容\" class=\"layui-textarea\"></textarea>"
-                , yes: function (index, layero) {
-                    //按钮【按钮一】的回调
-                    topic  = $(layero).find("input[type='text']").val();
-                    var comment =$(layero).find("textarea").val();
-                    if (!topic||!comment) {
-                        layer.msg("输入内容不能为空");
-                        return false;
+
+            }
+        });
+
+        <!--点赞-->
+        (function () {
+            $('#content').on('click', '.like,a.date-dz-z', function () {
+                var thumbNum = $(this).find('num').html();
+                console.log("当前点赞数:"+thumbNum);
+                var dom = this;
+                if ($.cookie('user') == null) {
+                    layer.msg("点赞需要登录。");
+                    return false;
+                } else {
+                    var cid = $(this).attr('data-id');
+                    $.ajax({
+
+                        url: '/like/topic/' + cid
+                        , type: 'post'
+                        , success: function (res) {
+                            layer.msg(res.msg);
+                            if (res.status === 0) {
+                                /*操作成功*/
+                                if (res.count === 1) {
+                                    /*点赞*/
+                                    thumbNum++;
+                                    if ( $(dom).find('.iconfont').length) {
+                                        $(dom).find('.iconfont').addClass('icon-dianzan1').removeClass('icon-dianzan');
+                                    }else {
+                                        $(dom).addClass('date-dz-z-click');
+                                        $(dom).find('.date-dz-z-click-red').addClass('red');
+                                    }
+                                    $(dom).find('num').html(thumbNum);
+
+                                } else {
+                                    /*取消点赞*/
+                                    thumbNum--;
+                                    if ($(dom).find('.iconfont').length) {
+                                        /*主页面*/
+                                        $(dom).find('.iconfont').addClass('icon-dianzan').removeClass('icon-dianzan1');
+                                    }else{
+                                        $(dom).removeClass('date-dz-z-click red');
+                                        $(dom).find('.date-dz-z-click-red').removeClass('red');
+                                    }
+                                    $(dom).find('num').html(thumbNum);
+
+                                }
+                            } else {
+                                layer.msg(res.msg);
+                            }
+                        }
+                        , error: function (res) {
+                            layer.msg("错误码：" + res.status + "<br>" + res.statusText);
+                        }
+                    });
+                    return false;
+                }
+            });
+        })();
+        function flowLoad(url) {
+            /*对搜索 点击的内容进行流加载*/
+            $('#content').html("");
+            layui.use('flow', function () {
+                var $ = layui.jquery; //不用额外加载jQuery，flow模块本身是有依赖jQuery的，直接用即可。
+                var flow = layui.flow;
+                flow.load({
+                    elem: '#content' //指定列表容器
+                    , done: function (page, next) { //到达临界点（默认滚动触发），触发下一页
+                        setTimeout(function () {
+                            var lis = [];
+                            $.get(url + '?limit=10&offset=' + (page - 1) * 10, function (res) {
+
+                                //假设你的列表返回在data集合中
+                                layui.each(res.data, function (index, result) {
+                                    var tmp = '<li class="card clearfix">' +
+                                        '<div class="float_left">' +
+                                        '<img src=' + result.sendUser.icons + ' class="head"/>' +
+                                        '</div>' +
+                                        '<div class="card_detail">' +
+                                        '<div class="card_nick">' +
+                                        '<a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1">' + result.sendUser.nickname + '</a>' +
+                                        '</div>' +
+                                        '<div class="card_time">' + result.ctime + '</div>' +
+                                        '<a href="javascript:;" data-id="' + result.ttid + '">#' + result.topic + '#</a>' +
+                                        '<div class="card_text ws14">' + result.content + '</div>' +
+                                        '<div class="layui-row">' +
+                                        '<ul class="inline">' +
+                                        '<li class="like" data-id="' + result.cid + '">' +
+                                        '<a href="javascript:;" >';
+
+                                    if (result.userLike) {
+                                        tmp += '<i class="iconfont icon-dianzan1"></i>';
+                                    } else {
+                                        tmp += '<i class="iconfont icon-dianzan"></i>';
+                                    }
+                                    tmp += '<num>' + result.likes + '</num>' +
+                                        '</a>' +
+                                        '</li>' +
+                                        '<li class="comment" data-id="' + result.cid + '">' +
+                                        '<a href="javascript:;" ><i class="layui-icon">&#xe63a;</i>' +
+                                        '</a>' +
+                                        '</li>' +
+                                        '<li class="share" data-id="' + result.cid + '">' +
+                                        '<a href="javascript:;" ><i class="layui-icon">&#xe641;</i></a>' +
+                                        '</li>' +
+                                        '<li class="report" data-id="' + result.cid + '">' +
+                                        '<a href="javascript:;" ><i class="layui-icon">&#xe6c5;</i></a>' +
+                                        '</li>' +
+                                        '</ul>' +
+                                        '<div class="commentAll">' +
+                                        '<div class="reviewArea clearfix"></div>' +
+                                        '<div class="comment-show">';
+                                    if (result.comment.length > 0) {
+                                        var child = buildReply(result.comment);
+                                        tmp += '<ul class="hf-list-con" style="display: block;">' + child + '</ul>';
+                                    } else {
+                                        tmp += '<ul class="hf-list-con"></ul>';
+                                    }
+                                    tmp +=
+                                        '</div>' +
+                                        '</div>' +
+                                        '<div class="comment-pl-block clearfix">' +
+                                        '<a href="/topic/comment/' + result.cid + '" class="float_right">查看更多</a>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</li>';
+                                    lis.push(tmp);
+
+                                });
+                                next(lis.join(''), page < res.count / 10);
+                            });
+                        }, 500);
                     }
+                });
+            });
+        }
+        $('.btn-group').on('click', '.child-btn', function () {
+            var name = $(this).attr('data-name');
+            console.log(name);
+            type = name;
+            flowLoad('/topic/' + type);
+        });
+        $('.child-btn[data-name="new"]').click();
+        $('.search-btn').on('click', function () {
+            var word = $(this).html();
+
+            var topic = $('#searchInput').val();
+            if (topic.length < 1) {
+                layer.msg("请输入内容");
+                return false;
+            }
+            if (word === '搜索') {
+                var loadIdx = layer.load(1);
+                flowLoad('/search/1001/' + topic);
+                layer.close(loadIdx);
+            } else if (word === '创建话题') {
+                layer.confirm('确定创建话题：' + topic, function (index) {
                     $.ajax({
                         url: '/topic'
+                        , data: {'topic': topic}
                         , type: 'post'
-                        ,data:{'data':aes.encrypt(JSON.stringify({'topic':topic,'comment':comment}))}
-
                         , success: function (res) {
-                            layer.close(loadIdx);
                             if (res.status === 0) {
-                                layer.msg("发表成功");
-
+                                layer.msg("创建成功");
                             } else {
                                 layer.alert(res.msg);
                             }
@@ -425,11 +378,59 @@
                             return false;
                         }
                     });
-                }
-            });
-        } else {
-            return false;
-        }
+                });
+            } else if (word === '讨论') {
+                layer.confirm('发表之前请确认是否存在话题，否则会创建话题', {icon: 3, title: '提示'}, function (index) {
+                    //do something
+
+                    layer.close(index);
+
+                    layer.open({
+                        type: 1 //Page层类型
+                        , btn: ["确定", "取消"]
+                        , title: ''
+                        , skin: 'layui-layer-prompt'
+                        , content:
+                        "<label class=\"layui-form-label\">讨论话题</label>" +
+                        "<input type=\"text\" name=\"identity\" placeholder=\"\" autocomplete=\"off\" class=\"layui-input\" value='" + topic + "'>" +
+                        "<label class=\"layui-form-label\">发布内容</label>" +
+                        "<textarea placeholder=\"请输入内容\" class=\"layui-textarea\"></textarea>"
+                        , yes: function (index, layero) {
+                            topic = $(layero).find("input[type='text']").val();
+                            var comment = $(layero).find("textarea").val();
+                            if (!topic || !comment) {
+                                layer.msg("输入内容不能为空");
+                                return false;
+                            }
+                            $.ajax({
+                                url: '/topic/publish'
+                                , type: 'post'
+                                , data: {'data': aes.encrypt(JSON.stringify({'topic': topic, 'comment': comment}))}
+
+                                , success: function (res) {
+                                    if (res.status === 0) {
+                                        layer.msg("发表成功");
+                                        layer.close(index);
+                                        flowLoad('/search/1001/' + topic);
+
+                                    } else {
+                                        layer.alert(res.msg);
+                                    }
+
+                                    return false;
+                                }
+                                , error: function (res) {
+                                    layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+                                    return false;
+                                }
+                            });
+                        }
+                    });
+                });
+            } else {
+                return false;
+            }
+        });
     });
 </script>
 </body>

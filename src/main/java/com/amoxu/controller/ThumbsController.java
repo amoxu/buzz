@@ -1,6 +1,7 @@
 package com.amoxu.controller;
 
 import com.amoxu.entity.AjaxResult;
+import com.amoxu.exception.UnLoginException;
 import com.amoxu.service.ThumbsService;
 import com.amoxu.util.StaticEnum;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -26,7 +27,7 @@ public class ThumbsController {
             , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
     )
     @ResponseBody
-    public String eventsLike(@PathVariable("cid") Integer cid, @PathVariable("type") String type) {
+    public String eventsLike(@PathVariable("cid") Integer cid, @PathVariable("type") String type) throws UnLoginException {
         AjaxResult<String> ajaxResult = new AjaxResult<>();
         boolean liked;
         switch (type) {

@@ -11,6 +11,8 @@
     <result column="feeling" property="feeling" jdbcType="DOUBLE" />
     <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
     <result column="base_cid" property="baseCid" jdbcType="INTEGER" />
+    <association property="sendUser" resultMap="userCommonInfoMap"></association>
+    <association property="receiveUser" resultMap="receiveUserMap" columnPrefix="rc_"></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,7 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    cid, rcid, uid, ttid, content, likes, feeling, ctime, base_cid
+    topic_comment.cid, topic_comment.rcid, topic_comment.uid, topic_comment.ttid, topic_comment.content,
+    topic_comment.likes, topic_comment.feeling, topic_comment.ctime, topic_comment.base_cid
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.TopicCommentExample" >
     select
@@ -98,8 +101,19 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
+
+    ,u1.nickname
+
+    ,comment.uid AS rc_uid
+    ,u2.nickname AS rc_nickname
+
     from topic_comment
-    where cid = #{cid,jdbcType=INTEGER}
+
+    LEFT JOIN `user` AS u1 ON u1.uid = topic_comment.uid
+    LEFT JOIN topic_comment AS comment ON topic_comment.rcid = comment.cid
+    LEFT JOIN `user` AS u2 ON u2.uid = comment.uid
+
+    where topic_comment.cid = #{cid,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from topic_comment
@@ -111,7 +125,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.amoxu.entity.TopicComment" >
+  <insert id="insert" parameterType="com.amoxu.entity.TopicComment" keyProperty="cid" useGeneratedKeys="true">
     insert into topic_comment (cid, rcid, uid, 
       ttid, content, likes, 
       feeling, ctime, base_cid
@@ -121,7 +135,7 @@
       #{feeling,jdbcType=DOUBLE}, #{ctime,jdbcType=TIMESTAMP}, #{baseCid,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.amoxu.entity.TopicComment" >
+  <insert id="insertSelective" parameterType="com.amoxu.entity.TopicComment" keyProperty="cid" useGeneratedKeys="true" >
     insert into topic_comment
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="cid != null" >
@@ -305,7 +319,7 @@
     <result column="topic" property="topic"/>
     <association property="sendUser" resultMap="userCommonInfoMap"></association>
     <association property="receiveUser" resultMap="receiveUserMap" columnPrefix="rc_"></association>
-    <collection property="reply" column="{onlineId=userLike,base=cid}" select="selectMainChild" fetchType="eager" />
+    <collection property="comment" column="{onlineId=userLike,base=cid}" select="selectMainChild" fetchType="eager" />
   </resultMap>
   <select id="selectMain" resultMap="listMap" parameterType="map">
     /* 查询首页 按时间排序*/
@@ -327,7 +341,7 @@
 
     FROM topic_comment
     LEFT JOIN topic ON topic_comment.ttid = topic.tid
-    LEFT JOIN like_topic_comment ON topic_comment.cid = like_topic_comment.topic_comment_tid AND like_topic_comment.uid=
+    LEFT JOIN like_topic_comment ON topic_comment.cid = like_topic_comment.cid AND like_topic_comment.uid=
     <if test="onlineId != null">
       #{onlineId}
     </if>
@@ -415,7 +429,7 @@
 
       ,u1.nickname
 
-      ,reply.uid AS rc_uid
+      ,comment.uid AS rc_uid
       ,u2.nickname AS rc_nickname
 
       , like_topic_comment.uid as userLike
@@ -424,7 +438,7 @@
       topic_comment AS tc
       LEFT JOIN `user` AS u1 ON u1.uid = tc.uid
 
-      LEFT JOIN like_topic_comment ON tc.cid = like_topic_comment.topic_comment_tid AND like_topic_comment.uid =
+      LEFT JOIN like_topic_comment ON tc.cid = like_topic_comment.cid AND like_topic_comment.uid =
       <if test="onlineId != null">
         #{onlineId}
       </if>
@@ -432,8 +446,8 @@
         0
       </if>
 
-      LEFT JOIN topic_comment AS reply ON tc.rcid = reply.cid
-      LEFT JOIN `user` AS u2 ON u2.uid = reply.uid
+      LEFT JOIN topic_comment AS comment ON tc.rcid = comment.cid
+      LEFT JOIN `user` AS u2 ON u2.uid = comment.uid
 
       WHERE tc.base_cid=#{base}
       ORDER BY likes DESC, tc.ctime DESC
@@ -464,7 +478,7 @@
 
     FROM topic_comment
 
-    LEFT JOIN like_topic_comment ON topic_comment.cid = like_topic_comment.topic_comment_tid AND like_topic_comment.uid=
+    LEFT JOIN like_topic_comment ON topic_comment.cid = like_topic_comment.cid AND like_topic_comment.uid=
     <if test="onlineId != null">
       #{onlineId}
     </if>

@@ -43,7 +43,7 @@
 
 
 
-        <table tableName="topic" domainObjectName="Topic"/>
+        <table tableName="report" domainObjectName="Report"/>
 
     </context>
 </generatorConfiguration>

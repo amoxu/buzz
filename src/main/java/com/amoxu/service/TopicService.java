@@ -1,5 +1,6 @@
 package com.amoxu.service;
 
+import com.amoxu.entity.AjaxResult;
 import com.amoxu.entity.PageResult;
 import com.amoxu.entity.TopicComment;
 import com.amoxu.entity.TopicMap;
@@ -14,4 +15,8 @@ public interface TopicService {
 
 
     String addTopic(String topic);
+
+    TopicComment publishComment(String data) throws UnLoginException;
+
+    AjaxResult<TopicComment> replyComment(Integer rcid, Integer bcid, String data);
 }

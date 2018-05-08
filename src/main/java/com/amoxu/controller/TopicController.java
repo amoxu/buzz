@@ -7,6 +7,7 @@ import com.amoxu.entity.TopicMap;
 import com.amoxu.exception.UnLoginException;
 import com.amoxu.service.TopicService;
 import com.amoxu.util.StaticEnum;
+import com.amoxu.util.ToolKit;
 import org.apache.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -45,26 +46,41 @@ public class TopicController {
         String ret = topicService.addTopic(topic);
         if (StaticEnum.OPT_SUCCESS.equals(ret)) {
             ajaxResult.ok();
-            ajaxResult.setData(StaticEnum.OPT_SUCCESS);
+            ajaxResult.setMsg(StaticEnum.OPT_SUCCESS);
         } else {
             ajaxResult.failed();
-            ajaxResult.setData(ret);
+            ajaxResult.setMsg(ret);
         }
         return ajaxResult.toString();
     }
 
     @RequestMapping(value = "/publish", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
     @ResponseBody
-    public String publishComment(@RequestParam("data") String data) {
+    public String publishComment(@RequestParam("data") String data) throws UnLoginException {
+        logger.info(data);
+        logger.info(ToolKit.aesDecrypt(data));
+        TopicComment comment = topicService.publishComment(data);
+        AjaxResult<TopicComment> ajaxResult = new AjaxResult<>();
 
-        return "";
+        if (comment == null) {
+            ajaxResult.failed();
+            ajaxResult.setMsg(StaticEnum.WORD_TOPIC_LENGTH);
+            return ajaxResult.toString();
+        }
+        ajaxResult.ok();
+        ajaxResult.setData(comment);
+        return ajaxResult.toString();
     }
-    public String likeComment() {
-        return "";
+
+    @RequestMapping(value = "/{bcid}/{rcid}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+    @ResponseBody
+    public String replyComment(@PathVariable("rcid") Integer rcid,
+                               @PathVariable("bcid") Integer bcid,
+                               @RequestParam("data") String data) {
+        return topicService.replyComment(rcid, bcid, data).toString();
     }
-    public String replyComment() {
-        return "";
-    }
+
+
 
     /**
      * type:  hot new rand focus

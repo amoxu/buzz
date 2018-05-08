@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.amoxu.entity.AjaxResult;
 import com.amoxu.entity.Permission;
 import com.amoxu.entity.User;
+import com.amoxu.exception.UnLoginException;
 import com.amoxu.service.PermissionService;
 import com.amoxu.service.UserFeatureService;
 import com.amoxu.service.UserService;
@@ -187,7 +188,7 @@ public class UserController {
             , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
     )
     @ResponseBody
-    public String getUserInfo(@PathVariable("id") Integer id) {
+    public String getUserInfo(@PathVariable("id") Integer id) throws UnLoginException {
         AjaxResult<User> result = new AjaxResult<>();
         User info = userService.getUserInfo(id);
         if (info == null) {

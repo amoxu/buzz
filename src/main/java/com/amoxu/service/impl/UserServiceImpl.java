@@ -3,6 +3,7 @@ package com.amoxu.service.impl;
 import com.amoxu.entity.MailUrlBuilder;
 import com.amoxu.entity.User;
 import com.amoxu.entity.UserExample;
+import com.amoxu.exception.UnLoginException;
 import com.amoxu.mapper.UserMapper;
 import com.amoxu.service.UserService;
 import com.amoxu.util.MailSender;
@@ -122,10 +123,13 @@ public class UserServiceImpl implements UserService {
      * 注意要复制一个一个user对象，不要直接把subject中的对对象直接返回，避免在返回页面时渲染产生的影响。
      * */
     @Override
-    public User getUserInfo(Integer uid) {
+    public User getUserInfo(Integer uid) throws UnLoginException {
         User user;
         if (uid == StaticEnum.SELF_ID) {
             Subject subject = SecurityUtils.getSubject();
+            if (!subject.isAuthenticated()) {
+                throw new UnLoginException();
+            }
             user = ((User) subject.getPrincipal()).clone();
             logger.info(user);
         } else {

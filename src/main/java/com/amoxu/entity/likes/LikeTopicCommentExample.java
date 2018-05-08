@@ -185,63 +185,63 @@ public class LikeTopicCommentExample {
             return (Criteria) this;
         }
 
-        public Criteria andTopicCommentTidIsNull() {
-            addCriterion("topic_comment_tid is null");
+        public Criteria andCidIsNull() {
+            addCriterion("cid is null");
             return (Criteria) this;
         }
 
-        public Criteria andTopicCommentTidIsNotNull() {
-            addCriterion("topic_comment_tid is not null");
+        public Criteria andCidIsNotNull() {
+            addCriterion("cid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTopicCommentTidEqualTo(Integer value) {
-            addCriterion("topic_comment_tid =", value, "topicCommentTid");
+        public Criteria andCidEqualTo(Integer value) {
+            addCriterion("cid =", value, "cid");
             return (Criteria) this;
         }
 
-        public Criteria andTopicCommentTidNotEqualTo(Integer value) {
-            addCriterion("topic_comment_tid <>", value, "topicCommentTid");
+        public Criteria andCidNotEqualTo(Integer value) {
+            addCriterion("cid <>", value, "cid");
             return (Criteria) this;
         }
 
-        public Criteria andTopicCommentTidGreaterThan(Integer value) {
-            addCriterion("topic_comment_tid >", value, "topicCommentTid");
+        public Criteria andCidGreaterThan(Integer value) {
+            addCriterion("cid >", value, "cid");
             return (Criteria) this;
         }
 
-        public Criteria andTopicCommentTidGreaterThanOrEqualTo(Integer value) {
-            addCriterion("topic_comment_tid >=", value, "topicCommentTid");
+        public Criteria andCidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("cid >=", value, "cid");
             return (Criteria) this;
         }
 
-        public Criteria andTopicCommentTidLessThan(Integer value) {
-            addCriterion("topic_comment_tid <", value, "topicCommentTid");
+        public Criteria andCidLessThan(Integer value) {
+            addCriterion("cid <", value, "cid");
             return (Criteria) this;
         }
 
-        public Criteria andTopicCommentTidLessThanOrEqualTo(Integer value) {
-            addCriterion("topic_comment_tid <=", value, "topicCommentTid");
+        public Criteria andCidLessThanOrEqualTo(Integer value) {
+            addCriterion("cid <=", value, "cid");
             return (Criteria) this;
         }
 
-        public Criteria andTopicCommentTidIn(List<Integer> values) {
-            addCriterion("topic_comment_tid in", values, "topicCommentTid");
+        public Criteria andCidIn(List<Integer> values) {
+            addCriterion("cid in", values, "cid");
             return (Criteria) this;
         }
 
-        public Criteria andTopicCommentTidNotIn(List<Integer> values) {
-            addCriterion("topic_comment_tid not in", values, "topicCommentTid");
+        public Criteria andCidNotIn(List<Integer> values) {
+            addCriterion("cid not in", values, "cid");
             return (Criteria) this;
         }
 
-        public Criteria andTopicCommentTidBetween(Integer value1, Integer value2) {
-            addCriterion("topic_comment_tid between", value1, value2, "topicCommentTid");
+        public Criteria andCidBetween(Integer value1, Integer value2) {
+            addCriterion("cid between", value1, value2, "cid");
             return (Criteria) this;
         }
 
-        public Criteria andTopicCommentTidNotBetween(Integer value1, Integer value2) {
-            addCriterion("topic_comment_tid not between", value1, value2, "topicCommentTid");
+        public Criteria andCidNotBetween(Integer value1, Integer value2) {
+            addCriterion("cid not between", value1, value2, "cid");
             return (Criteria) this;
         }
 

@@ -3,7 +3,7 @@ package com.amoxu.entity.likes;
 public class LikeTopicCommentKey {
     private Integer uid;
 
-    private Integer topicCommentTid;
+    private Integer cid;
 
     public Integer getUid() {
         return uid;
@@ -13,11 +13,11 @@ public class LikeTopicCommentKey {
         this.uid = uid;
     }
 
-    public Integer getTopicCommentTid() {
-        return topicCommentTid;
+    public Integer getCid() {
+        return cid;
     }
 
-    public void setTopicCommentTid(Integer topicCommentTid) {
-        this.topicCommentTid = topicCommentTid;
+    public void setCid(Integer cid) {
+        this.cid = cid;
     }
 }

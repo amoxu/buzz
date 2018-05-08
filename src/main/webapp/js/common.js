@@ -3,8 +3,9 @@ function zone(id) {
 }
 
 /*主评论回复 创建回复模块*/
-(function () {
-    $(".reply").on('click', function () {
+/*(function () {
+    $("#content .comment").on('click', ".reply",function () {
+
         var dom = $(this).parent().next().children(".reviewArea");
         if (dom.html().length > 0) {
             dom.html("");
@@ -20,6 +21,35 @@ function zone(id) {
             $('.content').flexText();
         }
 
+    });
+})();*/
+(function () {
+    $("#content.comment").on('click', ".comment",function () {
+        if (!$.cookie("user")) {
+            layer.msg("请登录后评论");
+            return false;
+        }
+        //获取回复人的名字
+        var fhName = $(this).parents('.card_detail').find('.S_txt1').html();
+        //回复@
+        var fhN = '回复@' + fhName + "：";
+        //var oInput = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.hf-con');
+        var fhHtml = '<div class="hf-con pull-left"> ' +
+            '<pre class="pre" style="padding: 6px 15px;"><span></span><br></pre>'+
+            '<textarea class="content comment-input hf-input" data-name="' + fhName +
+            '" placeholder="' + fhN + '"></textarea> <a href="javascript:;" class="hf-pl" data-id="'
+            + $(this).find('a').attr('data-id') + '">评论</a></div>';
+        //显示回复
+        if (!$(this).is('.hf-con-block')) {
+            $(this).parents('.card_detail').find('.reviewArea').html(fhHtml);
+            $(this).addClass('hf-con-block');
+            $('.content').flexText();
+            //input框自动聚焦
+            $(this).parents('.card_detail').find('.hf-input').val('').focus().val();
+        } else {
+            $(this).removeClass('hf-con-block');
+            $(this).parents('.card_detail').find('.hf-con').remove();
+        }
     });
 })();
 

@@ -20,50 +20,6 @@ public class LikeEventsMapperTest {
     LikeEventsMapper likeEventsMapper;
 
     @Test
-    public void countByExample() {
-    }
-
-    @Test
-    public void deleteByExample() {
-    }
-
-    @Test
-    public void deleteByPrimaryKey() {
-    }
-
-    @Test
-    public void insert() {
-    }
-
-    @Test
-    public void insertSelective() {
-    }
-
-    @Test
-    public void selectByExample() {
-    }
-
-    @Test
-    public void selectByPrimaryKey() {
-    }
-
-    @Test
-    public void updateByExampleSelective() {
-    }
-
-    @Test
-    public void updateByExample() {
-    }
-
-    @Test
-    public void updateByPrimaryKeySelective() {
-    }
-
-    @Test
-    public void updateByPrimaryKey() {
-    }
-
-    @Test
     public void callLikeProc() {
         int cid = 11;
         int uid = 23;

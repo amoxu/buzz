@@ -31,5 +31,7 @@ public interface LikeTopicCommentMapper {
 
     int updateByPrimaryKey(LikeTopicComment record);
 
+    /*调用存储过程*/
     ProcCallResult callLikeProc(ProcCallResult callResult);
+
 }

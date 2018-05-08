@@ -19,6 +19,17 @@ public class User implements Cloneable, Serializable {
         return u;
     }
 
+    public User publicUser() {
+        User clone = clone();
+        clone.setEmail(null)
+                .setBirth(null)
+                .setCity(null)
+                .setCtime(null)
+                .setIntroduce(null)
+                .setSex(null);
+        return clone;
+    }
+
     @Override
     public String toString() {
 

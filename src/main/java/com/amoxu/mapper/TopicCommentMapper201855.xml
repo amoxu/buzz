@@ -289,7 +289,7 @@
         <result column="userLike" property="userLike"/>
         <association property="sendUser" resultMap="userCommonInfoMap"></association>
         <association property="receiveUser" resultMap="receiveUserMap" columnPrefix="rc_"></association>
-        <collection property="reply" column="{onlineId=userLike,rCid=cid}" select="selectMainChild" fetchType="eager" />
+        <collection property="comment" column="{onlineId=userLike,rCid=cid}" select="selectMainChild" fetchType="eager" />
     </resultMap>
     <select id="selectMain" resultMap="listMap" parameterType="map">
         /* 查询首页 按时间排序*/
@@ -399,7 +399,7 @@
 
         ,u1.nickname
 
-        ,reply.uid AS rc_uid
+        ,comment.uid AS rc_uid
         ,u2.nickname AS rc_nickname
 
         , like_topic_comment.uid as userLike
@@ -416,8 +416,8 @@
           0
         </if>
 
-        LEFT JOIN topic_comment AS reply ON tc.rcid = reply.cid
-        LEFT JOIN `user` AS u2 ON u2.uid = reply.uid
+        LEFT JOIN topic_comment AS comment ON tc.rcid = comment.cid
+        LEFT JOIN `user` AS u2 ON u2.uid = comment.uid
 
         WHERE #{rCid}=tc.rcid
         ORDER BY likes DESC
