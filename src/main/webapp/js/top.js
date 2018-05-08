@@ -124,6 +124,50 @@ $(".top-btn").on("click", function () {
         element.init();
     });
 
+
+})();
+(function report() {
+    $('#content').on('click','.report',function () {
+        var cid =  $(this).attr('data-id');
+        var type = "";
+        /**
+         * 1001 动态
+         * 1002 话题
+         * 1003 热评
+         * 1004 音乐分享*/
+
+        var idx = window.location.href;
+        if (idx.includes('events')) {
+            idx = 1001;
+        }else if (idx.includes("topic")) {
+            idx = 1002;
+        }else if (idx.includes("recommend")) {
+            idx = 1003;
+        }else if (idx.includes("music")) {
+            idx = 1004
+        }else{
+            idx = 1000;
+        }
+        layer.prompt({
+            formType: 2,
+            title: '举报理由',
+        }, function(value, index, elem){
+            $.ajax({
+                url: './report/' + idx + '/' + cid
+                ,type:'post'
+                ,data:{'data':value}
+                , success: function (res) {
+                    layer.alert(res.msg);
+                    return false;
+                },
+                error: function (res) {
+                    layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+                    return false;
+                }
+            });
+            layer.close(index);
+        });
+    });
 })();
 
 
