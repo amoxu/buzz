@@ -303,7 +303,8 @@ public class UserController {
                            HttpServletRequest request,
                            HttpServletResponse response
     ) throws IOException {
-        logger.info(id + key);
+        logger.info(id+" ,key: " + key);
+        id = id.replace(" ", "+");
         String code = userService.activeUserMail(id, key);
         String html = "<br><h3><a href = '" + request.getScheme() + "://"
                 + request.getServerName()

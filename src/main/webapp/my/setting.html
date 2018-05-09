@@ -31,7 +31,7 @@
                     <dd><a href="../my/message.html">留言消息</a></dd>
                     <dd><a href="../my/setting.html#password">修改密码</a></dd>
                     <dd><a href="../my/friends.html">我的关注</a></dd>
-                    <dd><a href="../login-out">退出</a></dd>
+                    <dd><a class='logout'>退出</a></dd>
                 </dl>
             </li>
         </ul>
@@ -504,7 +504,7 @@
         var uploadInst = upload.render({
             elem: '#smfile'
             //'https://sm.ms/api/upload'
-            , url: 'https://icon.amoxuk.com/icon?' + (userInfo['data'].icons).split("?")[0]
+            , url: 'https://icon.amoxuk.com/icon?' + userInfo['data'].icons.split("?")[0].split("/").pop()
             , field: 'smfile'
             , auto: false
             , bindAction: '#upload' //指向一个按钮触发上传
@@ -525,7 +525,6 @@
                 //如果上传失败
                 if (res.status === 0) {
                     //上传成功
-                    /*todo 保存至服务器*/
                     $.ajax({
                         async: false
                         , url: "/user/icon"

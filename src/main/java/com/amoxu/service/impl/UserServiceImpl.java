@@ -182,6 +182,8 @@ public class UserServiceImpl implements UserService {
     public String activeUserMail(String id, String key) {
         try {
             id = ToolKit.aesDecrypt(id);
+            logger.info(id);
+
             User user = selectUserByName(id);
             boolean status = ToolKit.md5Hex(user.getNote()).equals(key);
             if (status) {
@@ -190,18 +192,20 @@ public class UserServiceImpl implements UserService {
                  * [1] 新邮箱
                  * */
                 String[] notes = user.getNote().split("\\$");
-                Long sendTime = Long.valueOf(notes[0]);
+                Long sendTime = Long.valueOf(notes[0]);/*毫秒值 */
                 Long now = new Date().getTime();
-                boolean timeoff = now - sendTime > 30 * 60 * 1000;
+                logger.info(now);
+                logger.info(sendTime);
+                boolean timeoff = now - sendTime > 30 * 60 * 1000;/*超过30分钟过期*/
                 int userState = user.getState();
                 /**
-                 * 用户未激活过邮箱或者激活未超时
+                 * 用户未激活过邮箱并且激活未超时
                  * */
-                if (userState == 0 || !timeoff) {
+                if (0 == userState && !timeoff) {
                     /*
-                    * 更新头像
-                    * 将邮箱md5更新为当前邮箱
-                    * */
+                     * 更新头像
+                     * 将邮箱md5更新为当前邮箱
+                     * */
                     String[] split = user.getIcons().split("\\?d=");
                     String newIcon = ToolKit.md5Hex(user.getEmail());
 
@@ -211,9 +215,8 @@ public class UserServiceImpl implements UserService {
                     user.setIcons(newIcon);
                     user.setEmail(notes[1]);
                     user.setNote("");
-                    if (userState == 0) {
-                        user.setState(1);
-                    }
+                    user.setState(1);
+
                     mapper.updateByPrimaryKeySelective(user);
                     return StaticEnum.MAIL_ACTIVE_SUC;
                 } else {

@@ -38,7 +38,7 @@ public final class StaticEnum {
     public final static String MAIL_FIND_PASSWORD = "找回密码";
     public final static String MAIL_REGISTER = "注册用户";
     public final static String MAIL_TIMEOFF = "激活超时";
-    public final static String MAIL_ACTIVE_SUC = "激活超时";
+    public final static String MAIL_ACTIVE_SUC = "激活成功";
     public final static String MAIL_VER_ERROR = "验证失败";
 
     /**
