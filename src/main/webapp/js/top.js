@@ -127,6 +127,8 @@ $(".top-btn").on("click", function () {
 
                 $.removeCookie('unLogin');
                 $.removeCookie('user');
+                $.removeCookie('unLogin',{path:"/"});
+                $.removeCookie('user',{path:"/"});
                 window.location.href = "../logout";
                 layer.close(index);
             });

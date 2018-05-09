@@ -54,6 +54,14 @@ layui.use(['element', 'jquery'], function () {
         /*0表示自身ID*/
         $.ajaxSettings.async = false;
         $.get("/user/info/0", function (res) {
+            if (res.status !== 0) {
+                $.removeCookie("user");
+                $.removeCookie('unLogin');
+                $.removeCookie("user",{path:"/my"});
+                $.removeCookie('unLogin',{path:"/"});
+                window.location.href = "../login.html";
+                return false;
+            }
             $.cookie("user", {  'user': res});
             userInfo = res;
         });
