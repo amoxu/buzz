@@ -329,19 +329,19 @@ public class UserController {
     /**
      * @descript 修改用户头像
      *
-     * @RequestParam url 头像的文件名
+     * @RequestParam md5 头像的文件名
      *
      *
      * */
-    public String alterIcon(@RequestParam("data") String url) {
+    public String alterIcon(@RequestParam("data") String md5) {
         AjaxResult<String> result = new AjaxResult<>();
-        logger.info(url);
-        if (StringUtils.isEmpty(url)) {
+        logger.info(md5);
+        if (StringUtils.isEmpty(md5)) {
             result.setMsg("操作失败");
             result.failed();
             return result.toString();
         }
-        int code = userService.updataIcon(url);
+        int code = userService.updataIcon(md5);
         if (code == 0) {
             result.setMsg("操作失败");
             result.failed();

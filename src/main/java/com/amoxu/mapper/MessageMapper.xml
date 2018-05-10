@@ -242,7 +242,7 @@
     </if>
     <include refid="GetMsg_Column_List"/>
     FROM buzz.message
-    LEFT JOIN buzz.user ON user.uid = message.ruid
+    LEFT JOIN buzz.user ON user.uid = message.suid
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>

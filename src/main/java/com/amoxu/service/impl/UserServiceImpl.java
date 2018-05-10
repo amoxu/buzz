@@ -312,7 +312,7 @@ public class UserServiceImpl implements UserService {
         String md5 = ToolKit.md5Hex(user.getEmail());
 
         try {
-            url = StaticEnum.PREFIX_ICON + md5 + "?d=" + URLEncoder.encode("https://icon.amoxuk.com/icon/" + md5 + ".jpg", "UTF-8");
+            url = StaticEnum.PREFIX_ICON + md5 + "?d=" + URLEncoder.encode("https://icon.amoxuk.com/icon/" + url + ".jpg", "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
