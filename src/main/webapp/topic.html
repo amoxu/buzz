@@ -296,7 +296,10 @@
                         setTimeout(function () {
                             var lis = [];
                             $.get(url + '?limit=10&offset=' + (page - 1) * 10, function (res) {
-
+                                if (res.status === 1) {
+                                    layer.msg(res.msg);
+                                    return false;
+                                }
                                 //假设你的列表返回在data集合中
                                 layui.each(res.data, function (index, result) {
                                     var tmp = '<li class="card clearfix">' +

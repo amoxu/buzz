@@ -85,7 +85,7 @@ public class Music {
 
     public String getLink() {
         if (source.getName().equals("网易云")) {
-            link = "http://music.163.com/song?id=" + sid;
+            link = "http://music.163.com/song?id=" + mid;
         }
         return link;
     }

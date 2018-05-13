@@ -317,9 +317,12 @@
     <result column="base_cid" property="baseCid" jdbcType="INTEGER" />
     <result column="userLike" property="userLike"/>
     <result column="topic" property="topic"/>
+
     <association property="sendUser" resultMap="userCommonInfoMap"></association>
     <association property="receiveUser" resultMap="receiveUserMap" columnPrefix="rc_"></association>
-    <collection property="comment" column="{onlineId=userLike,base=cid,target=rcid}" select="selectMainChild" fetchType="lazy" />
+
+    <!--TODO 这里有一个小bug 需要换成OnlineID 但是换成onlineID之后会在查询转换的时候报异常-->
+    <collection property="comment" column="{onlineId=userLike,base=cid,target=rcid}" select="selectMainChild" />
   </resultMap>
   <select id="selectMain" resultMap="listMap" parameterType="map">
     /* 查询首页 按时间排序*/
@@ -338,7 +341,14 @@
     `user`.icons
 
     , like_topic_comment.uid as userLike
-
+    ,
+    <if test="onlineId != null ">
+      ${onlineId}
+    </if>
+    <if test="onlineId == null ">
+      NULL
+    </if>
+    AS  onlineId
     FROM topic_comment
     LEFT JOIN topic ON topic_comment.ttid = topic.tid
     LEFT JOIN like_topic_comment ON topic_comment.cid = like_topic_comment.cid AND like_topic_comment.uid=
@@ -503,5 +513,6 @@
       limit ${example.offset}, ${example.limit}
     </if>
   </select>
+
 
 </mapper>

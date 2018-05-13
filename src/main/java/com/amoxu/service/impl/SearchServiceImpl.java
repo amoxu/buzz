@@ -27,7 +27,8 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private SingerMapper singerMapper;
     @Autowired
-    private TopicCommentMapper topicCommentMapper;
+    private MusicShareMapper shareMapper;
+
     @Autowired
     private TopicMapper topicMapper;
 
@@ -138,6 +139,34 @@ public class SearchServiceImpl implements SearchService {
                     pageResult.setList(topicComments);
                 }
                 sqlSession.close();
+                break;
+            case 1002:/*搜索分享音乐*/
+                MusicExample musicExample1 = new MusicExample();
+                MusicExample.Criteria musicCriteria1 = musicExample1.createCriteria();
+                musicCriteria1.andNameLike("%" + key + "%");
+                List<Music> musics = musicMapper.selectByExample(musicExample1);
+                List<Integer> mids = new ArrayList<>();
+                for (Music m : musics) {
+                    mids.add(m.getMid());
+                }
+                /*通过mid查询*/
+                MusicShareExample shareExample = new MusicShareExample();
+                shareExample.setOffset(pageResult.getOffset());
+                shareExample.setLimit(pageResult.getLimit());
+                /*统计总数*/
+                pageResult.setCount(shareMapper.countByExample(shareExample));
+                MusicShareExample.Criteria shareExampleCriteria = shareExample.createCriteria();
+                shareExampleCriteria.andMidIn(mids);
+                List<MusicShare> musicShares;
+                Subject subject1 = SecurityUtils.getSubject();
+                if (subject1.isAuthenticated()) {
+                    Integer uid = ((User) subject1.getPrincipal()).getUid();
+                    musicShares = shareMapper.selectMain(uid, shareExample);
+
+                } else {
+                    musicShares = shareMapper.selectMain(null, shareExample);
+                }
+                pageResult.setList(musicShares);
                 break;
             default:
                 break;

@@ -25,7 +25,7 @@ public class SearchController {
     @ResponseBody
     public String search(@PathVariable("type") Integer type, @PathVariable("key") String key, PageResult pageResult) {
         AjaxResult<List> ajaxResult = new AjaxResult<>();
-        if (type != 1001) {
+        if (type != 1001 && type != 1002) {
             /*当搜索内容为话题时，不需要对offset进行处理*/
             pageResult.setOffset((pageResult.getOffset() - 1) * 10);
         }

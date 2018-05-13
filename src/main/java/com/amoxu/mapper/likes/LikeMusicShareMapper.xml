@@ -94,12 +94,12 @@
     <include refid="Base_Column_List" />
     from like_music_share
     where uid = #{uid,jdbcType=INTEGER}
-      and music_share_id = #{musicShareId,jdbcType=INTEGER}
+      and oid = #{musicShareId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="com.amoxu.entity.likes.LikeMusicShareKey" >
     delete from like_music_share
     where uid = #{uid,jdbcType=INTEGER}
-      and music_share_id = #{musicShareId,jdbcType=INTEGER}
+      and oid = #{musicShareId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.amoxu.entity.likes.LikeMusicShareExample" >
     delete from like_music_share
@@ -108,7 +108,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.amoxu.entity.likes.LikeMusicShare" >
-    insert into like_music_share (uid, music_share_id, ctime
+    insert into like_music_share (uid, oid, ctime
       )
     values (#{uid,jdbcType=INTEGER}, #{musicShareId,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}
       )
@@ -164,7 +164,7 @@
   <update id="updateByExample" parameterType="map" >
     update like_music_share
     set uid = #{record.uid,jdbcType=INTEGER},
-      music_share_id = #{record.musicShareId,jdbcType=INTEGER},
+      oid = #{record.musicShareId,jdbcType=INTEGER},
       ctime = #{record.ctime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -184,6 +184,14 @@
     update like_music_share
     set ctime = #{ctime,jdbcType=TIMESTAMP}
     where uid = #{uid,jdbcType=INTEGER}
-      and music_share_id = #{musicShareId,jdbcType=INTEGER}
+      and oid = #{musicShareId,jdbcType=INTEGER}
   </update>
+
+  <select id="callLikeProc" statementType="CALLABLE" resultType="com.amoxu.entity.ProcCallResult"
+          parameterType="com.amoxu.entity.ProcCallResult">
+    CALL opt_like_music_share(
+    #{cid,mode=IN},
+    #{uid,mode=INOUT,jdbcType=INTEGER}
+    )
+  </select>
 </mapper>

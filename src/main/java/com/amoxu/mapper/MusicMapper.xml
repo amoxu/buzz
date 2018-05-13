@@ -106,7 +106,13 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
+    ,s.name as singer_name
+    ,s1.name as source_name
+
     from music
+    LEFT JOIN singer as s  ON music.sid = s.sid
+    LEFT JOIN source as s1 ON music.rid = s1.rid
+
     where mid = #{mid,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

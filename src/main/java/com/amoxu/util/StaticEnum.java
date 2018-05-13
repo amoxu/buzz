@@ -48,4 +48,7 @@ public final class StaticEnum {
 
 
     public static final String EMPTY_WORD = "输入内容不能为空";
+
+    public static final String ERROR_PARSE = "解析失败";
+
 }

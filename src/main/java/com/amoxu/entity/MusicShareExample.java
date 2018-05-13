@@ -577,7 +577,7 @@ public class MusicShareExample {
 
         protected Criterion(String condition, Object value, Object secondValue, String typeHandler) {
             super();
-            this.condition = condition;
+            this.condition = "music_share." + condition;
             this.value = value;
             this.secondValue = secondValue;
             this.typeHandler = typeHandler;

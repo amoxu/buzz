@@ -219,6 +219,7 @@ public class TopicServiceImpl implements TopicService {
         comment.setTtid(0);/*回复子列表时，话题ID为0*/
 
         commentMapper.insertSelective(comment);
+
         comment = commentMapper.selectByPrimaryKey(comment.getCid());
 
         result.ok();

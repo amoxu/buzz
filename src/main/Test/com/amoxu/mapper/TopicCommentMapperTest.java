@@ -39,10 +39,10 @@ public class TopicCommentMapperTest {
         List<TopicComment> topicComments;
 
 
-        topicComments = mapper.selectMain(null, commentExample);
+        topicComments = mapper.selectMain(1, commentExample);
 
 
-        logger.info(topicComments);
+        //logger.info(topicComments);
         logger.info(JSON.toJSONString(topicComments));
     }
 
@@ -65,7 +65,7 @@ public class TopicCommentMapperTest {
     public void selectMainChild() {
 
 
-        List<TopicComment> topicComments = mapper.selectMainChild(null, 2);
+        List<TopicComment> topicComments = mapper.selectMainChild(null, 2, 0);
         logger.info(JSON.toJSONString(topicComments));
 
     }

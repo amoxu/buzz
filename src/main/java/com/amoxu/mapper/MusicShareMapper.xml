@@ -8,6 +8,11 @@
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="likes" property="likes" jdbcType="INTEGER" />
     <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="userLike" property="userLike"/>
+
+    <association property="sendUser" resultMap="userCommonInfoMap"></association>
+    <association property="music" column="mid" select="com.amoxu.mapper.MusicMapper.selectByPrimaryKey" ></association>
+
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    oid, mid, uid, content, likes, ctime
+    music_share.oid, music_share.mid, music_share.uid, music_share.content, music_share.likes, music_share.ctime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.MusicShareExample" >
     select
@@ -93,10 +98,15 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    SELECT
     <include refid="Base_Column_List" />
-    from music_share
+    ,`user`.uid
+    ,`user`.nickname
+    ,`user`.icons
+    FROM music_share
+    LEFT JOIN `user` on `user`.uid = `music_share`.uid
     where oid = #{oid,jdbcType=INTEGER}
+
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from music_share
@@ -108,7 +118,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.amoxu.entity.MusicShare" >
+  <insert id="insert" parameterType="com.amoxu.entity.MusicShare"  keyProperty="oid" useGeneratedKeys="true">
     insert into music_share (oid, mid, uid, 
       content, likes, ctime
       )
@@ -116,7 +126,7 @@
       #{content,jdbcType=VARCHAR}, #{likes,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.amoxu.entity.MusicShare" >
+  <insert id="insertSelective" parameterType="com.amoxu.entity.MusicShare"  keyProperty="oid" useGeneratedKeys="true" >
     insert into music_share
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="oid != null" >
@@ -233,4 +243,78 @@
       ctime = #{ctime,jdbcType=TIMESTAMP}
     where oid = #{oid,jdbcType=INTEGER}
   </update>
+
+
+  <resultMap id="userCommonInfoMap" type="com.amoxu.entity.User">
+    <result property="nickname" column="nickname"/>
+    <result property="icons" column="icons"/>
+    <result property="uid" column="uid"/>
+  </resultMap>
+
+  <resultMap id="listMap" type="com.amoxu.entity.MusicShare" >
+    <id column="oid" property="oid" jdbcType="INTEGER" />
+    <result column="mid" property="mid" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="likes" property="likes" jdbcType="INTEGER" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+
+    <result column="userLike" property="userLike"/>
+
+    <association property="sendUser" resultMap="userCommonInfoMap"></association>
+    <association property="music" column="mid" select="com.amoxu.mapper.MusicMapper.selectByPrimaryKey" ></association>
+    <collection property="comment" column="{onlineId=onlineId,baseId=oid}"
+                select="com.amoxu.mapper.MusicShareCommentMapper.selectMainChild" fetchType="eager" />
+  </resultMap>
+
+  <select id="selectMain" resultMap="listMap" parameterType="map">
+    /* 查询首页 按时间排序*/
+    SELECT
+
+    music_share.oid ,
+    music_share.mid,
+    music_share.uid,
+    music_share.content,
+    music_share.likes,
+    music_share.ctime,
+
+    `user`.uid,
+    `user`.nickname,
+    `user`.icons
+
+    , like_music_share.uid as userLike
+      ,
+      <if test="onlineId != null ">
+          #{onlineId}
+      </if>
+      <if test="onlineId == null ">
+          NULL
+      </if>
+      AS onlineId
+    FROM music_share
+
+    LEFT JOIN like_music_share ON music_share.oid = like_music_share.oid AND like_music_share.uid=
+
+    <if test="onlineId != null">
+      #{onlineId}
+    </if>
+    <if test="onlineId == null">
+      0
+    </if>
+    LEFT JOIN `user` on `user`.uid = `music_share`.uid
+
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+
+
+    <if test="example.orderByClause != null">
+      order by ${example.orderByClause}
+    </if>
+    <if test="example.limit!=0">
+      limit ${example.offset}, ${example.limit}
+    </if>
+  </select>
+
+
 </mapper>

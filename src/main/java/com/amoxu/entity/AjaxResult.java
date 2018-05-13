@@ -1,6 +1,7 @@
 package com.amoxu.entity;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.amoxu.util.StaticEnum;
 import org.springframework.stereotype.Repository;
 
@@ -17,14 +18,16 @@ public class AjaxResult<T> {
     private int count = -1;
 
 
-    public void ok() {
+    public AjaxResult<T> ok() {
         this.status = 0;
         setMsg(StaticEnum.OPT_SUCCESS);
+        return this;
     }
 
-    public void failed() {
+    public AjaxResult<T> failed() {
         this.status = 1;
         setMsg(StaticEnum.OPT_ERROR);
+        return this;
     }
 
     public int getStatus() {
@@ -52,21 +55,24 @@ public class AjaxResult<T> {
         return msg;
     }
 
-    public void setMsg(String msg) {
+    public AjaxResult<T> setMsg(String msg) {
         this.msg = msg;
+        return this;
     }
 
     public int getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public AjaxResult<T> setCount(int count) {
         this.count = count;
+        return this;
     }
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        /*解决出现循环引用的情况*/
+        return JSON.toJSONString(this, SerializerFeature.DisableCircularReferenceDetect);
     }
 
 }

@@ -10,4 +10,7 @@ public interface ThumbsService {
     boolean likeShare(Integer cid) throws UnLoginException;
 
     boolean likeTopic(Integer cid) throws UnLoginException;
+
+    boolean likeShareComment(Integer cid) throws UnLoginException;
+
 }

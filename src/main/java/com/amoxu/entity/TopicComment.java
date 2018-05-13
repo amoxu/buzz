@@ -25,6 +25,7 @@ public class TopicComment {
     private Date ctime;
 
     private Integer baseCid;/*主页内容cid*/
+
     @JSONField(serialzeFeatures = SerializerFeature.WriteNullNumberAsZero)
     private Integer userLike;/*用户是否点赞 >0 表示点赞了*/
     private String topic;/*话题*/

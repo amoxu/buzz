@@ -2,8 +2,9 @@ package com.amoxu.mapper;
 
 import com.amoxu.entity.MusicShare;
 import com.amoxu.entity.MusicShareExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface MusicShareMapper {
     int countByExample(MusicShareExample example);
@@ -27,4 +28,9 @@ public interface MusicShareMapper {
     int updateByPrimaryKeySelective(MusicShare record);
 
     int updateByPrimaryKey(MusicShare record);
+
+    List<MusicShare> selectMain(@Param("onlineId") Integer onlineId, @Param("example") MusicShareExample example);
+
+
+
 }

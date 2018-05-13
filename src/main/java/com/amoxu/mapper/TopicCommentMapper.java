@@ -29,10 +29,10 @@ public interface TopicCommentMapper {
 
     int updateByPrimaryKey(TopicComment record);
 
-    List<TopicComment> selectMain(@Param("onlineId") Integer o, @Param("example") TopicCommentExample example);
+    List<TopicComment> selectMain(@Param("onlineId") Integer onLine, @Param("example") TopicCommentExample example);
 
-    List<TopicComment> selectMainChild(@Param("onlineId") Integer o, @Param("base") Integer i);
+    List<TopicComment> selectMainChild(@Param("onlineId") Integer onLine, @Param("base") Integer i, @Param("target") Integer rcid);
 
-    List<TopicComment> selectChild(@Param("onlineId") Integer o, @Param("example") TopicCommentExample example);
+    List<TopicComment> selectChild(@Param("onlineId") Integer onLine, @Param("example") TopicCommentExample example);
 
 }
