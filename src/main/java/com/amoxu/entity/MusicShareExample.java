@@ -554,14 +554,14 @@ public class MusicShareExample {
 
         protected Criterion(String condition) {
             super();
-            this.condition = condition;
+            this.condition = "music_share." + condition;
             this.typeHandler = null;
             this.noValue = true;
         }
 
         protected Criterion(String condition, Object value, String typeHandler) {
             super();
-            this.condition = condition;
+            this.condition ="music_share." + condition;
             this.value = value;
             this.typeHandler = typeHandler;
             if (value instanceof List<?>) {
@@ -572,12 +572,12 @@ public class MusicShareExample {
         }
 
         protected Criterion(String condition, Object value) {
-            this(condition, value, null);
+            this( condition, value, null);
         }
 
         protected Criterion(String condition, Object value, Object secondValue, String typeHandler) {
             super();
-            this.condition = "music_share." + condition;
+            this.condition ="music_share." + condition;
             this.value = value;
             this.secondValue = secondValue;
             this.typeHandler = typeHandler;
@@ -585,7 +585,7 @@ public class MusicShareExample {
         }
 
         protected Criterion(String condition, Object value, Object secondValue) {
-            this(condition, value, secondValue, null);
+            this( condition, value, secondValue, null);
         }
     }
 }
