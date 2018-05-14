@@ -2,8 +2,10 @@ package com.amoxu.mapper;
 
 import com.amoxu.entity.Comments;
 import com.amoxu.entity.CommentsExample;
-import java.util.List;
+import com.amoxu.entity.User;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface CommentsMapper {
     int countByExample(CommentsExample example);
@@ -27,4 +29,13 @@ public interface CommentsMapper {
     int updateByPrimaryKeySelective(Comments record);
 
     int updateByPrimaryKey(Comments record);
+
+
+    List<Comments> selectMainChild(@Param("onlineId") Integer onlineId, @Param("baseId") Integer baseId );
+
+    List<Comments> selectChild(@Param("onlineId") Integer onlineId,@Param("baseId") Integer baseId, @Param("example") CommentsExample example);
+
+    User getReceive(@Param("rcid")Integer rcid, @Param("buzzId")Integer buzzId);
+
+
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.amoxu.mapper.CommentsMapper">
-    <resultMap id="BaseResultMap" type="com.amoxu.entity.Comments">
+<mapper namespace="com.amoxu.mapper.MusicShareCommentMapper">
+    <resultMap id="BaseResultMap" type="com.amoxu.entity.MusicShareComment">
         <id column="cid" property="cid" jdbcType="INTEGER"/>
         <result column="rcid" property="rcid" jdbcType="INTEGER"/>
         <result column="uid" property="uid" jdbcType="INTEGER"/>
@@ -9,7 +9,7 @@
         <result column="likes" property="likes" jdbcType="INTEGER"/>
         <result column="feeling" property="feeling" jdbcType="DOUBLE"/>
         <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
-        <result column="buzz_id" property="buzzId" jdbcType="INTEGER"/>
+        <result column="base_cid" property="baseCid" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Example_Where_Clause">
         <where>
@@ -72,15 +72,18 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-    cid, rcid, uid, content, likes, feeling, ctime, buzz_id
+    music_share_content.cid, music_share_content.rcid, music_share_content.uid,
+     music_share_content.content, music_share_content.likes, music_share_content.feeling,
+      music_share_content.ctime, music_share_content.base_cid
+
   </sql>
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.CommentsExample">
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.MusicShareCommentExample">
         select
         <if test="distinct">
             distinct
         </if>
         <include refid="Base_Column_List"/>
-        from comments
+        from music_share_content
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -96,32 +99,50 @@
             </if>
         </if>
     </select>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" resultMap="listMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from comments
-        where cid = #{cid,jdbcType=INTEGER}
+        /*发送方信息*/
+        ,u1.nickname as send_nickname,
+        u1.icons as send_icons,
+        u1.uid as send_uid,
+        /*接受方信息*/
+        u2.nickname as receive_nickname,
+        u2.icons as receive_icons,
+        u2.uid as receive_uid
+
+
+        FROM
+        music_share_content
+        LEFT JOIN buzz.user u1 ON u1.uid = music_share_content.uid/*发表用户的信息*/
+        LEFT JOIN music_share_content content ON music_share_content.cid = content.rcid
+        LEFT JOIN buzz.user u2 ON content.uid = u2.uid
+
+        where music_share_content.cid = #{cid,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from comments
+    delete from music_share_content
     where cid = #{cid,jdbcType=INTEGER}
   </delete>
-    <delete id="deleteByExample" parameterType="com.amoxu.entity.CommentsExample">
-        delete from comments
+    <delete id="deleteByExample" parameterType="com.amoxu.entity.MusicShareCommentExample">
+        delete from music_share_content
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.amoxu.entity.Comments">
-    insert into comments (cid, rcid, uid, 
-      content, likes, feeling, 
-      ctime, buzz_id)
+    <insert id="insert" parameterType="com.amoxu.entity.MusicShareComment" keyProperty="cid" useGeneratedKeys="true">
+    insert into music_share_content (cid, rcid, uid, 
+       content, likes,
+      feeling, ctime, base_cid
+      )
     values (#{cid,jdbcType=INTEGER}, #{rcid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, 
-      #{content,jdbcType=VARCHAR}, #{likes,jdbcType=INTEGER}, #{feeling,jdbcType=DOUBLE}, 
-      #{ctime,jdbcType=TIMESTAMP}, #{buzzId,jdbcType=INTEGER})
+       #{content,jdbcType=VARCHAR}, #{likes,jdbcType=INTEGER},
+      #{feeling,jdbcType=DOUBLE}, #{ctime,jdbcType=TIMESTAMP}, #{baseCid,jdbcType=INTEGER}
+      )
   </insert>
-    <insert id="insertSelective" parameterType="com.amoxu.entity.Comments">
-        insert into comments
+    <insert id="insertSelective" parameterType="com.amoxu.entity.MusicShareComment" keyProperty="cid"
+            useGeneratedKeys="true">
+        insert into music_share_content
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="cid != null">
                 cid,
@@ -132,6 +153,7 @@
             <if test="uid != null">
                 uid,
             </if>
+
             <if test="content != null">
                 content,
             </if>
@@ -144,8 +166,8 @@
             <if test="ctime != null">
                 ctime,
             </if>
-            <if test="buzzId != null">
-                buzz_id,
+            <if test="baseCid != null">
+                base_cid,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -158,6 +180,7 @@
             <if test="uid != null">
                 #{uid,jdbcType=INTEGER},
             </if>
+
             <if test="content != null">
                 #{content,jdbcType=VARCHAR},
             </if>
@@ -170,19 +193,20 @@
             <if test="ctime != null">
                 #{ctime,jdbcType=TIMESTAMP},
             </if>
-            <if test="buzzId != null">
-                #{buzzId,jdbcType=INTEGER},
+            <if test="baseCid != null">
+                #{baseCid,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.amoxu.entity.CommentsExample" resultType="java.lang.Integer">
-        select count(*) from comments
+    <select id="countByExample" parameterType="com.amoxu.entity.MusicShareCommentExample"
+            resultType="java.lang.Integer">
+        select count(*) from music_share_content
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </select>
     <update id="updateByExampleSelective" parameterType="map">
-        update comments
+        update music_share_content
         <set>
             <if test="record.cid != null">
                 cid = #{record.cid,jdbcType=INTEGER},
@@ -193,6 +217,7 @@
             <if test="record.uid != null">
                 uid = #{record.uid,jdbcType=INTEGER},
             </if>
+
             <if test="record.content != null">
                 content = #{record.content,jdbcType=VARCHAR},
             </if>
@@ -205,8 +230,8 @@
             <if test="record.ctime != null">
                 ctime = #{record.ctime,jdbcType=TIMESTAMP},
             </if>
-            <if test="record.buzzId != null">
-                buzz_id = #{record.buzzId,jdbcType=INTEGER},
+            <if test="record.baseCid != null">
+                base_cid = #{record.baseCid,jdbcType=INTEGER},
             </if>
         </set>
         <if test="_parameter != null">
@@ -214,7 +239,7 @@
         </if>
     </update>
     <update id="updateByExample" parameterType="map">
-        update comments
+        update music_share_content
         set cid = #{record.cid,jdbcType=INTEGER},
         rcid = #{record.rcid,jdbcType=INTEGER},
         uid = #{record.uid,jdbcType=INTEGER},
@@ -222,13 +247,13 @@
         likes = #{record.likes,jdbcType=INTEGER},
         feeling = #{record.feeling,jdbcType=DOUBLE},
         ctime = #{record.ctime,jdbcType=TIMESTAMP},
-        buzz_id = #{record.buzzId,jdbcType=INTEGER}
+        base_cid = #{record.baseCid,jdbcType=INTEGER}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.amoxu.entity.Comments">
-        update comments
+    <update id="updateByPrimaryKeySelective" parameterType="com.amoxu.entity.MusicShareComment">
+        update music_share_content
         <set>
             <if test="rcid != null">
                 rcid = #{rcid,jdbcType=INTEGER},
@@ -236,6 +261,7 @@
             <if test="uid != null">
                 uid = #{uid,jdbcType=INTEGER},
             </if>
+
             <if test="content != null">
                 content = #{content,jdbcType=VARCHAR},
             </if>
@@ -248,21 +274,21 @@
             <if test="ctime != null">
                 ctime = #{ctime,jdbcType=TIMESTAMP},
             </if>
-            <if test="buzzId != null">
-                buzz_id = #{buzzId,jdbcType=INTEGER},
+            <if test="baseCid != null">
+                base_cid = #{baseCid,jdbcType=INTEGER},
             </if>
         </set>
         where cid = #{cid,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.amoxu.entity.Comments">
-    update comments
+    <update id="updateByPrimaryKey" parameterType="com.amoxu.entity.MusicShareComment">
+    update music_share_content
     set rcid = #{rcid,jdbcType=INTEGER},
       uid = #{uid,jdbcType=INTEGER},
       content = #{content,jdbcType=VARCHAR},
       likes = #{likes,jdbcType=INTEGER},
       feeling = #{feeling,jdbcType=DOUBLE},
       ctime = #{ctime,jdbcType=TIMESTAMP},
-      buzz_id = #{buzzId,jdbcType=INTEGER}
+      base_cid = #{baseCid,jdbcType=INTEGER}
     where cid = #{cid,jdbcType=INTEGER}
   </update>
 
@@ -273,7 +299,7 @@
         <result property="uid" column="uid"/>
     </resultMap>
 
-    <resultMap id="listMap" type="com.amoxu.entity.Comments">
+    <resultMap id="listMap" type="com.amoxu.entity.MusicShareComment">
         <id column="cid" property="cid" jdbcType="INTEGER"/>
         <result column="rcid" property="rcid" jdbcType="INTEGER"/>
         <result column="uid" property="uid" jdbcType="INTEGER"/>
@@ -281,12 +307,12 @@
         <result column="likes" property="likes" jdbcType="INTEGER"/>
         <result column="feeling" property="feeling" jdbcType="DOUBLE"/>
         <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
-        <result column="buzz_id" property="buzzId" jdbcType="INTEGER"/>
+        <result column="base_cid" property="baseCid" jdbcType="INTEGER"/>
 
         <result column="userLike" property="userLike"/>
 
         <association property="sendUser" resultMap="userCommonInfoMap" columnPrefix="send_"></association>
-        <association property="receiveUser" column="{rcid = rcid,buzzId=buzz_id}" select="getReceive"></association>
+        <association property="receiveUser" column="{rcid = rcid,baseId=base_cid}" select="getReceive"></association>
 
 
     </resultMap>
@@ -327,19 +353,18 @@
                 baseid  rcid为0时查baseid的 uid
         -->
     <select id="getReceive" resultMap="userCommonInfoMap" parameterType="map">
-        <if test="rcid != 0">/*comments表中有*/
+        <if test="rcid != 0">
             SELECT user.uid,`user`.icons,`user`.nickname
-            from buzz.comments
-            LEFT JOIN `user` ON `user`.uid = comments.uid
-            where comments.cid = #{rcid}
+            from music_share_content
+            LEFT JOIN `user` ON `user`.uid = music_share_content.uid
+            where music_share_content.cid = #{rcid}
         </if>
-        <if test="rcid == 0">/*回复热评。*/
-            SELECT
-            buzz_netease.user_id uid,
-            user_name nickname
-            from buzz_netease
-            LEFT JOIN comments c2 ON buzz_netease.id = c2.buzz_id
-            where buzz_netease.id = #{buzzId}
+        <if test="rcid == 0">
+            SELECT user.uid,`user`.icons,`user`.nickname
+            from music_share_content
+            LEFT JOIN music_share ON music_share_content.base_cid = music_share.oid
+            LEFT JOIN `user` ON `user`.uid = music_share.uid
+            where music_share.oid = #{baseId}
             limit 1
         </if>
 
@@ -358,20 +383,18 @@
         u1.nickname as send_nickname,
         u1.icons as send_icons,
         u1.uid as send_uid,
-
         c2.uid as userLike
-
         FROM
-        comments msc
+        music_share_content msc
         LEFT JOIN buzz.user u1 ON u1.uid = msc.uid/*发表用户的信息*/
-        LEFT JOIN like_comments c2 ON msc.cid = c2.comments_id AND c2.uid=
+        LEFT JOIN like_music_share_comment c2 ON msc.cid = c2.oid AND c2.uid=
         <if test="onlineId != null">
             #{onlineId}
         </if>
         <if test="onlineId == null">
             0
         </if>
-        WHERE msc.buzz_id=#{baseId}
+        WHERE msc.base_cid=#{baseId}
         ORDER BY likes DESC, msc.ctime DESC
         LIMIT 4
     </select>
@@ -385,10 +408,7 @@
         u1.nickname as send_nickname,
         u1.icons as send_icons,
         u1.uid as send_uid,
-        /*接受方信息*/
-        u2.nickname as receive_nickname,
-        u2.icons as receive_icons,
-        u2.uid as receive_uid,
+
 
         c2.uid as userLike
 
@@ -398,7 +418,6 @@
         music_share_content msc
         LEFT JOIN buzz.user u1 ON u1.uid = msc.uid/*发表用户的信息*/
         LEFT JOIN music_share_content content ON msc.cid = content.rcid
-        LEFT JOIN buzz.user u2 ON content.uid = u2.uid
         LEFT JOIN like_music_share_comment c2 ON msc.cid = c2.oid AND c2.uid=
         <if test="onlineId != null">
             #{onlineId}
@@ -417,8 +436,4 @@
             limit ${example.offset}, ${example.limit}
         </if>
     </select>
-
-
-
-
 </mapper>

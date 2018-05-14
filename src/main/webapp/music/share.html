@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="foundation.css">
+
+    <link rel="stylesheet" href="styles.css">
+    <script src="../js/jquery.min.js"></script>
+    <script src="../layui/lay/modules/layer.js"></script>
+    <link rel="stylesheet" href="../layui/css/modules/layer/default/layer.css">
+    <script src="../js/aes.js"></script>
+    <style type="text/css">
+        small.tips {
+            position: absolute;
+            background: transparent;
+            color: #4527A0;
+            font-style: normal;
+            padding-left: 0;
+        }
+
+    </style>
+</head>
+<body>
+<header class="m-main-header"></header>
+<div class="row">
+    <div class="small-12 small-centered medium-8 columns">
+        <div class="panel m-panel shadow">
+            <div class="row collapse">
+                <div class="small-12 columns">
+                    <header class="form-header">
+                        <h2>分享音乐
+                            <small>站内音乐分享</small>
+                        </h2>
+                    </header>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-12 columns">
+                    <form>
+                        <div class="row">
+                            <div class="small-4 columns">
+                                <p class="notice">歌曲 </p>
+                            </div>
+                            <div class="small-8 columns">
+                                <div class="form-group-material">
+                                    <label class="material-label" for="song">歌曲名称</label>
+                                    <input class="material-field" id="song" required="required" type="text"/>
+                                    <small class="tips">请输入完整歌曲名称</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="small-4 columns">
+                                <p class="notice">歌手 </p>
+                            </div>
+                            <div class="small-8 columns">
+                                <div class="form-group-material">
+                                    <label class="material-label" for="singer">歌手姓名</label>
+                                    <input class="material-field" id="singer" required="required" type="text"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="small-4 columns">
+                                <p class="notice">分享内容 </p>
+                            </div>
+                            <div class="small-8 columns">
+                                <div class="form-group-material">
+                                    <label class="material-label" for="content">分享内容</label>
+                                    <textarea class="material-field" id="content" required="required" style="height: 3em;padding-top: 1.6em;"
+                                              type="text"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="small-12 small-push-4 columns">
+                                <button id="share">立即分享</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="margin-top: 32px">
+    ©Copyright 2018 乐热评<br>
+</div>
+<script>
+
+
+    layer.alert("取消分享请点击页面右上角关闭按钮关闭页面。");
+    $('#share').on('click', function () {
+        var data = {
+            'song': $('#song').val()
+            , 'singer': $('#singer').val()
+            , 'content': $('#content').val()
+        };
+        $.ajax({
+            url: '/music/share'
+            , data: {'data': aes.encrypt(JSON.stringify(data))}
+            , type: 'post'
+            , success: function (res) {
+                console.log(res);
+                if (res.status === 0) {
+                    layer.alert("分享成功。",function (idx) {
+                        //当你在iframe页面关闭自身时
+                        layer.close(idx);
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                    });
+                }else{
+                    layer.alert(res.msg);
+                }
+            }
+            , error: function (res) {
+                layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+            }
+        });
+
+        return false;
+    });
+
+    (function () {
+        var materialForm;
+        materialForm = function () {
+            return $('.material-field').focus(function () {
+                return $(this).closest('.form-group-material').addClass('focused has-value');
+            }).focusout(function () {
+                return $(this).closest('.form-group-material').removeClass('focused');
+            }).blur(function () {
+                if (!this.value) {
+                    $(this).closest('.form-group-material').removeClass('has-value');
+                }
+                return $(this).closest('.form-group-material').removeClass('focused');
+            });
+        };
+        $(function () {
+            return materialForm();
+        });
+    }.call(this));
+
+</script>
+</body>
+</html>

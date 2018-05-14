@@ -2,16 +2,17 @@ package com.amoxu.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
-public class Comments {
+public class MusicShareComment {
     private Integer cid;
 
     private Integer rcid;
 
     private Integer uid;
+
 
     private String content;
 
@@ -19,20 +20,24 @@ public class Comments {
 
     private Double feeling;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date ctime;
 
-    private Integer buzzId;
-
-    private User sendUser;
-    private User receiveUser;
+    private Integer baseCid;
 
     @JSONField(serialzeFeatures = SerializerFeature.WriteNullNumberAsZero)
     private Integer userLike;/*用户是否点赞 >0 表示点赞了*/
 
+
+    private List<MusicShareComment> comment;/*回复列表*/
+    private User sendUser;/*发送用户*/
+
+    private User receiveUser;/*接收用户*/
+
+
     @Override
     public String toString() {
-        return "Comments{" +
+        return "MusicShareComment{" +
                 "cid=" + cid +
                 ", rcid=" + rcid +
                 ", uid=" + uid +
@@ -40,31 +45,14 @@ public class Comments {
                 ", likes=" + likes +
                 ", feeling=" + feeling +
                 ", ctime=" + ctime +
-                ", buzzId=" + buzzId +
+                ", baseCid=" + baseCid +
+                ", userLike=" + userLike +
+                ", comment=" + comment +
                 ", sendUser=" + sendUser +
                 ", receiveUser=" + receiveUser +
-                ", userLike=" + userLike +
                 '}';
     }
 
-
-    public User getSendUser() {
-        return sendUser;
-    }
-
-    public Comments setSendUser(User sendUser) {
-        this.sendUser = sendUser;
-        return this;
-    }
-
-    public Integer getUserLike() {
-        return userLike;
-    }
-
-    public Comments setUserLike(Integer userLike) {
-        this.userLike = userLike;
-        return this;
-    }
 
 
     public Integer getCid() {
@@ -90,6 +78,7 @@ public class Comments {
     public void setUid(Integer uid) {
         this.uid = uid;
     }
+
 
     public String getContent() {
         return content;
@@ -123,20 +112,49 @@ public class Comments {
         this.ctime = ctime;
     }
 
-    public Integer getBuzzId() {
-        return buzzId;
+    public Integer getBaseCid() {
+        return baseCid;
     }
 
-    public void setBuzzId(Integer buzzId) {
-        this.buzzId = buzzId;
+    public void setBaseCid(Integer baseCid) {
+        this.baseCid = baseCid;
+    }
+    public Integer getUserLike() {
+        return userLike;
+    }
+
+    public MusicShareComment setUserLike(Integer userLike) {
+        this.userLike = userLike;
+        return this;
+    }
+
+    public List<MusicShareComment> getComment() {
+
+
+        return comment;
+    }
+
+    public MusicShareComment setComment(List<MusicShareComment> comment) {
+        this.comment = comment;
+        return this;
+    }
+
+    public User getSendUser() {
+        return sendUser;
+    }
+
+    public MusicShareComment setSendUser(User sendUser) {
+        this.sendUser = sendUser;
+        return this;
     }
 
     public User getReceiveUser() {
         return receiveUser;
     }
 
-    public Comments setReceiveUser(User receiveUser) {
+    public MusicShareComment setReceiveUser(User receiveUser) {
         this.receiveUser = receiveUser;
         return this;
     }
+
 }

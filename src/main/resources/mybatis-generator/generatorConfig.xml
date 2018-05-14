@@ -43,7 +43,7 @@
 
 
 
-        <table tableName="like_music_share_comment" domainObjectName="LikeMusicShareComment"/>
+        <table tableName="like_buzz" domainObjectName="LikeBuzz"/>
 
     </context>
 </generatorConfiguration>

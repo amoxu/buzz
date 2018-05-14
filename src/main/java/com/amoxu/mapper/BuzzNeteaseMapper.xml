@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.amoxu.mapper.BuzzNeteaseMapper">
+    <resultMap id="BaseResultMap" type="com.amoxu.entity.BuzzNetease">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="liked_num" property="likedNum" jdbcType="INTEGER"/>
+        <result column="song_id" property="songId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="beReplied" property="bereplied" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    buzz_netease.id, buzz_netease.ctime, buzz_netease.content, buzz_netease.liked_num,
+     buzz_netease.song_id, buzz_netease.user_id, buzz_netease.user_name, buzz_netease.beReplied
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.BuzzNeteaseExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from buzz_netease
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from buzz_netease
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from buzz_netease
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.amoxu.entity.BuzzNeteaseExample">
+        delete from buzz_netease
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.amoxu.entity.BuzzNetease">
+    insert into buzz_netease (id, ctime, content, 
+      liked_num, song_id, user_id, 
+      user_name, beReplied)
+    values (#{id,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR}, 
+      #{likedNum,jdbcType=INTEGER}, #{songId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{userName,jdbcType=VARCHAR}, #{bereplied,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.amoxu.entity.BuzzNetease">
+        insert into buzz_netease
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="ctime != null">
+                ctime,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="likedNum != null">
+                liked_num,
+            </if>
+            <if test="songId != null">
+                song_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="bereplied != null">
+                beReplied,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="ctime != null">
+                #{ctime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="likedNum != null">
+                #{likedNum,jdbcType=INTEGER},
+            </if>
+            <if test="songId != null">
+                #{songId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="bereplied != null">
+                #{bereplied,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.amoxu.entity.BuzzNeteaseExample" resultType="java.lang.Integer">
+        select count(*) from buzz_netease
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update buzz_netease
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.ctime != null">
+                ctime = #{record.ctime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.content != null">
+                content = #{record.content,jdbcType=VARCHAR},
+            </if>
+            <if test="record.likedNum != null">
+                liked_num = #{record.likedNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.songId != null">
+                song_id = #{record.songId,jdbcType=INTEGER},
+            </if>
+            <if test="record.userId != null">
+                user_id = #{record.userId,jdbcType=INTEGER},
+            </if>
+            <if test="record.userName != null">
+                user_name = #{record.userName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bereplied != null">
+                beReplied = #{record.bereplied,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update buzz_netease
+        set id = #{record.id,jdbcType=INTEGER},
+        ctime = #{record.ctime,jdbcType=TIMESTAMP},
+        content = #{record.content,jdbcType=VARCHAR},
+        liked_num = #{record.likedNum,jdbcType=INTEGER},
+        song_id = #{record.songId,jdbcType=INTEGER},
+        user_id = #{record.userId,jdbcType=INTEGER},
+        user_name = #{record.userName,jdbcType=VARCHAR},
+        beReplied = #{record.bereplied,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.amoxu.entity.BuzzNetease">
+        update buzz_netease
+        <set>
+            <if test="ctime != null">
+                ctime = #{ctime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="likedNum != null">
+                liked_num = #{likedNum,jdbcType=INTEGER},
+            </if>
+            <if test="songId != null">
+                song_id = #{songId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="bereplied != null">
+                beReplied = #{bereplied,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.amoxu.entity.BuzzNetease">
+    update buzz_netease
+    set ctime = #{ctime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=VARCHAR},
+      liked_num = #{likedNum,jdbcType=INTEGER},
+      song_id = #{songId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      beReplied = #{bereplied,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+    <resultMap id="listMap" type="com.amoxu.entity.BuzzNetease">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="liked_num" property="likedNum" jdbcType="INTEGER"/>
+        <result column="song_id" property="songId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="beReplied" property="bereplied" jdbcType="VARCHAR"/>
+
+        <result column="userLike" property="userLike"/>
+
+        <association property="music" column="song_id"
+                     select="com.amoxu.mapper.MusicMapper.selectByPrimaryKey"></association>
+        <collection property="comments" column="{onlineId=onlineId,baseId=id}"
+                    select="com.amoxu.mapper.CommentsMapper.selectMainChild" fetchType="eager"/>
+    </resultMap>
+
+
+    <select id="selectMain" resultMap="listMap" parameterType="map">
+        /* 查询首页 按时间排序*/
+        SELECT
+        <include refid="Base_Column_List"/>
+        , like_buzz.uid as userLike
+        ,
+        <if test="onlineId != null ">
+            #{onlineId}
+        </if>
+        <if test="onlineId == null ">
+            NULL
+        </if>
+        AS onlineId
+        FROM buzz_netease
+
+        LEFT JOIN like_buzz ON buzz_netease.id = like_buzz.buzz_id AND like_buzz.uid=
+
+        <if test="onlineId != null">
+            #{onlineId}
+        </if>
+        <if test="onlineId == null">
+            0
+        </if>
+
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+
+
+        <if test="example.orderByClause != null">
+            order by ${example.orderByClause}
+        </if>
+        <if test="example.limit!=0">
+            limit ${example.offset}, ${example.limit}
+        </if>
+    </select>
+
+    <select id="selectTopReply" resultMap="listMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        , like_buzz.uid as userLike
+        ,
+        <if test="onlineId != null ">
+            #{onlineId}
+        </if>
+        <if test="onlineId == null ">
+            NULL
+        </if>
+        AS onlineId
+        FROM buzz_netease
+
+        LEFT JOIN like_buzz ON buzz_netease.id = like_buzz.buzz_id AND like_buzz.uid=
+
+        <if test="onlineId != null">
+            #{onlineId}
+        </if>
+        <if test="onlineId == null">
+            0
+        </if>
+        WHERE
+        id IN (
+            SELECT
+            *
+            FROM
+            (
+                SELECT
+                buzz_id
+                FROM
+                comments
+                GROUP BY
+                buzz_id
+                ORDER BY
+                COUNT(buzz_id) DESC
+                LIMIT 5
+            ) AS subquery
+        )
+        <if test="example.orderByClause != null">
+            order by ${example.orderByClause}
+        </if>
+        <if test="example.limit!=0">
+            limit ${example.offset}, ${example.limit}
+        </if>
+    </select>
+</mapper>

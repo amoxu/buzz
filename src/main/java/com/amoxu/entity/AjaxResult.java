@@ -71,8 +71,12 @@ public class AjaxResult<T> {
 
     @Override
     public String toString() {
-        /*解决出现循环引用的情况*/
-        return JSON.toJSONString(this, SerializerFeature.DisableCircularReferenceDetect);
+
+        return JSON.toJSONString(
+                this,
+                SerializerFeature.DisableCircularReferenceDetect,/*解决出现循环引用的情况*/
+                SerializerFeature.WriteDateUseDateFormat /*解决评论表和热评表时间戳没有格式化*/
+        );
     }
 
 }

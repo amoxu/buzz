@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CommentsExample {
+public class MusicShareCommentExample {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -15,7 +15,7 @@ public class CommentsExample {
 
     private Integer offset;
 
-    public CommentsExample() {
+    public MusicShareCommentExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -305,6 +305,7 @@ public class CommentsExample {
             return (Criteria) this;
         }
 
+
         public Criteria andContentIsNull() {
             addCriterion("content is null");
             return (Criteria) this;
@@ -555,63 +556,63 @@ public class CommentsExample {
             return (Criteria) this;
         }
 
-        public Criteria andBuzzIdIsNull() {
-            addCriterion("buzz_id is null");
+        public Criteria andBaseCidIsNull() {
+            addCriterion("base_cid is null");
             return (Criteria) this;
         }
 
-        public Criteria andBuzzIdIsNotNull() {
-            addCriterion("buzz_id is not null");
+        public Criteria andBaseCidIsNotNull() {
+            addCriterion("base_cid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andBuzzIdEqualTo(Integer value) {
-            addCriterion("buzz_id =", value, "buzzId");
+        public Criteria andBaseCidEqualTo(Integer value) {
+            addCriterion("base_cid =", value, "baseCid");
             return (Criteria) this;
         }
 
-        public Criteria andBuzzIdNotEqualTo(Integer value) {
-            addCriterion("buzz_id <>", value, "buzzId");
+        public Criteria andBaseCidNotEqualTo(Integer value) {
+            addCriterion("base_cid <>", value, "baseCid");
             return (Criteria) this;
         }
 
-        public Criteria andBuzzIdGreaterThan(Integer value) {
-            addCriterion("buzz_id >", value, "buzzId");
+        public Criteria andBaseCidGreaterThan(Integer value) {
+            addCriterion("base_cid >", value, "baseCid");
             return (Criteria) this;
         }
 
-        public Criteria andBuzzIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("buzz_id >=", value, "buzzId");
+        public Criteria andBaseCidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("base_cid >=", value, "baseCid");
             return (Criteria) this;
         }
 
-        public Criteria andBuzzIdLessThan(Integer value) {
-            addCriterion("buzz_id <", value, "buzzId");
+        public Criteria andBaseCidLessThan(Integer value) {
+            addCriterion("base_cid <", value, "baseCid");
             return (Criteria) this;
         }
 
-        public Criteria andBuzzIdLessThanOrEqualTo(Integer value) {
-            addCriterion("buzz_id <=", value, "buzzId");
+        public Criteria andBaseCidLessThanOrEqualTo(Integer value) {
+            addCriterion("base_cid <=", value, "baseCid");
             return (Criteria) this;
         }
 
-        public Criteria andBuzzIdIn(List<Integer> values) {
-            addCriterion("buzz_id in", values, "buzzId");
+        public Criteria andBaseCidIn(List<Integer> values) {
+            addCriterion("base_cid in", values, "baseCid");
             return (Criteria) this;
         }
 
-        public Criteria andBuzzIdNotIn(List<Integer> values) {
-            addCriterion("buzz_id not in", values, "buzzId");
+        public Criteria andBaseCidNotIn(List<Integer> values) {
+            addCriterion("base_cid not in", values, "baseCid");
             return (Criteria) this;
         }
 
-        public Criteria andBuzzIdBetween(Integer value1, Integer value2) {
-            addCriterion("buzz_id between", value1, value2, "buzzId");
+        public Criteria andBaseCidBetween(Integer value1, Integer value2) {
+            addCriterion("base_cid between", value1, value2, "baseCid");
             return (Criteria) this;
         }
 
-        public Criteria andBuzzIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("buzz_id not between", value1, value2, "buzzId");
+        public Criteria andBaseCidNotBetween(Integer value1, Integer value2) {
+            addCriterion("base_cid not between", value1, value2, "baseCid");
             return (Criteria) this;
         }
     }
@@ -697,7 +698,7 @@ public class CommentsExample {
 
         protected Criterion(String condition, Object value, Object secondValue, String typeHandler) {
             super();
-            this.condition = condition;
+            this.condition = "music_share_content." + condition;
             this.value = value;
             this.secondValue = secondValue;
             this.typeHandler = typeHandler;
