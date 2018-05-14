@@ -2,8 +2,10 @@ package com.amoxu.mapper;
 
 import com.amoxu.entity.Music;
 import com.amoxu.entity.MusicExample;
-import java.util.List;
+import com.amoxu.entity.MusicInfo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface MusicMapper {
     int countByExample(MusicExample example);
@@ -27,4 +29,6 @@ public interface MusicMapper {
     int updateByPrimaryKeySelective(Music record);
 
     int updateByPrimaryKey(Music record);
+
+    MusicInfo selectMusicInfo(@Param("singer") String artist, @Param("song") String music);
 }

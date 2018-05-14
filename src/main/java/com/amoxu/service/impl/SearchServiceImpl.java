@@ -155,6 +155,7 @@ public class SearchServiceImpl implements SearchService {
                 shareExample.setLimit(pageResult.getLimit());
                 /*统计总数*/
                 pageResult.setCount(shareMapper.countByExample(shareExample));
+                shareExample.setOrderByClause("ctime desc,likes desc");
                 MusicShareExample.Criteria shareExampleCriteria = shareExample.createCriteria();
                 shareExampleCriteria.andMidIn(mids);
                 List<MusicShare> musicShares;

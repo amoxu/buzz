@@ -234,4 +234,15 @@
       album = #{album,jdbcType=VARCHAR}
     where mid = #{mid,jdbcType=INTEGER}
   </update>
+
+  <resultMap id="MusicInfoMap" type="com.amoxu.entity.MusicInfo">
+    <result column="sid" property="sid"/>
+    <result column="mid" property="mid"/>
+  </resultMap>
+  <select id="selectMusicInfo" resultMap="MusicInfoMap" parameterType="map">
+    select s.sid,music.mid from music
+    LEFT JOIN singer s ON music.sid = s.sid
+    WHERE music.name LIKE #{song} AND s.name LIKE #{singer}
+    limit 1
+  </select>
 </mapper>

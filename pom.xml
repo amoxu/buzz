@@ -173,11 +173,22 @@
         <!-- https://mvnrepository.com/artifact/com.janeluo/ikanalyzer
 
         Ik 分词器
-        -->
+
         <dependency>
             <groupId>com.janeluo</groupId>
             <artifactId>ikanalyzer</artifactId>
             <version>2012_u6</version>
+        </dependency> -->
+        <!--
+        ==========HanLP===========
+        是由一系列模型与算法组成的NLP工具包，
+        目标是普及自然语言处理在生产环境中的应用。
+        HanLP具备功能完善、性能高效、架构清晰、语料时新、可自定义的特点。
+        -->
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+            <version>portable-1.6.3</version>
         </dependency>
         <!--Java  执行python-->
         <dependency>

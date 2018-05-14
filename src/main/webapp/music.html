@@ -151,8 +151,9 @@
             } else {
                 var loadIdx = layer.load(1);
                 var rcid = oThis.attr("data-id");
-                if ( ! oThis.parents('.comment-show').length) {
-                    rcid = 0;/*如果是根列表回复，回复ID设置为0*/
+                if (!oThis.parents('.comment-show').length) {
+                    rcid = 0;
+                    /*如果是根列表回复，回复ID设置为0*/
                 }
                 var bcid = oThis.parents('.commentAll').siblings('.inline').find('.comment').attr("data-id");
                 if (!bcid) {
@@ -214,12 +215,12 @@
                     var cid = $(this).attr('data-id');
                     var links;
                     if ($(this).attr('class').find('like')) {
-                         links ='/like/share/' + cid
-                    }else
-                        links ='/like/shareComment/' + cid
+                        links = '/like/share/' + cid
+                    } else
+                        links = '/like/shareComment/' + cid
                     $.ajax({
 
-                        url:links
+                        url: links
                         , type: 'post'
                         , success: function (res) {
                             layer.msg(res.msg);
@@ -261,13 +262,6 @@
                 }
             });
         })();
-        <!--话题-->
-        (function () {
-            $('#content').on('click', '.topic', function () {
-                var cid = $(this).attr('data-id');
-                flowLoad('/music/' + cid);
-            });
-        })();
 
         function flowLoad(url) {
             /*对搜索 点击的内容进行流加载*/
@@ -296,9 +290,9 @@
                                         '<a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1">' + result.sendUser.nickname + '</a>' +
                                         '</div>' +
                                         '<div class="card_time">' + result.ctime + '</div>' +
-                                        '<i class="layui-icon layui-icon-headset" style="color: #1E9FFF;"></i>   <a>'+ result.music.singer.name +'</a> 的<a href="'+result.music.link+
+                                        '<i class="layui-icon layui-icon-headset" style="color: #1E9FFF;"></i>   <a>' + result.music.singer.name + '</a> 的<a  target="_blank" href="' + result.music.link +
                                         '" data-id="' + result.music.mid + '">《' + result.music.name +
-                                        '》</a> 来自 <a>'+result.music.source.name+'</a>' +
+                                        '》</a> 来自 <a>' + result.music.source.name + '</a>' +
                                         '<div class="card_text ws14">' + result.content + '</div>' +
                                         '<div class="layui-row">' +
                                         '<ul class="inline">' +
@@ -353,6 +347,13 @@
             });
         }
 
+        /*头部分类信息，点击分流*/
+        $('.btn-group').on('click', '.child-btn', function () {
+            var name = $(this).attr('data-name');
+            console.log(name);
+            type = name;
+            flowLoad('/music/' + type);
+        });
         $('.child-btn[data-name="new"]').click();
         $('.search-btn').on('click', function () {
             var word = $(this).html();
@@ -369,52 +370,16 @@
                 layer.close(loadIdx);
 
             } else if (word === '分享音乐') {
-                layer.confirm('发表之前请确认是否存在话题，否则会创建话题', {icon: 3, title: '提示'}, function (index) {
-                    //do something
-
-                    layer.close(index);
-
-                    layer.open({
-                        type: 1 //Page层类型
-                        , btn: ["确定", "取消"]
-                        , title: ''
-                        , skin: 'layui-layer-prompt'
-                        , content:
-                        "<label class=\"layui-form-label\">讨论话题</label>" +
-                        "<input type=\"text\" name=\"identity\" placeholder=\"\" autocomplete=\"off\" class=\"layui-input\" value='" + topic + "'>" +
-                        "<label class=\"layui-form-label\">发布内容</label>" +
-                        "<textarea placeholder=\"请输入内容\" class=\"layui-textarea\"></textarea>"
-                        , yes: function (index, layero) {
-                            topic = $(layero).find("input[type='text']").val();
-                            var comment = $(layero).find("textarea").val();
-                            if (!topic || !comment) {
-                                layer.msg("输入内容不能为空");
-                                return false;
-                            }
-                            $.ajax({
-                                url: '/music/publish'
-                                , type: 'post'
-                                , data: {'data': aes.encrypt(JSON.stringify({'topic': topic, 'comment': comment}))}
-
-                                , success: function (res) {
-                                    if (res.status === 0) {
-                                        layer.msg("发表成功");
-                                        layer.close(index);
-                                        flowLoad('/search/1001/' + topic);
-
-                                    } else {
-                                        layer.alert(res.msg);
-                                    }
-
-                                    return false;
-                                }
-                                , error: function (res) {
-                                    layer.alert("错误码：" + res.status + "<br>" + res.statusText);
-                                    return false;
-                                }
-                            });
-                        }
-                    });
+                var idx = layer.open({
+                    type: 2,
+                    title: '分享音乐',
+                    maxmin: true,
+                    shadeClose: true, //点击遮罩关闭层
+                    area: ['1100px', '600px'],
+                    content: 'music/share.html',
+                    end:function () {
+                        window.location.reload();
+                    }
                 });
             } else {
                 return false;

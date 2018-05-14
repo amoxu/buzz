@@ -25,26 +25,6 @@ package com.amoxu.util;
  *
  */
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.*;
-import org.apache.lucene.index.IndexWriterConfig.OpenMode;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.util.Version;
-import org.wltea.analyzer.lucene.IKAnalyzer;
-
-import java.io.IOException;
-
 /**
  * 使用IKAnalyzer进行Lucene索引和查询的演示
  * 2012-3-2
@@ -54,11 +34,11 @@ import java.io.IOException;
  */
 public class LuceneIndexAndSearchDemo {
 
-    /**
+   /* *//**
      * 模拟：
      * 创建一个单条记录的索引，并对其进行搜索
      * @param args
-     */
+     *//*
     public static void main(String[] args) {
         // Lucene Document的域名
         String fieldName = "text";
@@ -127,5 +107,5 @@ public class LuceneIndexAndSearchDemo {
                 }
             }
         }
-    }
+    }*/
 }

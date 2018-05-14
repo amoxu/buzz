@@ -24,17 +24,6 @@ package com.amoxu.util; /**
  *
  */
 
-import org.apache.log4j.Logger;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
-import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
-import org.wltea.analyzer.lucene.IKAnalyzer;
-
-import java.io.IOException;
-import java.io.StringReader;
-
 /**
  * 使用IKAnalyzer进行分词的演示
  * 2012-10-22
@@ -42,6 +31,7 @@ import java.io.StringReader;
  */
 public class IkSample {
 
+/*
     private static Logger logger = Logger.getLogger(IkSample.class);
 
     public static void main(String[] args) {
@@ -89,5 +79,6 @@ public class IkSample {
 
 
     }
+*/
 
 }
