@@ -46,6 +46,9 @@ public class ThumbsController {
             case "shareComment":
                 liked = thumbsService.likeShareComment(cid);
                 break;
+            case "buzz":
+                liked = thumbsService.likeBuzz(cid);
+                break;
             default:
                 ajaxResult.failed();
                 ajaxResult.setMsg(StaticEnum.OPT_ERROR);

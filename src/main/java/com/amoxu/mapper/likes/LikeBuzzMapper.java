@@ -1,10 +1,12 @@
 package com.amoxu.mapper.likes;
 
+import com.amoxu.entity.ProcCallResult;
 import com.amoxu.entity.likes.LikeBuzz;
 import com.amoxu.entity.likes.LikeBuzzExample;
 import com.amoxu.entity.likes.LikeBuzzKey;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface LikeBuzzMapper {
     int countByExample(LikeBuzzExample example);
@@ -28,4 +30,7 @@ public interface LikeBuzzMapper {
     int updateByPrimaryKeySelective(LikeBuzz record);
 
     int updateByPrimaryKey(LikeBuzz record);
+
+    ProcCallResult callLikeProc(ProcCallResult callResult);
+
 }

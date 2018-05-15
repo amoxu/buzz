@@ -200,10 +200,16 @@
                     layer.msg("点赞需要登录。");
                     return false;
                 } else {
+
                     var cid = $(this).attr('data-id');
+                    var links;
+                    if ($(this).attr('class').find('like')) {
+                        links = '/like/buzz/' + cid
+                    } else
+                        links = '/like/comment/' + cid
                     $.ajax({
 
-                        url: '/like/buzz/' + cid
+                        url: links
                         , type: 'post'
                         , success: function (res) {
                             layer.msg(res.msg);
@@ -271,19 +277,19 @@
                                 //假设你的列表返回在data集合中
                                 layui.each(res.data, function (index, result) {
                                     var tmp = '<li class="card clearfix">' +
-                                        '<div class="float_left">' +
-                                        '<img src=' + result.sendUser.icons + ' class="head"/>' +
-                                        '</div>' +
-                                        '<div class="card_detail">' +
+                                            '<div style="padding-left: 17px">'+
                                         '<div class="card_nick">' +
-                                        '<a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1">' + result.sendUser.nickname + '</a>' +
+                                        '<a href="http://music.163.com/#/user/home?id='+result.userId+'" target="_blank" class="ws16 W_fb S_txt1">' + result.userName + '</a>' +
                                         '</div>' +
                                         '<div class="card_time">' + result.ctime + '</div>' +
-                                        '<a href="javascript:;" class="topic" data-id="' + result.ttid + '">#' + result.topic + '#</a>' +
                                         '<div class="card_text ws14">' + result.content + '</div>' +
+                                        '<div class="float_right">——来自 <a target="_blank" href="http://music.163.com/#/artist?id='
+                                        +result.music.sid+'">'+result.music.singer.name+
+                                        '</a> 《<a target="_blank"  href="'+result.music.link+'">'+
+                                        result.music.name+'</a>》 <a>'+result.music.source.name+'</a></div>'+
                                         '<div class="layui-row">' +
                                         '<ul class="inline">' +
-                                        '<li class="like" data-id="' + result.cid + '">' +
+                                        '<li class="like" data-id="' + result.id + '">' +
                                         '<a href="javascript:;" >';
 
                                     if (result.userLike) {
@@ -291,17 +297,17 @@
                                     } else {
                                         tmp += '<i class="iconfont icon-dianzan"></i>';
                                     }
-                                    tmp += '<num>' + result.likes + '</num>' +
+                                    tmp += '<num>' + result.likedNum + '</num>' +
                                         '</a>' +
                                         '</li>' +
-                                        '<li class="comment" data-id="' + result.cid + '">' +
+                                        '<li class="comment" data-id="' + result.id + '">' +
                                         '<a href="javascript:;" ><i class="layui-icon">&#xe63a;</i>' +
                                         '</a>' +
                                         '</li>' +
-                                        '<li class="share" data-id="' + result.cid + '">' +
+                                        '<li class="share" data-id="' + result.id + '">' +
                                         '<a href="javascript:;" ><i class="layui-icon">&#xe641;</i></a>' +
                                         '</li>' +
-                                        '<li class="report" data-id="' + result.cid + '">' +
+                                        '<li class="report" data-id="' + result.id + '">' +
                                         '<a href="javascript:;" ><i class="layui-icon">&#xe6c5;</i></a>' +
                                         '</li>' +
                                         '</ul>' +
@@ -318,7 +324,7 @@
                                         '</div>' +
                                         '</div>' +
                                         '<div class="comment-pl-block clearfix">' +
-                                        '<a href="../buzz/comment.html?id=' + result.cid + '" class="float_right">查看更多</a>' +
+                                        '<a href="../buzz/comment.html?id=' + result.id + '" class="float_right">查看更多</a>' +
                                         '</div>' +
                                         '</div>' +
                                         '</div>' +

@@ -113,7 +113,7 @@
         </if>
     </delete>
     <insert id="insert" parameterType="com.amoxu.entity.Comments">
-    insert into comments (cid, rcid, uid, 
+    insert into comments (cid, rcid, uid,
       content, likes, feeling, 
       ctime, buzz_id)
     values (#{cid,jdbcType=INTEGER}, #{rcid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, 

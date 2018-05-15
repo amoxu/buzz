@@ -186,4 +186,13 @@
     where uid = #{uid,jdbcType=INTEGER}
       and comments_id = #{commentsId,jdbcType=INTEGER}
   </update>
+
+
+  <select id="callLikeProc" statementType="CALLABLE" resultType="com.amoxu.entity.ProcCallResult"
+          parameterType="com.amoxu.entity.ProcCallResult">
+    CALL opt_like_comment(
+    #{cid,mode=IN},
+    #{uid,mode=INOUT,jdbcType=INTEGER}
+    )
+  </select>
 </mapper>

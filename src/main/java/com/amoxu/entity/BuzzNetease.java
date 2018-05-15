@@ -26,7 +26,7 @@ public class BuzzNetease {
 
     private String bereplied;
 
-    private List<Comments> comments;
+    private List<Comments> comment;
 
     private Music music;
 
@@ -36,12 +36,12 @@ public class BuzzNetease {
     private Integer userLike;/*用户是否点赞 >0 表示点赞了*/
 
 
-    public List<Comments> getComments() {
-        return comments;
+    public List<Comments> getComment() {
+        return comment;
     }
 
-    public BuzzNetease setComments(List<Comments> comments) {
-        this.comments = comments;
+    public BuzzNetease setComment(List<Comments> comment) {
+        this.comment = comment;
         return this;
     }
 
@@ -148,7 +148,7 @@ public class BuzzNetease {
                 ", userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", bereplied='" + bereplied + '\'' +
-                ", comments=" + comments +
+                ", comment=" + comment +
                 ", music=" + music +
                 ", singer=" + singer +
                 ", userLike=" + userLike +

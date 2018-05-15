@@ -282,7 +282,7 @@
 
         <association property="music" column="song_id"
                      select="com.amoxu.mapper.MusicMapper.selectByPrimaryKey"></association>
-        <collection property="comments" column="{onlineId=onlineId,baseId=id}"
+        <collection property="comment" column="{onlineId=onlineId,baseId=id}"
                     select="com.amoxu.mapper.CommentsMapper.selectMainChild" fetchType="eager"/>
     </resultMap>
 
