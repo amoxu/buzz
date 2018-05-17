@@ -74,7 +74,9 @@
                                 <thead>
                                 <tr>
                                     <th lay-data="{field:'cid', width: 120}">ID</th>
-                                    <th lay-data="{field:'user',templet: '<div>{{d.user.nickname}}</div>', width: 120}">用户名</th>
+                                    <th lay-data="{field:'user',templet: '<div>{{d.user.nickname}}</div>', width: 120}">
+                                        用户名
+                                    </th>
                                     <th lay-data="{field:'ctime', width: 120}">时间</th>
                                     <th lay-data="{field:'content'}">内容</th>
                                 </tr>
@@ -88,8 +90,12 @@
                                 <tr>
                                     <th lay-data="{field:'sid', width: 120}">ID</th>
                                     <th lay-data="{field:'name', width: 120}">歌名</th>
-                                    <th lay-data="{field:'singer',templet: '<div>{{d.singer.name}}</div>', width: 120}">歌手</th>
-                                    <th lay-data="{field:'link', width: 120,templet: '<div><a target=\'_blank\' href =\'{{d.link}}\'><i class=\'layui-icon\'>&#xe652;</i></a></div>'}">收听</th>
+                                    <th lay-data="{field:'singer',templet: '<div>{{d.singer.name}}</div>', width: 120}">
+                                        歌手
+                                    </th>
+                                    <th lay-data="{field:'link', width: 120,templet: '<div><a target=\'_blank\' href =\'{{d.link}}\'><i class=\'layui-icon\'>&#xe652;</i></a></div>'}">
+                                        收听
+                                    </th>
                                     <th lay-data="{field:'source',templet: '<div>{{d.source.name}}</div>'}">来源</th>
                                 </tr>
                                 </thead>
@@ -140,24 +146,7 @@
             <div class="layui-box">
                 <div class="ws18">附近</div>
                 <hr>
-                <ul>
-                    <div class="layui-show-lg-inline-block">
-                        <div class="inline">
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                        </div>
-                    </div>
-                    <div class="layui-show-lg-inline-block">
-                        <div class="inline">
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                        </div>
-                    </div>
-                </ul>
+                <ul class="nearby"></ul>
                 <hr>
             </div>
         </div>
@@ -198,6 +187,7 @@
                 search(key, type);
             }
         });
+
         function search(key, type) {
             var table = layui.table;
             var param = {
@@ -210,7 +200,7 @@
             };
             switch (type) {
                 case '222':/*评论*/
-                    table.reload('comment',param);
+                    table.reload('comment', param);
                     break;
                 case '100':/*歌曲*/
                     table.reload('songs', param);
@@ -228,5 +218,6 @@
         }
     });
 </script>
+<script type="text/javascript" src="js/nearby.js"></script>
 </body>
 </html>

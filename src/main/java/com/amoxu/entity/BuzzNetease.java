@@ -8,9 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BuzzNetease {
-
     private Integer id;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date ctime;
 
@@ -26,15 +24,14 @@ public class BuzzNetease {
 
     private String bereplied;
 
+    private String keyword;
+
+    /*================================================*/
     private List<Comments> comment;
 
     private Music music;
 
     private Singer singer;
-
-    @JSONField(serialzeFeatures = SerializerFeature.WriteNullNumberAsZero)
-    private Integer userLike;/*用户是否点赞 >0 表示点赞了*/
-
 
     public List<Comments> getComment() {
         return comment;
@@ -62,6 +59,38 @@ public class BuzzNetease {
         this.singer = singer;
         return this;
     }
+
+    public Integer getUserLike() {
+        return userLike;
+    }
+
+    public BuzzNetease setUserLike(Integer userLike) {
+        this.userLike = userLike;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "BuzzNetease{" +
+                "id=" + id +
+                ", ctime=" + ctime +
+                ", content='" + content + '\'' +
+                ", likedNum=" + likedNum +
+                ", songId=" + songId +
+                ", userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", bereplied='" + bereplied + '\'' +
+                ", keyword='" + keyword + '\'' +
+                ", comment=" + comment +
+                ", music=" + music +
+                ", singer=" + singer +
+                ", userLike=" + userLike +
+                '}';
+    }
+
+    @JSONField(serialzeFeatures = SerializerFeature.WriteNullNumberAsZero)
+    private Integer userLike;/*用户是否点赞 >0 表示点赞了*/
+    /*================================================*/
 
 
     public Integer getId() {
@@ -128,30 +157,11 @@ public class BuzzNetease {
         this.bereplied = bereplied == null ? null : bereplied.trim();
     }
 
-    public Integer getUserLike() {
-        return userLike;
+    public String getKeyword() {
+        return keyword;
     }
 
-    public BuzzNetease setUserLike(Integer userLike) {
-        this.userLike = userLike;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "BuzzNetease{" +
-                "id=" + id +
-                ", ctime=" + ctime +
-                ", content='" + content + '\'' +
-                ", likedNum=" + likedNum +
-                ", songId=" + songId +
-                ", userId=" + userId +
-                ", userName='" + userName + '\'' +
-                ", bereplied='" + bereplied + '\'' +
-                ", comment=" + comment +
-                ", music=" + music +
-                ", singer=" + singer +
-                ", userLike=" + userLike +
-                '}';
+    public void setKeyword(String keyword) {
+        this.keyword = keyword == null ? null : keyword.trim();
     }
 }

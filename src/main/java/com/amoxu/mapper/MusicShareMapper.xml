@@ -170,7 +170,7 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.amoxu.entity.MusicShareExample" resultType="java.lang.Integer" >
-    select count(*) from music_share
+    select count(oid) from music_share
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>

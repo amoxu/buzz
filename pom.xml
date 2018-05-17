@@ -214,6 +214,7 @@
             <version>1.10.3</version>
         </dependency>
 
+
     </dependencies>
     <build>
         <finalName>buzz</finalName>
@@ -254,6 +255,10 @@
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <!-- 指定编码格式，否则在DOS下运行mvn命令时当发生文件资源copy时将使用系统默认使用GBK编码 -->
+                    <!--<nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>pdf</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>swf</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>-->
                 </configuration>
             </plugin>
 

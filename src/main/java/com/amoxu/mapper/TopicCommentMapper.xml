@@ -197,7 +197,7 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.amoxu.entity.TopicCommentExample" resultType="java.lang.Integer" >
-    select count(*) from topic_comment
+    select count(cid) from topic_comment
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>

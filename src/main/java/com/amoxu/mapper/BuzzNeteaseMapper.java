@@ -28,9 +28,14 @@ public interface BuzzNeteaseMapper {
     int updateByPrimaryKeySelective(BuzzNetease record);
 
     int updateByPrimaryKey(BuzzNetease record);
-
+    
     List<BuzzNetease> selectMain(@Param("onlineId") Integer uid, @Param("example") BuzzNeteaseExample buzzExample);
 
     List<BuzzNetease> selectTopReply(@Param("onlineId") Integer uid, @Param("example") BuzzNeteaseExample buzzExample);
 
+
+    List<BuzzNetease> select4KeyWord(BuzzNeteaseExample example);
+
+
+    int update(@Param("id") Integer id, @Param("key") String keyword);
 }

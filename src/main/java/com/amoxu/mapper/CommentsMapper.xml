@@ -72,7 +72,8 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-    cid, rcid, uid, content, likes, feeling, ctime, buzz_id
+    comments.cid, comments.rcid, comments.uid, comments.content, comments.likes,
+     comments.feeling, comments.ctime, comments.buzz_id
   </sql>
     <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.CommentsExample">
         select
@@ -176,7 +177,7 @@
         </trim>
     </insert>
     <select id="countByExample" parameterType="com.amoxu.entity.CommentsExample" resultType="java.lang.Integer">
-        select count(*) from comments
+        select count(cid) from comments
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -322,6 +323,12 @@
             </foreach>
         </where>
     </sql>
+
+    <sql id="Msc_Column_List">
+        msc.cid, msc.rcid, msc.uid, msc.content, msc.likes,
+        msc.feeling, msc.ctime, msc.buzz_id
+    </sql>
+
     <!--
         param : rcid    回复id 不为0时 查rcid的uid
                 baseid  rcid为0时查baseid的 uid
@@ -353,7 +360,8 @@
         /*查询首页子列表 热评*/
         SELECT
         /*评论信息*/
-        msc.*,
+        <include refid="Msc_Column_List"/>
+        ,
         /*发送方信息*/
         u1.nickname as send_nickname,
         u1.icons as send_icons,
@@ -380,26 +388,22 @@
 
         SELECT
 
-        msc.*,
+        <include refid="Msc_Column_List"/>,
         /*发送方信息*/
         u1.nickname as send_nickname,
         u1.icons as send_icons,
         u1.uid as send_uid,
         /*接受方信息*/
-        u2.nickname as receive_nickname,
-        u2.icons as receive_icons,
-        u2.uid as receive_uid,
 
         c2.uid as userLike
 
 
         FROM
 
-        music_share_content msc
+        buzz.comments msc
         LEFT JOIN buzz.user u1 ON u1.uid = msc.uid/*发表用户的信息*/
-        LEFT JOIN music_share_content content ON msc.cid = content.rcid
-        LEFT JOIN buzz.user u2 ON content.uid = u2.uid
-        LEFT JOIN like_music_share_comment c2 ON msc.cid = c2.oid AND c2.uid=
+
+        LEFT JOIN like_comments c2 ON msc.cid = c2.comments_id AND c2.uid=
         <if test="onlineId != null">
             #{onlineId}
         </if>
@@ -407,7 +411,7 @@
             0
         </if>
 
-        WHERE msc.base_cid = #{baseId}
+        WHERE msc.buzz_id = #{baseId}
         <include refid="My_By_Example_Where_Clause"/>
 
         <if test="example.orderByClause != null">
@@ -417,8 +421,4 @@
             limit ${example.offset}, ${example.limit}
         </if>
     </select>
-
-
-
-
 </mapper>

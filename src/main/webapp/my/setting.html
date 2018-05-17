@@ -376,7 +376,7 @@
                 , data: data.field
                 , success: function (res) {
                     if (res.status === 0) {
-                        $.cookie("user", { 'permission': data.field});
+                        $.cookie("user", {'permission': data.field});
                     }
                     layer.msg(res.msg);
                     setting.reload();

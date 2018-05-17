@@ -174,7 +174,7 @@
         if ($.isEmptyObject(userInfo)) {
             /*0表示自身ID*/
             $.get("/user/info/0", function (res) {
-                $.cookie("user", { 'user': res});
+                $.cookie("user", {'user': res});
                 setting.show(res);
             });
         } else {

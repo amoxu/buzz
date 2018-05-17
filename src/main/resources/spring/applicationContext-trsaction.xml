@@ -15,6 +15,8 @@
     <!--事务控制器
         对mybatis操作数据库事务控制，spring使用jdbc的事务控制类
     -->
+
+
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <!--配置数据源
         dataSource在applicationContext-cn.edu360.dao.xml中配置了

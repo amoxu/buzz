@@ -3,12 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>乐热评-因为热爱所以快乐</title>
+    <title>热评-乐热评</title>
     <link rel="stylesheet" href="layui/css/layui.css">
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" type="text/css" href="./alicon/iconfont.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/comment.css">
+    <script src="js/aes.js"></script>
 
 </head>
 <body class="mbg">
@@ -43,116 +44,24 @@
                 <i class="icon iconfont icon-pinglun1" style="color:salmon"></i>
                 热评
             </h1>
-            <p class="child-desc">最热评最热评最热评最热评最热评最热评最热评</p>
+            <p class="child-desc">一首歌是一种心情，一段热评便是对一首歌的共鸣。</p>
         </div>
+        <hr>
         <div class="layui-row btn-group">
-            <button class="child-btn button_border" data-button="red">发现</button><!--随机x条评论-->
-            <button class="child-btn button_border" data-button="green">热评</button><!--回复最多-->
-            <button class="child-btn button_border" data-button="blue">推荐</button><!--根据爱好推荐-->
-            <button class="child-btn button_border" data-button="purple">点赞</button><!--点赞最多-->
+            <button class="child-btn button_border" data-button="red" data-name="discover">发现</button><!--随机x条评论-->
+            <button class="child-btn button_border" data-button="green" data-name="hot">热评</button><!--回复最多-->
+            <button class="child-btn button_border" data-button="blue" data-name="recommend">推荐</button><!--根据爱好推荐-->
+            <button class="child-btn button_border" data-button="purple" data-name="thumb">点赞</button><!--点赞最多-->
         </div>
+        <hr>
     </div>
-    <hr>
 
     <div class="layui-row">
         <div class="layui-col-md9">
-            <div class="card">
-                
-                
-                    <div class="card_nick">
-                        <a href="javascript:;" target="_blank" class="ws16 W_fb S_txt1">桂花乌龙冰</a>
-                    </div>
-                    <div class="card_time">3月29日 09:38</div>
-                    <div class="card_text ws14">跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。跟Alan Walker的Fade有异曲同工之妙。</div>
-                    <div class="float_right">——来自 <a>Ahrix</a> 《<a href="javascript:;">Nova</a>》 <a>网易云音乐</a></div>
-                    <div class="layui-row">
-                        <ul class="inline">
-                            <li class="like">
-                                <a href="javascript:;"><i class="layui-icon">&#xe6c6;</i>
-                                    <num>999+</num>
-                                </a>
-                            </li>
-                            <li class="comment">
-                                <a href="javascript:;"><i class="layui-icon">&#xe63a;</i>
-                                    <num>999+</num>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:;"><i class="layui-icon">&#xe641;</i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:;"><i class="layui-icon">&#xe6c5;</i></a>
-                            </li>
-                        </ul>
-                        <div class="commentAll"></div>
-                    </div>
+            <div id="content" class="comment">
+                &nbsp;
 
             </div>
-            <div class="card">
-                
-                
-                    <div class="card_nick">
-                        <a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1">桂花乌龙冰</a>
-                    </div>
-                    <div class="card_time">3月29日 09:38</div>
-                    <div class="card_text ws14">跟Alan Walker的Fade有异曲同工之妙。</div>
-                    <div class="float_right">——来自 <a>Ahrix</a> 《<a href="javascript:;">Nova</a>》 <a>网易云音乐</a></div>
-                    <div class="layui-row">
-                        <ul class="inline">
-                            <li class="like">
-                                <a href="javascript:;"><i class="layui-icon">&#xe6c6;</i>
-                                    <num>999+</num>
-                                </a>
-                            </li>
-                            <li class="comment">
-                                <a href="javascript:;"><i class="layui-icon">&#xe63a;</i>
-                                    <num>999+</num>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:;"><i class="layui-icon">&#xe641;</i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:;"><i class="layui-icon">&#xe6c5;</i></a>
-                            </li>
-                        </ul>
-                        <div class="commentAll"></div>
-                    </div>
-
-            </div>
-            <div class="card">
-                
-                
-                    <div class="card_nick">
-                        <a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1">桂花乌龙冰</a>
-                    </div>
-                    <div class="card_time">3月29日 09:38</div>
-                    <div class="card_text ws14">跟Alan Walker的Fade有异曲同工之妙。</div>
-                    <div class="float_right">——来自 <a>Ahrix</a> 《<a href="javascript:;">Nova</a>》 <a>网易云音乐</a></div>
-                    <div class="layui-row">
-                        <ul class="inline">
-                            <li class="like">
-                                <a href="javascript:;"><i class="layui-icon">&#xe6c6;</i>
-                                    <num>999+</num>
-                                </a>
-                            </li>
-                            <li class="comment">
-                                <a href="javascript:;"><i class="layui-icon">&#xe63a;</i>
-                                    <num>999+</num>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:;"><i class="layui-icon">&#xe641;</i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:;"><i class="layui-icon">&#xe6c5;</i></a>
-                            </li>
-                        </ul>
-                        <div class="commentAll"></div>
-                    </div>
-
-            </div>
-
         </div>
 
         <div class="layui-col-md3">
@@ -171,23 +80,9 @@
             <div class="layui-row">
                 <div class="ws18">附近</div>
                 <hr>
-                <ul>
-                    <div class="layui-show-lg-inline-block">
-                        <div class="inline">
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                        </div>
-                    </div>
-                    <div class="layui-show-lg-inline-block">
-                        <div class="inline">
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                        </div>
-                    </div>
+                <ul class="nearby">
+
+
                 </ul>
                 <hr>
             </div>
@@ -195,38 +90,343 @@
 
 
     </div>
-    <div class="footer">
-        &copy;Copyright 2018 乐热评<br>
-        感谢：<a>Layui</a>,<a>Bootstrap</a>,<a>网易云</a>,<a>QQ音乐</a>,<a>酷我音乐</a>...<br>
-        联系我们：<a href="mailto:amoxuk@aliyun.com">amoxuk#aliyun.com(#换成@)</a>
-    </div>
-
-
 </div>
+<div class="footer">
+    &copy;Copyright 2018 乐热评<br>
+    感谢：<a>Layui</a>,<a>Bootstrap</a>,<a>网易云</a>,<a>QQ音乐</a>,<a>酷我音乐</a>...<br>
+    联系我们：<a href="mailto:amoxuk@aliyun.com">amoxuk#aliyun.com(#换成@)</a>
+</div>
+
+
+<script src="layui/layui.js"></script>
 
 
 <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
 <script src="js/jquery.session.js"></script>
 <script type="text/javascript" src="js/jquery.flexText.js"></script>
-<script src="js/common.js"></script>
-<script src="layui/layui.js"></script>
+<script src="js/reply.js"></script>
 <script src="js/top.js"></script>
 
 <script>
     //注意：导航 依赖 element 模块，否则无法进行功能性操作
-    layui.use('element', function () {
+    layui.use(['element', 'layer'], function () {
         var element = layui.element;
-    });
-    layui.use('carousel', function () {
-        var carousel = layui.carousel;
-        //建造实例
-        carousel.render({
-            elem: '#carousel'
-            , width: '100%' //设置容器宽度
-            , height: 200 //设置容器宽度
-            , arrow: 'hover' //始终显示箭头
+        var layer = layui.layer;
+
+        var type = "new";
+
+        $('#content.comment').on('click', '.hf-pl', function () {
+            var oThis = $(this);
+            //获取输入内容
+            console.log("this is in self page");
+            var content = oThis.siblings('.flex-text-wrap').find('.comment-input').val();
+            console.log(content);
+            if (content.replace(/^ +| +$/g, '') === '' || content.trim().length < 1) {
+                /*输入内容为空*/
+                layer.msg("输入内容为空。");
+                return false;
+            } else {
+                var loadIdx = layer.load(1);
+                var rcid = oThis.attr("data-id");
+                if (!oThis.parents('.comment-show').length) {
+                    rcid = 0;
+                    /*如果是根列表回复，回复ID设置为0*/
+                }
+                var bcid = oThis.parents('.commentAll').siblings('.inline').find('.comment').attr("data-id");
+                if (!bcid) {
+                    bcid = rcid;
+                }
+                $.ajax({
+                    url: '/buzz/' + bcid + "/" + rcid
+                    , type: 'post'
+                    , data: {"data": aes.encrypt(content)}
+                    , success: function (res) {
+                        layer.close(loadIdx);
+                        if (res.status === 0) {
+                            layer.msg("发表成功");
+                            var oHtml = buildReply(res.data);
+                            addReply(oHtml, oThis);
+                            return false;
+                        } else {
+                            layer.alert(res.msg);
+                        }
+                        return false;
+                    },
+                    error: function (res) {
+                        layer.close(loadIdx);
+                        layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+                        return false;
+                    }
+                });
+            }
         });
+        <!--分享-->
+        (function () {
+            $('#content.comment').on('click', '.share', function () {
+                var dom = $(this);
+                var did = dom.attr('data-id');
+                var text = "给你分享一个来自乐热评的消息：" +
+                    dom.parents('.card_detail').find('.card_text').text() +
+                    "\n点击查看原文：http://localhost/buzz/comment.html?id=" + did;
+                layer.prompt({
+                    formType: 2,
+                    value: text,
+                    title: '复制内容分享',
+                }, function (value, index, elem) {
+                    layer.close(index);
+                });
+            });
+        })();
+        <!--点赞-->
+        (function () {
+            $('#content').on('click', '.like,a.date-dz-z', function () {
+                var thumbNum = $(this).find('num').html();
+                console.log("当前点赞数:" + thumbNum);
+                var dom = this;
+                if ($.cookie('user') == null) {
+                    layer.msg("点赞需要登录。");
+                    return false;
+                } else {
+
+                    var cid = $(this).attr('data-id');
+                    var links;
+                    if ($(this).attr('class').find('like')) {
+                        links = '/like/buzz/' + cid
+                    } else
+                        links = '/like/comment/' + cid
+                    $.ajax({
+
+                        url: links
+                        , type: 'post'
+                        , success: function (res) {
+                            layer.msg(res.msg);
+                            if (res.status === 0) {
+                                /*操作成功*/
+                                if (res.count === 1) {
+                                    /*点赞*/
+                                    thumbNum++;
+                                    if ($(dom).find('.iconfont').length) {
+                                        $(dom).find('.iconfont').addClass('icon-dianzan1').removeClass('icon-dianzan');
+                                    } else {
+                                        $(dom).addClass('date-dz-z-click');
+                                        $(dom).find('.date-dz-z-click-red').addClass('red');
+                                    }
+                                    $(dom).find('num').html(thumbNum);
+
+                                } else {
+                                    /*取消点赞*/
+                                    thumbNum--;
+                                    if ($(dom).find('.iconfont').length) {
+                                        /*主页面*/
+                                        $(dom).find('.iconfont').addClass('icon-dianzan').removeClass('icon-dianzan1');
+                                    } else {
+                                        $(dom).removeClass('date-dz-z-click red');
+                                        $(dom).find('.date-dz-z-click-red').removeClass('red');
+                                    }
+                                    $(dom).find('num').html(thumbNum);
+
+                                }
+                            } else {
+                                layer.msg(res.msg);
+                            }
+                        }
+                        , error: function (res) {
+                            layer.msg("错误码：" + res.status + "<br>" + res.statusText);
+                        }
+                    });
+                    return false;
+                }
+            });
+        })();
+        <!--话题-->
+        (function () {
+            $('#content').on('click', '.topic', function () {
+                var cid = $(this).attr('data-id');
+                flowLoad('/buzz/' + cid);
+            });
+        })();
+
+        function flowLoad(url) {
+            /*对搜索 点击的内容进行流加载*/
+            $('#content').html("");
+            layui.use('flow', function () {
+                var $ = layui.jquery; //不用额外加载jQuery，flow模块本身是有依赖jQuery的，直接用即可。
+                var flow = layui.flow;
+                flow.load({
+                    elem: '#content' //指定列表容器
+                    , done: function (page, next) { //到达临界点（默认滚动触发），触发下一页
+                        setTimeout(function () {
+                            var lis = [];
+                            $.get(url + '?limit=10&offset=' + (page - 1) * 10, function (res) {
+                                if (res.status === 1) {
+                                    layer.alert(res.msg);
+                                    return false;
+                                }
+                                //假设你的列表返回在data集合中
+                                layui.each(res.data, function (index, result) {
+                                    var tmp = '<li class="card clearfix">' +
+                                        '<div class="card_detail" style="margin-left: 17px">' +
+                                        '<div class="card_nick">' +
+                                        '<a href="http://music.163.com/#/user/home?id=' + result.userId + '" target="_blank" class="ws16 W_fb S_txt1">' + result.userName + '</a>' +
+                                        '</div>' +
+                                        '<div class="card_time">' + result.ctime + '</div>' +
+                                        '<div class="card_text ws14">' + result.content + '</div>';
+                                    if (result.bereplied) {
+                                        tmp += '<div class="card_text ws14"> <strong>回复消息</strong>：' + result.bereplied + '</div>';
+
+                                    }
+                                    tmp += '<div class="float_right">——来自 <a target="_blank" href="http://music.163.com/#/artist?id='
+                                        + result.music.sid + '">' + result.music.singer.name +
+                                        '</a> 《<a target="_blank"  href="' + result.music.link + '">' +
+                                        result.music.name + '</a>》 <a>' + result.music.source.name + '</a></div>' +
+                                        '<div class="layui-row">' +
+                                        '<ul class="inline">' +
+                                        '<li class="like" data-id="' + result.id + '">' +
+                                        '<a href="javascript:;" >';
+
+                                    if (result.userLike) {
+                                        tmp += '<i class="iconfont icon-dianzan1"></i>';
+                                    } else {
+                                        tmp += '<i class="iconfont icon-dianzan"></i>';
+                                    }
+                                    tmp += '<num>' + result.likedNum + '</num>' +
+                                        '</a>' +
+                                        '</li>' +
+                                        '<li class="comment" data-id="' + result.id + '">' +
+                                        '<a href="javascript:;" ><i class="layui-icon">&#xe63a;</i>' +
+                                        '</a>' +
+                                        '</li>' +
+                                        '<li class="share" data-id="' + result.id + '">' +
+                                        '<a href="javascript:;" ><i class="layui-icon">&#xe641;</i></a>' +
+                                        '</li>' +
+                                        '<li class="report" data-id="' + result.id + '">' +
+                                        '<a href="javascript:;" ><i class="layui-icon">&#xe6c5;</i></a>' +
+                                        '</li>' +
+                                        '</ul>' +
+                                        '<div class="commentAll">' +
+                                        '<div class="reviewArea clearfix"></div>' +
+                                        '<div class="comment-show">';
+                                    if (result.comment.length > 0) {
+                                        var child = buildReply(result.comment);
+                                        tmp += '<ul class="hf-list-con" style="display: block;">' + child + '</ul>';
+                                    } else {
+                                        tmp += '<ul class="hf-list-con"></ul>';
+                                    }
+                                    tmp +=
+                                        '</div>' +
+                                        '</div>' +
+                                        '<div class="comment-pl-block clearfix">' +
+                                        '<a href="../buzz/comment.html?id=' + result.id + '" class="float_right">查看更多</a>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</li>';
+                                    lis.push(tmp);
+
+                                });
+                                next(lis.join(''), page < res.count / 10);
+                            });
+                        }, 500);
+                    }
+                });
+            });
+        }
+
+        $('.btn-group').on('click', '.child-btn', function () {
+            var name = $(this).attr('data-name');
+            console.log(name);
+            type = name;
+            flowLoad('/buzz/' + type);
+        });
+        $('.child-btn[data-name="discover"]').click();
+        $('.search-btn').on('click', function () {
+            var word = $(this).html();
+
+            var topic = $('#searchInput').val();
+            if (topic.length < 1) {
+                layer.msg("请输入内容");
+                return false;
+            }
+            if (word === '搜索') {
+                var loadIdx = layer.load(1);
+                flowLoad('/search/1001/' + topic);
+                layer.close(loadIdx);
+            } else if (word === '创建话题') {
+                layer.confirm('确定创建话题：' + topic, function (index) {
+                    $.ajax({
+                        url: '/buzz'
+                        , data: {'topic': topic}
+                        , type: 'post'
+                        , success: function (res) {
+                            if (res.status === 0) {
+                                layer.msg("创建成功");
+                            } else {
+                                layer.alert(res.msg);
+                            }
+                            return false;
+                        }
+                        , error: function (res) {
+                            layer.close(loadIdx);
+                            layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+                            return false;
+                        }
+                    });
+                });
+            } else if (word === '讨论') {
+                layer.confirm('发表之前请确认是否存在话题，否则会创建话题', {icon: 3, title: '提示'}, function (index) {
+                    //do something
+
+                    layer.close(index);
+
+                    layer.open({
+                        type: 1 //Page层类型
+                        , btn: ["确定", "取消"]
+                        , title: ''
+                        , skin: 'layui-layer-prompt'
+                        , content:
+                        "<label class=\"layui-form-label\">讨论话题</label>" +
+                        "<input type=\"text\" name=\"identity\" placeholder=\"\" autocomplete=\"off\" class=\"layui-input\" value='" + topic + "'>" +
+                        "<label class=\"layui-form-label\">发布内容</label>" +
+                        "<textarea placeholder=\"请输入内容\" class=\"layui-textarea\"></textarea>"
+                        , yes: function (index, layero) {
+                            topic = $(layero).find("input[type='text']").val();
+                            var comment = $(layero).find("textarea").val();
+                            if (!topic || !comment) {
+                                layer.msg("输入内容不能为空");
+                                return false;
+                            }
+                            $.ajax({
+                                url: '/buzz/publish'
+                                , type: 'post'
+                                , data: {'data': aes.encrypt(JSON.stringify({'topic': topic, 'comment': comment}))}
+
+                                , success: function (res) {
+                                    if (res.status === 0) {
+                                        layer.msg("发表成功");
+                                        layer.close(index);
+                                        flowLoad('/search/1001/' + topic);
+
+                                    } else {
+                                        layer.alert(res.msg);
+                                    }
+
+                                    return false;
+                                }
+                                , error: function (res) {
+                                    layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+                                    return false;
+                                }
+                            });
+                        }
+                    });
+                });
+            } else {
+                return false;
+            }
+        });
+
     });
 </script>
+<script type="text/javascript" src="js/nearby.js"></script>
 </body>
 </html>

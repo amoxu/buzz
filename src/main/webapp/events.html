@@ -72,24 +72,7 @@
             <div class="layui-box">
                 <div class="ws18">附近</div>
                 <hr>
-                <ul>
-                    <div class="layui-show-lg-inline-block">
-                        <div class="inline">
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                        </div>
-                    </div>
-                    <div class="layui-show-lg-inline-block">
-                        <div class="inline">
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="img/109951163161135955.jpg" class="head"/></li>
-                        </div>
-                    </div>
-                </ul>
+                <ul class="nearby"></ul>
                 <hr>
             </div>
         </div>
@@ -175,7 +158,7 @@
                         //假设你的列表返回在data集合中
                         layui.each(res.data, function (index, result) {
                             var tmp = '<li><div class=" card clearfix">' +
-                           // var tmp = '<li><div class="comment-show-con card clearfix">' +
+                                // var tmp = '<li><div class="comment-show-con card clearfix">' +
                                 '<div class="comment-show-con-img pull-left">' +
                                 '<img src="' + result.sendUser.icons + '" alt="">' +
                                 '</div> ' +
@@ -307,5 +290,6 @@
         });
     })();
 </script>
+<script type="text/javascript" src="js/nearby.js"></script>
 </body>
 </html>

@@ -8,6 +8,8 @@ import com.amoxu.service.BuzzService;
 import com.amoxu.util.StaticEnum;
 import com.amoxu.util.ToolKit;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -24,6 +26,8 @@ public class BuzzServiceImpl implements BuzzService {
     private Logger logger = Logger.getLogger(getClass());
 
     @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+    @Autowired
     private BuzzNeteaseMapper buzzNeteaseMapper;
     @Autowired
     private CommentsMapper commentsMapper;
@@ -38,82 +42,94 @@ public class BuzzServiceImpl implements BuzzService {
 
         BuzzNeteaseExample buzzExample = new BuzzNeteaseExample();
         BuzzNeteaseExample.Criteria buzzExampleCriteria = buzzExample.createCriteria();
-        /*获取总条数*/
-        int allCount = buzzNeteaseMapper.countByExample(buzzExample);
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        BuzzNeteaseMapper sqlSessionMapper = sqlSession.getMapper(BuzzNeteaseMapper.class);
+
+        try {
 
 
-        Subject subject;
-        boolean authenticated;
-        Random random;
-        ArrayList<Integer> ids;
+            /*获取总条数*/
+            int allCount = sqlSessionMapper.countByExample(buzzExample);
 
 
-        buzzExample.setOffset(pageResult.getOffset());
-        buzzExample.setLimit(pageResult.getLimit());
-        switch (type) {
-            case "discover":
-                random = new Random();
-                ids = new ArrayList<>();
-                for (int i = 0; i < 10; i++) {
-                    ids.add(random.nextInt(allCount - 2) + 1);
-                }
-                buzzExampleCriteria.andIdIn(ids);
+            Subject subject;
+            boolean authenticated;
+            Random random;
+            ArrayList<Integer> ids;
 
-                break;
-            case "hot":
-                List<BuzzNetease> buzzNeteases;
-                 subject = SecurityUtils.getSubject();
-                authenticated = subject.isAuthenticated();
-                if (authenticated) {
-                    User u = (User) subject.getPrincipal();
-                    Integer uid = u.getUid();
-                    buzzNeteases = buzzNeteaseMapper.selectTopReply(uid, buzzExample);
-                } else {
-                    buzzNeteases = buzzNeteaseMapper.selectTopReply(null, buzzExample);
-                }
-                pageResult.setCount(buzzNeteases == null ? 0 : buzzNeteases.size());
-                pageResult.setList(buzzNeteases);
-                return pageResult;
-            case "thumb":
-                buzzExample.setOrderByClause("buzz_netease.liked_num desc");
-                break;
-            case "recommend":
-                subject = SecurityUtils.getSubject();
-                authenticated = subject.isAuthenticated();
-                if (!authenticated) {
-                    throw new UnLoginException();
-                }
+
+            buzzExample.setOffset(pageResult.getOffset());
+            buzzExample.setLimit(pageResult.getLimit());
+
+            switch (type) {
+                case "discover":
+                    random = new Random();
+                    ids = new ArrayList<>();
+                    for (int i = 0; i < 10; i++) {
+                        ids.add(random.nextInt(allCount - 2) + 1);
+                    }
+                    buzzExampleCriteria.andIdIn(ids);
+
+                    break;
+                case "hot":
+                    List<BuzzNetease> buzzNeteases;
+                    subject = SecurityUtils.getSubject();
+                    authenticated = subject.isAuthenticated();
+                    if (authenticated) {
+                        User u = (User) subject.getPrincipal();
+                        Integer uid = u.getUid();
+                        buzzNeteases = sqlSessionMapper.selectTopReply(uid, buzzExample);
+                    } else {
+                        buzzNeteases = sqlSessionMapper.selectTopReply(null, buzzExample);
+                    }
+                    pageResult.setCount(buzzNeteases == null ? 0 : buzzNeteases.size());
+                    pageResult.setList(buzzNeteases);
+                    return pageResult;
+                case "thumb":
+                    buzzExample.setOrderByClause("buzz_netease.liked_num desc");
+                    break;
+                case "recommend":
+                    subject = SecurityUtils.getSubject();
+                    authenticated = subject.isAuthenticated();
+                    if (!authenticated) {
+                        throw new UnLoginException();
+                    }
                 /*
                 User u = (User) subject.getPrincipal();
                 Integer uid = u.getUid();
                 */
-                random = new Random();
-                ids = new ArrayList<>();
-                for (int i = 0; i < 10; i++) {
-                    ids.add(random.nextInt(allCount - 2) + 1);
-                }
-                buzzExampleCriteria.andIdIn(ids);
-                break;
-            default:
-                break;
+                    random = new Random();
+                    ids = new ArrayList<>();
+                    for (int i = 0; i < 10; i++) {
+                        ids.add(random.nextInt(allCount - 2) + 1);
+                    }
+                    buzzExampleCriteria.andIdIn(ids);
+                    break;
+                default:
+                    break;
+            }
+
+            List<BuzzNetease> buzzNeteaseList;
+            int count = sqlSessionMapper.countByExample(buzzExample);
+            pageResult.setCount(count);
+
+            subject = SecurityUtils.getSubject();
+            authenticated = subject.isAuthenticated();
+            if (authenticated) {
+                User u = (User) subject.getPrincipal();
+                Integer uid = u.getUid();
+                buzzNeteaseList = sqlSessionMapper.selectMain(uid, buzzExample);
+            } else {
+                buzzNeteaseList = sqlSessionMapper.selectMain(null, buzzExample);
+            }
+
+            pageResult.setList(buzzNeteaseList);
+        } finally {
+            sqlSession.close();
+
         }
-
-        List<BuzzNetease> buzzNeteaseList;
-        int count = buzzNeteaseMapper.countByExample(buzzExample);
-        pageResult.setCount(count);
-
-         subject = SecurityUtils.getSubject();
-         authenticated = subject.isAuthenticated();
-        if (authenticated) {
-            User u = (User) subject.getPrincipal();
-            Integer uid = u.getUid();
-            buzzNeteaseList = buzzNeteaseMapper.selectMain(uid, buzzExample);
-        } else {
-            buzzNeteaseList = buzzNeteaseMapper.selectMain(null, buzzExample);
-        }
-
-        pageResult.setList(buzzNeteaseList);
         return pageResult;
+
     }
 
     @Override
@@ -140,7 +156,7 @@ public class BuzzServiceImpl implements BuzzService {
             return ret.failed().setMsg(StaticEnum.ERROR_PARSE);
         }
 
-
+        shareComment.setBuzzId(bcid);
         shareComment.setRcid(rcid);
         shareComment.setContent(data);
 
@@ -152,10 +168,15 @@ public class BuzzServiceImpl implements BuzzService {
         return ret;
     }
 
+    /**
+     * 详细页面头部 包括热评一条和四条回复
+     * @param oid --> buzzId 热评id
+     * */
     @Override
     public AjaxResult getDetailMain(Integer oid) {
         BuzzNeteaseExample shareExample = new BuzzNeteaseExample();
         BuzzNeteaseExample.Criteria commentExampleCriteria = shareExample.createCriteria();
+        commentExampleCriteria.andIdEqualTo(oid);
         shareExample.setLimit(1);
         shareExample.setOffset(0);
 
@@ -187,6 +208,7 @@ public class BuzzServiceImpl implements BuzzService {
 
     }
 
+    /*详细页面获取流加载子列表*/
     @Override
     public AjaxResult commentDetail(Integer cid, PageResult<Comments> pageResult) {
         AjaxResult<List<Comments>> ajaxResult = new AjaxResult<>();
@@ -194,7 +216,7 @@ public class BuzzServiceImpl implements BuzzService {
 
         CommentsExample example = new CommentsExample();
         CommentsExample.Criteria criteria = example.createCriteria();
-
+        criteria.andBuzzIdEqualTo(cid);
         int count = commentsMapper.countByExample(example);//获取分页总数
         example.clear();
 

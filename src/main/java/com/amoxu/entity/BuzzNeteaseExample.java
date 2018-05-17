@@ -634,6 +634,76 @@ public class BuzzNeteaseExample {
             addCriterion("beReplied not between", value1, value2, "bereplied");
             return (Criteria) this;
         }
+
+        public Criteria andKeywordIsNull() {
+            addCriterion("keyword is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordIsNotNull() {
+            addCriterion("keyword is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordEqualTo(String value) {
+            addCriterion("keyword =", value, "keyword");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordNotEqualTo(String value) {
+            addCriterion("keyword <>", value, "keyword");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordGreaterThan(String value) {
+            addCriterion("keyword >", value, "keyword");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordGreaterThanOrEqualTo(String value) {
+            addCriterion("keyword >=", value, "keyword");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordLessThan(String value) {
+            addCriterion("keyword <", value, "keyword");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordLessThanOrEqualTo(String value) {
+            addCriterion("keyword <=", value, "keyword");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordLike(String value) {
+            addCriterion("keyword like", value, "keyword");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordNotLike(String value) {
+            addCriterion("keyword not like", value, "keyword");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordIn(List<String> values) {
+            addCriterion("keyword in", values, "keyword");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordNotIn(List<String> values) {
+            addCriterion("keyword not in", values, "keyword");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordBetween(String value1, String value2) {
+            addCriterion("keyword between", value1, value2, "keyword");
+            return (Criteria) this;
+        }
+
+        public Criteria andKeywordNotBetween(String value1, String value2) {
+            addCriterion("keyword not between", value1, value2, "keyword");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

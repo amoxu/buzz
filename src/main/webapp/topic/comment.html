@@ -75,24 +75,7 @@
             <div class="layui-row">
                 <div class="ws18">附近</div>
                 <hr>
-                <ul>
-                    <div class="layui-show-lg-inline-block">
-                        <div class="inline">
-                            <li><img src="../img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="../img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="../img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="../img/109951163161135955.jpg" class="head"/></li>
-                        </div>
-                    </div>
-                    <div class="layui-show-lg-inline-block">
-                        <div class="inline">
-                            <li><img src="../img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="../img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="../img/109951163161135955.jpg" class="head"/></li>
-                            <li><img src="../img/109951163161135955.jpg" class="head"/></li>
-                        </div>
-                    </div>
-                </ul>
+                <ul class="nearby"></ul>
                 <hr>
             </div>
         </div>
@@ -244,11 +227,6 @@
         })();
 
 
-
-
-
-
-
         $.get('/topic/comment/' + getHashData('id') + '?limit=10&offset=' + 0, function (res) {
             //假设你的列表返回在data集合中
             var lis = [];
@@ -313,12 +291,12 @@
             $('#content').append(lis);
 
 
-            layui.use('flow', function(){
+            layui.use('flow', function () {
                 var $ = layui.jquery; //不用额外加载jQuery，flow模块本身是有依赖jQuery的，直接用即可。
                 var flow = layui.flow;
                 flow.load({
                     elem: '.hf-list-con' //指定列表容器
-                    ,done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
+                    , done: function (page, next) { //到达临界点（默认滚动触发），触发下一页
                         var lis = [];
                         if (page === 1) {
                             lis.push('<li class="all-pl-con new-tab">\n' +
@@ -328,16 +306,16 @@
                         }
 
                         //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-                        $.get('/topic/comment/reply/' + getHashData('id')  + '?limit=10&offset=' + (page - 1) * 10, function(res){
+                        $.get('/topic/comment/reply/' + getHashData('id') + '?limit=10&offset=' + (page - 1) * 10, function (res) {
                             //假设你的列表返回在data集合中
 
-                            if (res.data.length>0) {
+                            if (res.data.length > 0) {
                                 lis.push(buildReply(res.data));
                             }
 
                             //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
                             //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
-                            next(lis.join(''), page < res.count/10);
+                            next(lis.join(''), page < res.count / 10);
                         });
                     }
                 });
@@ -348,5 +326,6 @@
 
     });
 </script>
+<script type="text/javascript" src="../js/nearby.js"></script>
 </body>
 </html>

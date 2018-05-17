@@ -39,11 +39,11 @@ String.prototype.find = function (str) {
 function getHashStringArgs() {
 //取得查询的hash，并去除开头的#号
     var hashStrings = (window.location.hash.length > 0 ? window.location.hash.substring(1) : ""),
-    //保持数据的对象
-    hashArgs = {},
-    //取得每一项hash对
-    items = hashStrings.length > 0 ? hashStrings.split("&") : [], item = null, name = null, value = null, i = 0,
-    len = items.length;
+        //保持数据的对象
+        hashArgs = {},
+        //取得每一项hash对
+        items = hashStrings.length > 0 ? hashStrings.split("&") : [], item = null, name = null, value = null, i = 0,
+        len = items.length;
     //逐个将每一项添加到hashArgs中
     for (i = 0; i < len; i++) {
         item = items[i].split("=");
@@ -55,12 +55,13 @@ function getHashStringArgs() {
     }
     return hashArgs;
 }
+
 /*获取地址中的参数*/
 function getHashData(key) {
     let url = window.location.href ? window.location.href : "";
     url = url.split(/[?,&]/);
     console.log(url);
-    for (let i = 0; i<url.length; i++) {
+    for (let i = 0; i < url.length; i++) {
         let item = url[i].split('=');
         let name = decodeURIComponent(item[0]);
         let value = decodeURIComponent(item[1]);
@@ -68,7 +69,7 @@ function getHashData(key) {
             return value;
         }
     }
-   return null;
+    return null;
 }
 
 function scrollFunction() {
@@ -127,8 +128,8 @@ $(".top-btn").on("click", function () {
 
                 $.removeCookie('unLogin');
                 $.removeCookie('user');
-                $.removeCookie('unLogin',{path:"/"});
-                $.removeCookie('user',{path:"/"});
+                $.removeCookie('unLogin', {path: "/"});
+                $.removeCookie('user', {path: "/"});
                 window.location.href = "../logout";
                 layer.close(index);
             });
@@ -136,17 +137,16 @@ $(".top-btn").on("click", function () {
         });
     }
 
-    layui.use(['layer','element'], function () {
+    layui.use(['layer', 'element'], function () {
         var element = layui.element;
         var layer = layui.layer;
         element.init();
     });
 
-
 })();
 (function report() {
-    $('#content').on('click','.report',function () {
-        var cid =  $(this).attr('data-id');
+    $('#content').on('click', '.report', function () {
+        var cid = $(this).attr('data-id');
         var type = "";
         /**
          * 1001 动态
@@ -157,23 +157,23 @@ $(".top-btn").on("click", function () {
         var idx = window.location.href;
         if (idx.includes('events')) {
             idx = 1001;
-        }else if (idx.includes("topic")) {
+        } else if (idx.includes("topic")) {
             idx = 1002;
-        }else if (idx.includes("recommend")) {
+        } else if (idx.includes("recommend")) {
             idx = 1003;
-        }else if (idx.includes("music")) {
+        } else if (idx.includes("music")) {
             idx = 1004
-        }else{
+        } else {
             idx = 1000;
         }
         layer.prompt({
             formType: 2,
             title: '举报理由',
-        }, function(value, index, elem){
+        }, function (value, index, elem) {
             $.ajax({
                 url: './report/' + idx + '/' + cid
-                ,type:'post'
-                ,data:{'data':value}
+                , type: 'post'
+                , data: {'data': value}
                 , success: function (res) {
                     layer.alert(res.msg);
                     return false;

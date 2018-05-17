@@ -10,6 +10,7 @@
         <result column="user_id" property="userId" jdbcType="INTEGER"/>
         <result column="user_name" property="userName" jdbcType="VARCHAR"/>
         <result column="beReplied" property="bereplied" jdbcType="VARCHAR"/>
+        <result column="keyword" property="keyword" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Example_Where_Clause">
         <where>
@@ -72,8 +73,9 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-    buzz_netease.id, buzz_netease.ctime, buzz_netease.content, buzz_netease.liked_num,
-     buzz_netease.song_id, buzz_netease.user_id, buzz_netease.user_name, buzz_netease.beReplied
+      buzz_netease.id, buzz_netease.ctime, buzz_netease.content, buzz_netease.liked_num,
+      buzz_netease.song_id, buzz_netease.user_id, buzz_netease.user_name, buzz_netease.beReplied,buzz_netease.keyword
+
   </sql>
     <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.BuzzNeteaseExample">
         select
@@ -116,10 +118,12 @@
     <insert id="insert" parameterType="com.amoxu.entity.BuzzNetease">
     insert into buzz_netease (id, ctime, content, 
       liked_num, song_id, user_id, 
-      user_name, beReplied)
+      user_name, beReplied, keyword
+      )
     values (#{id,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR}, 
       #{likedNum,jdbcType=INTEGER}, #{songId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
-      #{userName,jdbcType=VARCHAR}, #{bereplied,jdbcType=VARCHAR})
+      #{userName,jdbcType=VARCHAR}, #{bereplied,jdbcType=VARCHAR}, #{keyword,jdbcType=VARCHAR}
+      )
   </insert>
     <insert id="insertSelective" parameterType="com.amoxu.entity.BuzzNetease">
         insert into buzz_netease
@@ -148,6 +152,9 @@
             <if test="bereplied != null">
                 beReplied,
             </if>
+            <if test="keyword != null">
+                keyword,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -174,10 +181,13 @@
             <if test="bereplied != null">
                 #{bereplied,jdbcType=VARCHAR},
             </if>
+            <if test="keyword != null">
+                #{keyword,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <select id="countByExample" parameterType="com.amoxu.entity.BuzzNeteaseExample" resultType="java.lang.Integer">
-        select count(*) from buzz_netease
+        select count(id) from buzz_netease
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -209,6 +219,9 @@
             <if test="record.bereplied != null">
                 beReplied = #{record.bereplied,jdbcType=VARCHAR},
             </if>
+            <if test="record.keyword != null">
+                keyword = #{record.keyword,jdbcType=VARCHAR},
+            </if>
         </set>
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
@@ -223,7 +236,8 @@
         song_id = #{record.songId,jdbcType=INTEGER},
         user_id = #{record.userId,jdbcType=INTEGER},
         user_name = #{record.userName,jdbcType=VARCHAR},
-        beReplied = #{record.bereplied,jdbcType=VARCHAR}
+        beReplied = #{record.bereplied,jdbcType=VARCHAR},
+        keyword = #{record.keyword,jdbcType=VARCHAR}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
@@ -252,6 +266,9 @@
             <if test="bereplied != null">
                 beReplied = #{bereplied,jdbcType=VARCHAR},
             </if>
+            <if test="keyword != null">
+                keyword = #{keyword,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -263,7 +280,8 @@
       song_id = #{songId,jdbcType=INTEGER},
       user_id = #{userId,jdbcType=INTEGER},
       user_name = #{userName,jdbcType=VARCHAR},
-      beReplied = #{bereplied,jdbcType=VARCHAR}
+      beReplied = #{bereplied,jdbcType=VARCHAR},
+      keyword = #{keyword,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -326,6 +344,7 @@
 
     <select id="selectTopReply" resultMap="listMap" parameterType="map">
         SELECT
+
         <include refid="Base_Column_List"/>
         , like_buzz.uid as userLike
         ,
@@ -348,20 +367,20 @@
         </if>
         WHERE
         id IN (
-            SELECT
-            *
-            FROM
-            (
-                SELECT
-                buzz_id
-                FROM
-                comments
-                GROUP BY
-                buzz_id
-                ORDER BY
-                COUNT(buzz_id) DESC
-                LIMIT 5
-            ) AS subquery
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        buzz_id
+        FROM
+        comments
+        GROUP BY
+        buzz_id
+        ORDER BY
+        COUNT(buzz_id) DESC
+        LIMIT 5
+        ) AS subquery
         )
         <if test="example.orderByClause != null">
             order by ${example.orderByClause}
@@ -370,4 +389,30 @@
             limit ${example.offset}, ${example.limit}
         </if>
     </select>
+
+
+    <!--for update keyword-->
+    <resultMap id="forKeyMap" type="com.amoxu.entity.BuzzNetease">
+        <id property="id" column="id"/>
+        <result column="content" property="content"/>
+    </resultMap>
+
+    <select id="select4KeyWord" resultMap="forKeyMap" parameterType="com.amoxu.entity.BuzzNeteaseExample">
+    select
+    id,content
+    from buzz_netease
+    WHERE keyword is NULL
+    ORDER BY  id
+
+    limit ${offset}, ${limit}
+
+  </select>
+    <insert id="update" parameterType="map">
+
+
+
+    UPDATE buzz_netease
+     SET keyword = #{key}
+    WHERE id = #{id}
+  </insert>
 </mapper>

@@ -200,7 +200,7 @@
     </insert>
     <select id="countByExample" parameterType="com.amoxu.entity.MusicShareCommentExample"
             resultType="java.lang.Integer">
-        select count(*) from music_share_content
+        select count(cid) from music_share_content
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -369,7 +369,12 @@
         </if>
 
     </select>
+    <sql id="Msc_Column_List">
+        msc.cid, msc.rcid, msc.uid,
+        msc.content, msc.likes, msc.feeling,
+        msc.ctime, msc.base_cid
 
+    </sql>
     <!--
     param : onlineId    在线用户id，用于检查是否点赞
             baseId      分享ID，用于查询子列表
@@ -378,7 +383,7 @@
         /*查询首页子列表 热评*/
         SELECT
         /*评论信息*/
-        msc.*,
+        <include refid="Msc_Column_List"/>,
         /*发送方信息*/
         u1.nickname as send_nickname,
         u1.icons as send_icons,
@@ -403,7 +408,8 @@
 
         SELECT
 
-        msc.*,
+        <include refid="Msc_Column_List"/>
+,
         /*发送方信息*/
         u1.nickname as send_nickname,
         u1.icons as send_icons,

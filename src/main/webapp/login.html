@@ -148,7 +148,7 @@
                     $.cookie('unLogin', {'statue': true});
                     $.cookie("user", {'user': res});
                     self.location = window.history.back();
-                    window.location.refresh();
+                    window.location.reload();
                 }
                 /*self.location = res["msg"];*/
 
@@ -163,5 +163,6 @@
     });
 
 </script>
+<script type="text/javascript" src="js/nearby.js"></script>
 </body>
 </html>
