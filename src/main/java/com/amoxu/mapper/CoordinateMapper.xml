@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.amoxu.mapper.CoordinateMapper" >
+  <resultMap id="BaseResultMap" type="com.amoxu.entity.Coordinate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="shortname" property="shortname" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="merger_name" property="mergerName" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="TINYINT" />
+    <result column="pinyin" property="pinyin" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="zip_code" property="zipCode" jdbcType="CHAR" />
+    <result column="first" property="first" jdbcType="CHAR" />
+    <result column="lng" property="lng" jdbcType="DOUBLE" />
+    <result column="lat" property="lat" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, pid, shortname, name, merger_name, level, pinyin, code, zip_code, first, lng, 
+    lat
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.CoordinateExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from coordinate
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from coordinate
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from coordinate
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.amoxu.entity.CoordinateExample" >
+    delete from coordinate
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.amoxu.entity.Coordinate" >
+    insert into coordinate (id, pid, shortname, 
+      name, merger_name, level, 
+      pinyin, code, zip_code, 
+      first, lng, lat)
+    values (#{id,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{shortname,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{mergerName,jdbcType=VARCHAR}, #{level,jdbcType=TINYINT}, 
+      #{pinyin,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{zipCode,jdbcType=CHAR}, 
+      #{first,jdbcType=CHAR}, #{lng,jdbcType=DOUBLE}, #{lat,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.amoxu.entity.Coordinate" >
+    insert into coordinate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="shortname != null" >
+        shortname,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="mergerName != null" >
+        merger_name,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="pinyin != null" >
+        pinyin,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="zipCode != null" >
+        zip_code,
+      </if>
+      <if test="first != null" >
+        first,
+      </if>
+      <if test="lng != null" >
+        lng,
+      </if>
+      <if test="lat != null" >
+        lat,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="shortname != null" >
+        #{shortname,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mergerName != null" >
+        #{mergerName,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=TINYINT},
+      </if>
+      <if test="pinyin != null" >
+        #{pinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        #{zipCode,jdbcType=CHAR},
+      </if>
+      <if test="first != null" >
+        #{first,jdbcType=CHAR},
+      </if>
+      <if test="lng != null" >
+        #{lng,jdbcType=DOUBLE},
+      </if>
+      <if test="lat != null" >
+        #{lat,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.amoxu.entity.CoordinateExample" resultType="java.lang.Integer" >
+    select count(*) from coordinate
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update coordinate
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.pid != null" >
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.shortname != null" >
+        shortname = #{record.shortname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mergerName != null" >
+        merger_name = #{record.mergerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.level != null" >
+        level = #{record.level,jdbcType=TINYINT},
+      </if>
+      <if test="record.pinyin != null" >
+        pinyin = #{record.pinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null" >
+        code = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zipCode != null" >
+        zip_code = #{record.zipCode,jdbcType=CHAR},
+      </if>
+      <if test="record.first != null" >
+        first = #{record.first,jdbcType=CHAR},
+      </if>
+      <if test="record.lng != null" >
+        lng = #{record.lng,jdbcType=DOUBLE},
+      </if>
+      <if test="record.lat != null" >
+        lat = #{record.lat,jdbcType=DOUBLE},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update coordinate
+    set id = #{record.id,jdbcType=INTEGER},
+      pid = #{record.pid,jdbcType=INTEGER},
+      shortname = #{record.shortname,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      merger_name = #{record.mergerName,jdbcType=VARCHAR},
+      level = #{record.level,jdbcType=TINYINT},
+      pinyin = #{record.pinyin,jdbcType=VARCHAR},
+      code = #{record.code,jdbcType=VARCHAR},
+      zip_code = #{record.zipCode,jdbcType=CHAR},
+      first = #{record.first,jdbcType=CHAR},
+      lng = #{record.lng,jdbcType=DOUBLE},
+      lat = #{record.lat,jdbcType=DOUBLE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.amoxu.entity.Coordinate" >
+    update coordinate
+    <set >
+      <if test="pid != null" >
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="shortname != null" >
+        shortname = #{shortname,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mergerName != null" >
+        merger_name = #{mergerName,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=TINYINT},
+      </if>
+      <if test="pinyin != null" >
+        pinyin = #{pinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        zip_code = #{zipCode,jdbcType=CHAR},
+      </if>
+      <if test="first != null" >
+        first = #{first,jdbcType=CHAR},
+      </if>
+      <if test="lng != null" >
+        lng = #{lng,jdbcType=DOUBLE},
+      </if>
+      <if test="lat != null" >
+        lat = #{lat,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.amoxu.entity.Coordinate" >
+    update coordinate
+    set pid = #{pid,jdbcType=INTEGER},
+      shortname = #{shortname,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      merger_name = #{mergerName,jdbcType=VARCHAR},
+      level = #{level,jdbcType=TINYINT},
+      pinyin = #{pinyin,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      zip_code = #{zipCode,jdbcType=CHAR},
+      first = #{first,jdbcType=CHAR},
+      lng = #{lng,jdbcType=DOUBLE},
+      lat = #{lat,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

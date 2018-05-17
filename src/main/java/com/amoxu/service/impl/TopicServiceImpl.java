@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class TopicServiceImpl implements TopicService {
@@ -271,14 +268,15 @@ public class TopicServiceImpl implements TopicService {
      * 使用在详细页面
      * */
     @Override
-    public AjaxResult<List<TopicComment>> getDetailMain(Integer cid) {
+    public AjaxResult<List<TopicComment>> getDetailMain(Integer... cid) {
         TopicCommentExample commentExample = new TopicCommentExample();
         TopicCommentExample.Criteria commentExampleCriteria = commentExample.createCriteria();
-        commentExample.setLimit(1);
+        commentExample.setLimit(cid.length);
         commentExample.setOffset(0);
 
         commentExampleCriteria.andBaseCidEqualTo(0);
-        commentExampleCriteria.andCidEqualTo(cid);
+
+        commentExampleCriteria.andCidIn(Arrays.asList(cid));
 
         Subject subject = SecurityUtils.getSubject();
         boolean authenticated = subject.isAuthenticated();
@@ -305,5 +303,18 @@ public class TopicServiceImpl implements TopicService {
 
         return ajaxResult;
 
+    }
+
+    @Override
+    public AjaxResult index() {
+        int allCount = commentMapper.countByExample(null);
+        Random random = new Random();
+        AjaxResult detailMain;
+        while (true) {
+            detailMain = getDetailMain(random.nextInt(allCount), random.nextInt(allCount));
+            if (detailMain.getCount() > 0) {
+                return detailMain;
+            }
+        }
     }
 }

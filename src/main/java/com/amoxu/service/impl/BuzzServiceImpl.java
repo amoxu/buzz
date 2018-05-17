@@ -4,6 +4,7 @@ import com.amoxu.entity.*;
 import com.amoxu.exception.UnLoginException;
 import com.amoxu.mapper.BuzzNeteaseMapper;
 import com.amoxu.mapper.CommentsMapper;
+import com.amoxu.cache.BuzzCacheDao;
 import com.amoxu.service.BuzzService;
 import com.amoxu.util.StaticEnum;
 import com.amoxu.util.ToolKit;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -31,6 +33,10 @@ public class BuzzServiceImpl implements BuzzService {
     private BuzzNeteaseMapper buzzNeteaseMapper;
     @Autowired
     private CommentsMapper commentsMapper;
+
+    @Autowired
+    BuzzCacheDao buzzCache;
+
     /**
      * data-name="discover" 发现 <!--随机x条评论-->
      * data-name="hot" 热评<!--回复最多-->
@@ -49,7 +55,10 @@ public class BuzzServiceImpl implements BuzzService {
 
 
             /*获取总条数*/
-            int allCount = sqlSessionMapper.countByExample(buzzExample);
+            int allCount = buzzCache.getBuzzCount();
+
+            logger.info("\n=====================总信息条数是：" + allCount+"\n=====================");
+
 
 
             Subject subject;
@@ -66,6 +75,9 @@ public class BuzzServiceImpl implements BuzzService {
                     random = new Random();
                     ids = new ArrayList<>();
                     for (int i = 0; i < 10; i++) {
+                        if (allCount < 2) {
+                            allCount = 3;
+                        }
                         ids.add(random.nextInt(allCount - 2) + 1);
                     }
                     buzzExampleCriteria.andIdIn(ids);
@@ -133,6 +145,20 @@ public class BuzzServiceImpl implements BuzzService {
     }
 
     @Override
+    public AjaxResult index() {
+        int allCount = buzzCache.getBuzzCount();
+        Random random = new Random();
+        AjaxResult detailMain;
+        while (true) {
+            detailMain = getDetailMain(random.nextInt(allCount));
+            if (detailMain.getCount() > 0) {
+                return detailMain;
+            }
+        }
+
+    }
+
+    @Override
     public AjaxResult replyComment(Integer rcid, Integer bcid, String data) {
         AjaxResult<Comments> ret = new AjaxResult<>();
         Comments shareComment = new Comments();
@@ -173,11 +199,11 @@ public class BuzzServiceImpl implements BuzzService {
      * @param oid --> buzzId 热评id
      * */
     @Override
-    public AjaxResult getDetailMain(Integer oid) {
+    public AjaxResult getDetailMain(Integer... oid) {
         BuzzNeteaseExample shareExample = new BuzzNeteaseExample();
         BuzzNeteaseExample.Criteria commentExampleCriteria = shareExample.createCriteria();
-        commentExampleCriteria.andIdEqualTo(oid);
-        shareExample.setLimit(1);
+        commentExampleCriteria.andIdIn(Arrays.asList(oid));
+        shareExample.setLimit(oid.length);
         shareExample.setOffset(0);
 
 

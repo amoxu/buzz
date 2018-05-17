@@ -46,7 +46,7 @@
             </props>
         </property>
     </bean>
-    <bean id="MailSender" class="com.amoxu.util.MailSender"/>
+    <bean id="mailSender" class="com.amoxu.util.MailSender"/>
 <!--    <bean id="mailUtil" class="com.amoxu.util.MailUtil">
         <property name="mailSender" ref="mailSender"></property>
         <property name="simpleMailMessage" ref="simpleMailMessage"></property>

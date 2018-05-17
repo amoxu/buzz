@@ -20,7 +20,9 @@ import org.springframework.stereotype.Controller;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 public class MusicServiceImpl implements MusicService {
@@ -175,13 +177,13 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    public AjaxResult getDetailMain(Integer oid) {
+    public AjaxResult getDetailMain(Integer... oid) {
         MusicShareExample shareExample = new MusicShareExample();
         MusicShareExample.Criteria commentExampleCriteria = shareExample.createCriteria();
-        shareExample.setLimit(1);
+        shareExample.setLimit(oid.length);
         shareExample.setOffset(0);
 
-        commentExampleCriteria.andOidEqualTo(oid);
+        commentExampleCriteria.andOidIn(Arrays.asList(oid));
 
         Subject subject = SecurityUtils.getSubject();
         boolean authenticated = subject.isAuthenticated();
@@ -243,6 +245,19 @@ public class MusicServiceImpl implements MusicService {
 
         ajaxResult.ok();
         return ajaxResult;
+    }
+
+    @Override
+    public AjaxResult index() {
+        int allCount = shareCommentMapper.countByExample(null);
+        Random random = new Random();
+        AjaxResult detailMain;
+        while (true) {
+            detailMain = getDetailMain(random.nextInt(allCount), random.nextInt(allCount));
+            if (detailMain.getCount() > 0) {
+                return detailMain;
+            }
+        }
     }
 
 }

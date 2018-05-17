@@ -13,7 +13,11 @@ public interface MusicService {
 
     AjaxResult replyComment(Integer rcid, Integer bcid, String data);
 
-    AjaxResult getDetailMain(Integer cid);
+
+    AjaxResult getDetailMain(Integer... oid);
 
     AjaxResult commentDetail(Integer cid, PageResult<TopicComment> pageResult);
+
+    AjaxResult index();
+
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.amoxu.entity.BuzzNetease;
 import com.amoxu.entity.BuzzNeteaseExample;
 import com.amoxu.util.HanlpUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
@@ -48,7 +49,7 @@ public class BuzzNeteaseMapperTest {
     public void addKey() {
         BuzzNeteaseExample buzzNeteaseExample = new BuzzNeteaseExample();
 
-        int offset = 1;
+        int offset = 0;
 
         /**
          * 196700 19:01
@@ -77,8 +78,7 @@ public class BuzzNeteaseMapperTest {
                 buzzNeteases = sqlSessionMapper.select4KeyWord(buzzNeteaseExample);
 
                 if (buzzNeteases == null || buzzNeteases.size() == 0) {
-                    continue;
-                    //break;
+                    break;
                 }
                 //logger.info(JSON.toJSONString(buzzNeteases));
                 iterator = buzzNeteases.iterator();
@@ -86,12 +86,20 @@ public class BuzzNeteaseMapperTest {
                 for (; iterator.hasNext(); ) {
                     next = iterator.next();
                     try {
-                        keyword = HanlpUtil.getKeyword(next.getContent());
-                        sqlSessionMapper.update(next.getId(), keyword);
+                        String content = next.getContent();
+                        System.out.println("===========content is ："+content);
+
+                        keyword = HanlpUtil.getKeyword(content);
+                        if (StringUtils.isBlank(keyword)) {
+                            sqlSessionMapper.deleteByPrimaryKey(next.getId());
+                        } else {
+                            sqlSessionMapper.update(next.getId(), keyword);
+                        }
                     } catch (Throwable e) {
                         System.out.println(e.getMessage());
                     }
                 }
+                sqlSession.commit();
 
             }
         }  finally {

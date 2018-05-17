@@ -401,9 +401,8 @@
     select
     id,content
     from buzz_netease
-    WHERE keyword is NULL
+    WHERE keyword =""
     ORDER BY  id
-
     limit ${offset}, ${limit}
 
   </select>
