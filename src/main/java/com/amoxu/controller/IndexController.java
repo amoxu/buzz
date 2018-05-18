@@ -53,4 +53,13 @@ public class IndexController {
         return musicService.index().toString();
     }
 
+    @RequestMapping(value = "/column"
+            , method = RequestMethod.GET
+            , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
+    )
+    @ResponseBody
+    public String getColumn() {
+
+        return topicService.indexColumn().toString();
+    }
 }

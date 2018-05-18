@@ -1,5 +1,6 @@
 package com.amoxu.service.impl;
 
+import com.amoxu.entity.AjaxResult;
 import com.amoxu.service.TopicService;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -32,4 +33,10 @@ public class TopicServiceImplTest {
         logger.info(s);
 
     }
+    @Test
+    public  void getColumn() {
+        AjaxResult ajaxResult = topicService.indexColumn();
+        logger.info(ajaxResult.toString());
+    }
+
 }

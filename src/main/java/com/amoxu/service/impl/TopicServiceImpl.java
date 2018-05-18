@@ -103,7 +103,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<TopicMap> getHotTopic() {
+    public List<TopicMap> getHeadTopic() {
         TopicExample topicExample = new TopicExample();
         topicExample.setOrderByClause("coefficient desc");
         topicExample.setLimit(4);
@@ -309,12 +309,30 @@ public class TopicServiceImpl implements TopicService {
     public AjaxResult index() {
         int allCount = commentMapper.countByExample(null);
         Random random = new Random();
-        AjaxResult detailMain;
+        AjaxResult<List<TopicComment>> detailMain;
+
         while (true) {
-            detailMain = getDetailMain(random.nextInt(allCount), random.nextInt(allCount));
+            detailMain = getDetailMain(random.nextInt(allCount), random.nextInt(allCount), random.nextInt(allCount), random.nextInt(allCount));
             if (detailMain.getCount() > 0) {
+                for (int i = detailMain.getData().size() - 1; i > 2; i--) {
+                    detailMain.getData().remove(i);
+                }
                 return detailMain;
             }
         }
     }
+
+    @Override
+    public AjaxResult indexColumn() {
+        List<TopicMap> headTopic = getHeadTopic();
+        if (headTopic.size() > 3) {
+            headTopic.remove(3);
+        }
+        AjaxResult<List<TopicMap>> result = new AjaxResult<>();
+
+        result.ok();
+        result.setData(headTopic);
+        return result;
+    }
+
 }

@@ -31,7 +31,7 @@ public class TopicController {
     @ResponseBody
     public String headTopic() {
         AjaxResult<List<TopicMap>> ajaxResult = new AjaxResult<>();
-        List<TopicMap> list = topicService.getHotTopic();
+        List<TopicMap> list = topicService.getHeadTopic();
         ajaxResult.setData(list);
 
         return ajaxResult.toString();

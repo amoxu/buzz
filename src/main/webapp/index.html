@@ -9,7 +9,81 @@
     <link rel="stylesheet" type="text/css" href="./alicon/iconfont.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/comment.css">
+    <style>
 
+        .topic-column {
+            width: 100%;
+            text-align: center;
+            -moz-box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.37);
+            box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.37);
+        }
+
+        .topic-column ul {
+            display: inline-block;
+            width: auto;
+            margin: auto;
+            padding: 0;
+
+        }
+
+        .topic-column ul div {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            color: #fff;
+            font-size: 14px;
+            height: auto;
+            overflow: hidden;
+        }
+
+        .topic-column ul span {
+            height: auto;
+            padding: 0 5px 10px;
+            display: block;
+            line-height: 1.4;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .topic-column ul li {
+            position: relative;
+            overflow: hidden;
+
+            width: 120px;
+            height: 120px;
+            margin: 15px 25px;
+            display: block;
+            float: left;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+
+            line-height: 75px;
+            text-align: center;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .topic-column ul li img {
+            vertical-align: middle;
+        }
+
+        .topic-column li:nth-child(1) {
+            background-color: #1ABC9C;
+        }
+
+        .topic-column li:nth-child(2) {
+            background-color: #34495E;
+        }
+
+        .topic-column li:nth-child(3) {
+            background-color: #F39C12;
+        }
+
+
+    </style>
 </head>
 <body class="mbg">
 
@@ -92,121 +166,6 @@
     <div class="layui-row">
         <div class="layui-col-md9">
             <div data-id="user-like">
-                <!--<div class="float_left">
-                    <img data-id="" src="img/109951163161135955.jpg" class="head"/>
-                </div>
-                <div class="card_detail">
-                    <div class="card_nick">
-                        <a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1" data-id="">桂花乌龙冰</a>
-                        <div class="float_right">
-                            <a href="javascript:void(0);" id="push-like" data-id=""><i class="iconfont"
-                                                                                       style="font-size: x-large;margin-left: 1em; color: #FF5900">&#xe60e;</i></a>
-                            <a href="javascript:void(0);" id="push-dislike" data-id=""><i class="iconfont"
-                                                                                          style="font-size: x-large;margin-left: 1em; color: #2D93CA">&#xe607;</i></a>
-                        </div>
-
-                    </div>
-                    <div class="card_time">3月29日 09:38</div>
-                    <div class="card_text ws14">跟Alan Walker的Fade有异曲同工之妙。</div>
-                    <div class="float_right">——来自 <a>Ahrix</a> 《<a href="javascript:;">Nova</a>》 <a>网易云音乐</a></div>
-                    <div class="layui-row">
-                        <ul class="inline">
-                            <li class="like">
-                                <a href="javascript:;"><i class="layui-icon">&#xe6c6;</i>
-                                    <num>999+</num>
-                                </a>
-                            </li>
-                            <li class="comment">
-                                <a href="javascript:;"><i class="layui-icon">&#xe63a;</i>
-                                    <num>999+</num>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:;"><i class="layui-icon">&#xe641;</i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:;"><i class="layui-icon">&#xe6c5;</i></a>
-                            </li>
-                        </ul>
-                        <div class="commentAll"></div>
-                        <ul class="hf-list-con" style="display: block;">
-                            <li class="all-pl-con">
-                                <div class="pl-text hfpl-text clearfix"><a href="../user/22/my.html"
-                                                                           class="comment-size-name">markone</a><span
-                                        class="my-pl-con">回复<a href="../user/22/my.html" class="atName">@markone</a> : 熊汝霖的温柔如落雪，阿宝的惊艳如群鹤掠空长鸣。整首歌宛若落雪季，群鹤飞过……那声长鸣是那么无奈，那么凄婉，那么倾国倾城，那么流芳百世。</span>
-                                </div>
-                                <div class="date-dz"><span
-                                        class="date-dz-left pull-left comment-time">2018-04-21 21:03:01</span>
-                                    <div class="date-dz-right pull-right comment-pl-block"><a href="javascript:;"
-                                                                                              class="date-dz-pl pl-hf pull-left hf-con-block"
-                                                                                              data-id="10179">回复</a>
-                                        <span
-                                                class="pull-left date-dz-line">|</span> <a data-id="10179"
-                                                                                           href="javascript:;"
-                                                                                           class="date-dz-z pull-left"><i
-                                                class="date-dz-z-click-red"></i>赞 (<i class="z-num">1</i>)</a></div>
-                                </div>
-                            </li>
-                            <li class="all-pl-con">
-                                <div class="pl-text hfpl-text clearfix"><a href="../user/22/my.html"
-                                                                           class="comment-size-name">markone</a><span
-                                        class="my-pl-con">回复<a href="../user/22/my.html" class="atName">@markone</a> : 熊汝霖的温柔如落雪，阿宝的惊艳如群鹤掠空长鸣。整首歌宛若落雪季，群鹤飞过……那声长鸣是那么无奈，那么凄婉，那么倾国倾城，那么流芳百世。</span>
-                                </div>
-                                <div class="date-dz"><span
-                                        class="date-dz-left pull-left comment-time">2018-04-21 21:03:01</span>
-                                    <div class="date-dz-right pull-right comment-pl-block"><a href="javascript:;"
-                                                                                              class="date-dz-pl pl-hf pull-left hf-con-block"
-                                                                                              data-id="10179">回复</a>
-                                        <span
-                                                class="pull-left date-dz-line">|</span> <a data-id="10179"
-                                                                                           href="javascript:;"
-                                                                                           class="date-dz-z pull-left"><i
-                                                class="date-dz-z-click-red"></i>赞 (<i class="z-num">1</i>)</a></div>
-                                </div>
-                            </li>
-                            <li class="all-pl-con">
-                                <div class="pl-text hfpl-text clearfix"><a href="../user/22/my.html"
-                                                                           class="comment-size-name">markone</a><span
-                                        class="my-pl-con">回复<a href="../user/22/my.html" class="atName">@markone</a> : 熊汝霖的温柔如落雪，阿宝的惊艳如群鹤掠空长鸣。整首歌宛若落雪季，群鹤飞过……那声长鸣是那么无奈，那么凄婉，那么倾国倾城，那么流芳百世。</span>
-                                </div>
-                                <div class="date-dz"><span
-                                        class="date-dz-left pull-left comment-time">2018-04-21 21:03:01</span>
-                                    <div class="date-dz-right pull-right comment-pl-block"><a href="javascript:;"
-                                                                                              class="date-dz-pl pl-hf pull-left hf-con-block"
-                                                                                              data-id="10179">回复</a>
-                                        <span
-                                                class="pull-left date-dz-line">|</span> <a data-id="10179"
-                                                                                           href="javascript:;"
-                                                                                           class="date-dz-z pull-left"><i
-                                                class="date-dz-z-click-red"></i>赞 (<i class="z-num">1</i>)</a></div>
-                                </div>
-                            </li>
-                            <li class="all-pl-con">
-                                <div class="pl-text hfpl-text clearfix"><a href="../user/22/my.html"
-                                                                           class="comment-size-name">markone</a><span
-                                        class="my-pl-con">回复<a href="../user/22/my.html" class="atName">@markone</a> : 熊汝霖的温柔如落雪，阿宝的惊艳如群鹤掠空长鸣。整首歌宛若落雪季，群鹤飞过……那声长鸣是那么无奈，那么凄婉，那么倾国倾城，那么流芳百世。</span>
-                                </div>
-                                <div class="date-dz"><span
-                                        class="date-dz-left pull-left comment-time">2018-04-21 21:03:01</span>
-                                    <div class="date-dz-right pull-right comment-pl-block"><a href="javascript:;"
-                                                                                              class="date-dz-pl pl-hf pull-left hf-con-block"
-                                                                                              data-id="10179">回复</a>
-                                        <span
-                                                class="pull-left date-dz-line">|</span> <a data-id="10179"
-                                                                                           href="javascript:;"
-                                                                                           class="date-dz-z pull-left"><i
-                                                class="date-dz-z-click-red"></i>赞 (<i class="z-num">1</i>)</a></div>
-                                </div>
-                            </li>
-
-
-                        </ul>
-                        <div class="all-pl-con clearfix">
-                            <a href="#" class="float_right">>>查看更多</a>
-                        </div>
-                    </div>
-
-                </div>-->
             </div>
 
             <div style="text-align: center;font-size: x-large">...</div>
@@ -214,21 +173,33 @@
             <!--推荐歌曲-->
 
             <div data-id="music"></div>
-            <ul class="site-icon">
-                <li>
-                    话题1
-                </li>
-                <li>
-                    话题2
-                </li>
-                <li>
-                    话题3
-                </li>
-            </ul>
+            <div class="topic-column">
+                <ul>
+                    <li>
+                        <img src="img/audio.svg" width="40" alt="">
+                        <a data-name="0">
+                            <div><span></span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <img src="img/hearts.svg" width="80" alt="">
+                        <a data-name="1">
+                        <div><span></span></div>
+                        </a>
+                    </li>
+                    <li>
+                        <img src="img/earphone.svg" width="60" alt="">
+                        <a data-name="2">
+                        <div><span></span></div>
+                        </a>
+                    </li>
+
+                    <div style="clear: both"></div>
+                </ul>
+                <div style="clear: both"></div>
+            </div>
             <div data-id="topic"></div>
-
             <hr>
-
         </div>
 
         <div class="layui-col-md3">
@@ -271,10 +242,19 @@
 
 <script>
 
-
+    layui.use(['carousel', 'layer'], function () {
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#carousel'
+            , width: '100%' //设置容器宽度
+            , height: 200 //设置容器宽度
+            , arrow: 'hover' //始终显示箭头
+        });
+    });
     $.get('/index/buzz', function (result) {
         var tmp = "";
-        $.each(result.data,function (idx, result) {
+        $.each(result.data, function (idx, result) {
 
             tmp += '<li class="card clearfix">' +
                 '<div class="card_detail" style="margin-left: 17px">' +
@@ -341,7 +321,7 @@
     });
     $.get('/index/music', function (result) {
         var tmp = "";
-        $.each(result.data,function (idx,result) {
+        $.each(result.data, function (idx, result) {
             tmp += '<li class="card clearfix">' +
                 '<div class="float_left">' +
                 '<img src=' + result.sendUser.icons + ' class="head"/>' +
@@ -463,16 +443,13 @@
         $('div[data-id="topic"]').html(tmp);
 
     });
+    $.get("/index/column", function (result) {
 
-    layui.use(['carousel', 'layer'], function () {
-        var carousel = layui.carousel;
-//建造实例
-        carousel.render({
-            elem: '#carousel'
-            , width: '100%' //设置容器宽度
-            , height: 200 //设置容器宽度
-            , arrow: 'hover' //始终显示箭头
+        $.each(result.data, function (idx, result) {
+            $(`.topic-column a[data-name=${idx}]`).attr('href',"");
+            $(`.topic-column a[data-name=${idx}] span`).text(result.topic);
         });
+
     });
     layui.use('layer', function () {
         let layer = layui.layer;
@@ -508,6 +485,9 @@
         $("div[data-id='user-like']").slideUp("normal");
         $("div[data-id='user-like']").slideDown("normal");
     });
+    /*绑定回复按钮事件*/
+    $();
+
 </script>
 <script type="text/javascript" src="js/nearby.js"></script>
 </body>

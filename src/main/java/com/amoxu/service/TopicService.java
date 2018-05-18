@@ -11,7 +11,7 @@ import java.util.List;
 public interface TopicService {
     PageResult<TopicComment> getMain(String type, PageResult<TopicComment> pageResult) throws UnLoginException;
 
-    List<TopicMap> getHotTopic();
+    List<TopicMap> getHeadTopic();
 
 
     String addTopic(String topic);
@@ -26,4 +26,6 @@ public interface TopicService {
     AjaxResult<List<TopicComment>> getDetailMain(Integer... cid);
 
     AjaxResult index();
+
+    AjaxResult indexColumn();
 }
