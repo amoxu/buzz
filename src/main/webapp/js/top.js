@@ -80,6 +80,11 @@ function scrollFunction() {
         $(".top-btn")[0].style.display = "none";
     }
 }
+function getType(dom) {
+    var type = $(dom).parents('li.card').parent().attr('data-id');
+    console.log(type);
+    return type;
+}
 
 // 点击按钮，返回顶部
 $(".top-btn").on("click", function () {
@@ -147,7 +152,7 @@ $(".top-btn").on("click", function () {
 (function report() {
     $('#content').on('click', '.report', function () {
         var cid = $(this).attr('data-id');
-        var type = "";
+        var type = getType(this);
         /**
          * 1001 动态
          * 1002 话题
@@ -155,13 +160,14 @@ $(".top-btn").on("click", function () {
          * 1004 音乐分享*/
 
         var idx = window.location.href;
-        if (idx.includes('events')) {
+
+        if (idx.includes('events') ) {
             idx = 1001;
-        } else if (idx.includes("topic")) {
+        } else if (idx.includes("topic")|| type === "topic") {
             idx = 1002;
-        } else if (idx.includes("recommend")) {
+        } else if (idx.includes("recommend")|| type === "buzz") {
             idx = 1003;
-        } else if (idx.includes("music")) {
+        } else if (idx.includes("music")|| type === "music") {
             idx = 1004
         } else {
             idx = 1000;

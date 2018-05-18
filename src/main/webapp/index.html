@@ -9,81 +9,8 @@
     <link rel="stylesheet" type="text/css" href="./alicon/iconfont.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/comment.css">
-    <style>
+    <script type="text/javascript" src="js/aes.js"></script>
 
-        .topic-column {
-            width: 100%;
-            text-align: center;
-            -moz-box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.37);
-            box-shadow: 0 -4px 4px -4px rgba(0, 0, 0, 0.37);
-        }
-
-        .topic-column ul {
-            display: inline-block;
-            width: auto;
-            margin: auto;
-            padding: 0;
-
-        }
-
-        .topic-column ul div {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            left: 0;
-            color: #fff;
-            font-size: 14px;
-            height: auto;
-            overflow: hidden;
-        }
-
-        .topic-column ul span {
-            height: auto;
-            padding: 0 5px 10px;
-            display: block;
-            line-height: 1.4;
-            text-overflow: ellipsis;
-            overflow: hidden;
-        }
-
-        .topic-column ul li {
-            position: relative;
-            overflow: hidden;
-
-            width: 120px;
-            height: 120px;
-            margin: 15px 25px;
-            display: block;
-            float: left;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-
-            line-height: 75px;
-            text-align: center;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        .topic-column ul li img {
-            vertical-align: middle;
-        }
-
-        .topic-column li:nth-child(1) {
-            background-color: #1ABC9C;
-        }
-
-        .topic-column li:nth-child(2) {
-            background-color: #34495E;
-        }
-
-        .topic-column li:nth-child(3) {
-            background-color: #F39C12;
-        }
-
-
-    </style>
 </head>
 <body class="mbg">
 
@@ -164,8 +91,8 @@
     <hr>
 
     <div class="layui-row">
-        <div class="layui-col-md9">
-            <div data-id="user-like">
+        <div class="layui-col-md9" id="content">
+            <div data-id="buzz">
             </div>
 
             <div style="text-align: center;font-size: x-large">...</div>
@@ -184,13 +111,13 @@
                     <li>
                         <img src="img/hearts.svg" width="80" alt="">
                         <a data-name="1">
-                        <div><span></span></div>
+                            <div><span></span></div>
                         </a>
                     </li>
                     <li>
                         <img src="img/earphone.svg" width="60" alt="">
                         <a data-name="2">
-                        <div><span></span></div>
+                            <div><span></span></div>
                         </a>
                     </li>
 
@@ -198,7 +125,7 @@
                 </ul>
                 <div style="clear: both"></div>
             </div>
-            <div data-id="topic"></div>
+             <div data-id="topic"></div>
             <hr>
         </div>
 
@@ -237,7 +164,7 @@
 <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
 <script src="js/jquery.session.js"></script>
 <script type="text/javascript" src="js/jquery.flexText.js"></script>
-<script src="js/common.js"></script>
+<script src="js/reply.js"></script>
 <script src="js/top.js"></script>
 
 <script>
@@ -311,12 +238,13 @@
                 '</div>' +
                 '</div>' +
                 '<div class="comment-pl-block clearfix">' +
+                '<a href="../buzz/comment.html?id=' + result.id + '" class="float_right">查看更多</a>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
                 '</li>';
         });
-        $('div[data-id="user-like"]').html(tmp);
+        $('div[data-id="buzz"]').html(tmp);
 
     });
     $.get('/index/music', function (result) {
@@ -372,6 +300,7 @@
                 '</div>' +
                 '</div>' +
                 '<div class="comment-pl-block clearfix">' +
+                '<a href="../music/comment.html?id=' + result.oid + '" class="float_right">查看更多</a>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -433,6 +362,7 @@
                     '</div>' +
                     '</div>' +
                     '<div class="comment-pl-block clearfix">' +
+                    '<a href="../topic/comment.html?id=' + result.cid + '" class="float_right">查看更多</a>' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
@@ -446,7 +376,7 @@
     $.get("/index/column", function (result) {
 
         $.each(result.data, function (idx, result) {
-            $(`.topic-column a[data-name=${idx}]`).attr('href',"");
+            $(`.topic-column a[data-name=${idx}]`).attr('href', "");
             $(`.topic-column a[data-name=${idx}] span`).text(result.topic);
         });
 
@@ -482,12 +412,203 @@
         });
     });
     $("#push-like").on("click", function () {
-        $("div[data-id='user-like']").slideUp("normal");
-        $("div[data-id='user-like']").slideDown("normal");
+        $("div[data-id='buzz']").slideUp("normal");
+        $("div[data-id='buzz']").slideDown("normal");
     });
-    /*绑定回复按钮事件*/
-    $();
 
+
+    /*绑定回复按钮事件*/
+    $('#content').on('click', '.hf-pl', function () {
+        var type = getType(this);
+        var oThis = $(this);
+        //获取输入内容
+        console.log("this is in self page");
+        var content = oThis.siblings('.flex-text-wrap').find('.comment-input').val();
+        console.log(content);
+        if (content.replace(/^ +| +$/g, '') === '' || content.trim().length < 1) {
+            /*输入内容为空*/
+            layer.msg("输入内容为空。");
+            return false;
+        } else {
+            var loadIdx = layer.load(1);
+            var rcid = oThis.attr("data-id");
+            var bcid = oThis.parents('.commentAll').siblings('.inline').find('.comment').attr("data-id");
+            if (!bcid) {
+                bcid = rcid;
+            }
+            $.ajax({
+                url: '/'+type+'/' + bcid + "/" + rcid
+                , type: 'post'
+                , data: {"data": aes.encrypt(content)}
+                , success: function (res) {
+                    layer.close(loadIdx);
+                    if (res.status === 0) {
+                        layer.msg("发表成功");
+                        var oHtml = buildReply(res.data);
+                        addReply(oHtml, oThis);
+                        return false;
+                    } else {
+                        layer.alert(res.msg);
+                    }
+                    return false;
+                },
+                error: function (res) {
+                    layer.close(loadIdx);
+                    layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+                    return false;
+                }
+            });
+
+
+        }
+    });
+
+    /*绑定点击话题事件 -->进入话题页面 加载话题内容 */
+    (function () {
+        $('#content').on('click', '.topic', function () {
+            var tid = $(this).attr('data-id');
+            window.location.href = "./topic.html?tid="+tid;
+        });
+    })();
+    <!--点击回复动态创建回复块 子栏目-->
+    (function () {
+        $('#content').on('click', '.date-dz-pl.pl-hf', function () {
+
+            if (!$.cookie("user")) {
+                layer.msg("请登录后评论");
+                return false;
+            }
+            //获取回复人的名字
+            var fhName = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.pl-text').find('.comment-size-name').html();
+            //回复@
+            var fhN = '回复@' + fhName + "：";
+            //var oInput = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.hf-con');
+            var fhHtml = '<div class="hf-con pull-left"> ' +
+                '<textarea class="content comment-input hf-input" data-name="' + fhName +
+                '" placeholder="' + fhN + '"></textarea> <a href="javascript:;" class="hf-pl" data-id="'
+                + $(this).attr('data-id') + '">评论</a></div>';
+            //显示回复
+            if ($(this).is('.hf-con-block')) {
+                $(this).parents('.date-dz-right').parents('.date-dz').append(fhHtml);
+                $(this).removeClass('hf-con-block');
+                $('.content').flexText();
+                $(this).parents('.date-dz-right').siblings('.hf-con').find('.pre').css('padding', '6px 15px');
+                //console.log($(this).parents('.date-dz-right').siblings('.hf-con').find('.pre'))
+                //input框自动聚焦
+                $(this).parents('.date-dz-right').siblings('.hf-con').find('.hf-input').val('').focus().val();
+            } else {
+                $(this).addClass('hf-con-block');
+                $(this).parents('.date-dz-right').siblings('.hf-con').remove();
+            }
+        });
+    })();
+    <!--分享-->
+    (function () {
+        $('#content').on('click', '.share', function () {
+            var type = getType(this);
+
+            var dom = $(this);
+            var did = dom.attr('data-id');
+            var text = "给你分享一个来自乐热评的消息：" +
+                dom.parents('.card_detail').find('.card_text').text() +
+                "\n点击查看原文：http://localhost/"+type+"/comment.html?id=" + did;
+            layer.prompt({
+                formType: 2,
+                value: text,
+                title: '复制内容分享',
+            }, function (value, index, elem) {
+                layer.close(index);
+            });
+        });
+    })();
+    <!--点赞-->
+    (function () {
+        $('#content').on('click', '.like,a.date-dz-z', function () {
+            var type = getType(this);
+
+            var thumbNum = $(this).find('num').html();
+            console.log("当前点赞数:" + thumbNum);
+            var dom = this;
+            if ($.cookie('user') == null) {
+                layer.msg("点赞需要登录。");
+                return false;
+            } else {
+                var cid = $(this).attr('data-id');
+                $.ajax({
+
+                    url: '/like/'+type+'/' + cid
+                    , type: 'post'
+                    , success: function (res) {
+                        layer.msg(res.msg);
+                        if (res.status === 0) {
+                            /*操作成功*/
+                            if (res.count === 1) {
+                                /*点赞*/
+                                thumbNum++;
+                                if ($(dom).find('.iconfont').length) {
+                                    $(dom).find('.iconfont').addClass('icon-dianzan1').removeClass('icon-dianzan');
+                                } else {
+                                    $(dom).addClass('date-dz-z-click');
+                                    $(dom).find('.date-dz-z-click-red').addClass('red');
+                                }
+                                $(dom).find('num').html(thumbNum);
+
+                            } else {
+                                /*取消点赞*/
+                                thumbNum--;
+                                if ($(dom).find('.iconfont').length) {
+                                    /*主页面*/
+                                    $(dom).find('.iconfont').addClass('icon-dianzan').removeClass('icon-dianzan1');
+                                } else {
+                                    $(dom).removeClass('date-dz-z-click red');
+                                    $(dom).find('.date-dz-z-click-red').removeClass('red');
+                                }
+                                $(dom).find('num').html(thumbNum);
+
+                            }
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    }
+                    , error: function (res) {
+                        layer.msg("错误码：" + res.status + "<br>" + res.statusText);
+                    }
+                });
+                return false;
+            }
+        });
+    })();
+    /*创建回复按钮*/
+    (function () {
+        $("#content").on('click', ".comment", function () {
+
+            if (!$.cookie("user")) {
+                layer.msg("请登录后评论");
+                return false;
+            }
+            //获取回复人的名字
+            var fhName = $(this).parents('.card_detail').find('.S_txt1').html();
+            //回复@
+            var fhN = '回复@' + fhName + "：";
+            //var oInput = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.hf-con');
+            var fhHtml = '<div class="hf-con pull-left"> ' +
+                '<textarea class="content comment-input hf-input" data-name="' + fhName +
+                '" placeholder="' + fhN + '"></textarea> <a href="javascript:;" class="hf-pl" data-id="'
+                + $(this).attr('data-id') + '">评论</a></div>';
+            //显示回复
+            if (!$(this).is('.hf-con-block')) {
+                $(this).parents('.card_detail').find('.reviewArea').html(fhHtml);
+                $(this).addClass('hf-con-block');
+                $('.content').flexText();
+                $('.content').parents('flex-text-wrap').find('pre').css('padding', '6px 15px');
+                //input框自动聚焦
+                $(this).parents('.card_detail').find('.hf-input').val('').focus().val();
+            } else {
+                $(this).removeClass('hf-con-block');
+                $(this).parents('.card_detail').find('.hf-con').remove();
+            }
+        });
+    })();
 </script>
 <script type="text/javascript" src="js/nearby.js"></script>
 </body>

@@ -357,7 +357,14 @@
             type = name;
             flowLoad('/topic/' + type);
         });
-        $('.child-btn[data-name="new"]').click();
+        var tid;
+        tid = getHashData("tid");
+        if(  tid !== null) {
+            flowLoad('/topic/' + tid);
+        }else{
+            $('.child-btn[data-name="new"]').click();
+        }
+
         $('.search-btn').on('click', function () {
             var word = $(this).html();
 
