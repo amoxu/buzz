@@ -30,4 +30,7 @@ public interface FeatureMapper {
     int updateByPrimaryKey(Feature record);
 
     List<Feature> selectByRandom(@Param("limit") Integer limit);
+
+    int insertBatch(List<String> list);
+
 }

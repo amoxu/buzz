@@ -18,4 +18,7 @@ public interface BuzzService {
 
     AjaxResult index();
 
+    AjaxResult likeBuzz(Integer bid);
+
+    AjaxResult dislikeBuzz(Integer bid);
 }

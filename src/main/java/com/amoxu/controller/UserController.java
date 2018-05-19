@@ -166,7 +166,7 @@ public class UserController {
             , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
     )
     @ResponseBody
-    public String setUserFeature(@RequestParam("data") String data) {
+    public String setUserFeature(@RequestParam("data") String data) throws UnLoginException {
         logger.info(data);
         AjaxResult<String> result = new AjaxResult<>();
         JSONObject js = JSON.parseObject(data);

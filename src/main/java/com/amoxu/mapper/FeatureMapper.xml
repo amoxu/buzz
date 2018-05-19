@@ -220,4 +220,15 @@
     limit ${limit}
 
   </select>
+
+
+  <insert id="insertBatch" parameterType="java.util.List">
+    INSERT ignore INTO feature(name)
+    VALUES
+    <foreach collection="list" item="name" separator=","  >
+      ( #{name,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+
 </mapper>

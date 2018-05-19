@@ -11,7 +11,6 @@ import java.util.List;
 public class FeatureServiceImpl implements FeatureService {
     @Autowired
     private FeatureMapper mapper;
-
     @Override
     public List<Feature> getRegFeatures() {
         return mapper.selectByRandom(5);

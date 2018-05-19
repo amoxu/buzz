@@ -65,7 +65,6 @@ public class NearbyServiceImpl implements NearbyService {
             byte[] member = geo.getMember();
             outUser = JedisUtil.deSeri(member, User.class);
             nearbyUser.add(outUser);
-            System.err.println(JSON.toJSONString(geo));
         }
 
         if (nearbyUser.size() < 6) {

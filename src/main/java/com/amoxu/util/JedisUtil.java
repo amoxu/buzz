@@ -1034,7 +1034,7 @@ public class JedisUtil {
      * @return
      * @throws IOException
      */
-    private static <T> byte[] enSeriList(List<T> list) throws RuntimeException, IOException {
+    public static <T> byte[] enSeriList(List<T> list) throws RuntimeException, IOException {
         if (list == null || list.size() == 0) {
             throw new RuntimeException("集合不能为空!");
         }
@@ -1054,7 +1054,7 @@ public class JedisUtil {
      * @return
      * @throws IOException
      */
-    private static <T> List<T> deSeriList(byte[] data, Class<T> clazz) throws IOException {
+    public static <T> List<T> deSeriList(byte[] data, Class<T> clazz) throws IOException {
         if (data == null || data.length == 0) {
             return null;
         }

@@ -25,4 +25,11 @@ public class UserFeatureServiceImplTest {
         ls.add(1001);
 
     }
+    @Test
+    public void setUserFeature() {
+        String[] strings = "阿杜/成就/当时/不然的话/火".split("/");
+
+        int i = userFeatureService.setUserFeature(1, 1.0, strings);
+        logger.info(i);
+    }
 }

@@ -34,14 +34,14 @@ public class BuzzCacheDao {
         }
     }
 
-    public String setBuzzCount(Integer count) {
+    private void setBuzzCount(Integer count) {
         if (count == null) {
-            return null;
+            return;
         }
         Jedis jedis = JedisPoolUtil.getJedis();
         try {
             byte[] bytes = JedisUtil.enSeri(count);
-            return jedis.set(CountKey.getBytes(), bytes);
+            jedis.set(CountKey.getBytes(), bytes);
         } finally {
             JedisPoolUtil.closeJedis(jedis);
         }

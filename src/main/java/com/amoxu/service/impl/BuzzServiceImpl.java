@@ -1,11 +1,14 @@
 package com.amoxu.service.impl;
 
+import com.amoxu.cache.BuzzCacheDao;
 import com.amoxu.entity.*;
+import com.amoxu.entity.likes.LikeBuzzKey;
 import com.amoxu.exception.UnLoginException;
 import com.amoxu.mapper.BuzzNeteaseMapper;
 import com.amoxu.mapper.CommentsMapper;
-import com.amoxu.cache.BuzzCacheDao;
+import com.amoxu.mapper.likes.LikeBuzzMapper;
 import com.amoxu.service.BuzzService;
+import com.amoxu.service.UserFeatureService;
 import com.amoxu.util.StaticEnum;
 import com.amoxu.util.ToolKit;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +20,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,11 +32,16 @@ public class BuzzServiceImpl implements BuzzService {
     private Logger logger = Logger.getLogger(getClass());
 
     @Autowired
+    private LikeBuzzMapper likeBuzzMapper;
+    @Autowired
     private SqlSessionFactory sqlSessionFactory;
     @Autowired
     private BuzzNeteaseMapper buzzNeteaseMapper;
     @Autowired
     private CommentsMapper commentsMapper;
+
+    @Resource(name = "userFeatureServiceImpl")
+    private UserFeatureService userFeatureService;
 
     @Autowired
     BuzzCacheDao buzzCache;
@@ -57,8 +66,7 @@ public class BuzzServiceImpl implements BuzzService {
             /*获取总条数*/
             int allCount = buzzCache.getBuzzCount();
 
-            logger.info("\n=====================总信息条数是：" + allCount+"\n=====================");
-
+            logger.info("\n=====================总信息条数是：" + allCount + "\n=====================");
 
 
             Subject subject;
@@ -159,6 +167,41 @@ public class BuzzServiceImpl implements BuzzService {
     }
 
     @Override
+    public AjaxResult likeBuzz(Integer bid) {
+        AjaxResult<String> ajaxResult = new AjaxResult<>();
+
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (!authenticated) {
+            ajaxResult.failed().setMsg(StaticEnum.OPT_UNLOGIN);
+            return ajaxResult;
+        }
+        User principal = (User) subject.getPrincipal();
+        Integer uid = principal.getUid();
+
+        LikeBuzzKey likeBuzzKey = new LikeBuzzKey();
+        likeBuzzKey.setBuzzId(bid).setUid(uid);
+
+        /*点赞*/
+        likeBuzzMapper.ignoreIntoByPk(likeBuzzKey);
+
+        //用户已经点赞 -> 相关用户爱好+2
+        BuzzNetease buzzNetease = buzzNeteaseMapper.selectByPrimaryKey(bid);
+        String keyword = buzzNetease.getKeyword();
+        String[] split = keyword.split("/");
+        userFeatureService.setUserFeature(uid, 1.0, split);
+        ajaxResult.ok();
+        return ajaxResult;
+
+    }
+
+    @Override
+    public AjaxResult dislikeBuzz(Integer bid) {
+
+        return null;
+    }
+
+    @Override
     public AjaxResult replyComment(Integer rcid, Integer bcid, String data) {
         AjaxResult<Comments> ret = new AjaxResult<>();
         Comments shareComment = new Comments();
@@ -196,8 +239,9 @@ public class BuzzServiceImpl implements BuzzService {
 
     /**
      * 详细页面头部 包括热评一条和四条回复
+     *
      * @param oid --> buzzId 热评id
-     * */
+     */
     @Override
     public AjaxResult getDetailMain(Integer... oid) {
         BuzzNeteaseExample shareExample = new BuzzNeteaseExample();

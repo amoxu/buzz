@@ -194,5 +194,11 @@
     #{uid,mode=INOUT,jdbcType=INTEGER}
     )
   </select>
+  <insert id="ignoreIntoByPk" parameterType="com.amoxu.entity.likes.LikeBuzzKey" >
+    INSERT ignore INTO
+    like_buzz(uid,buzz_id)
+    VALUES (#{uid},#{buzzId})
+  </insert>
+
 
 </mapper>

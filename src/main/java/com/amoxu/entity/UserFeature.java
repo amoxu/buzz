@@ -11,6 +11,21 @@ public class UserFeature {
 
     private Double counts;
 
+    @Override
+    public String toString() {
+        return "UserFeature{" +
+                "id=" + id +
+                ", uid=" + uid +
+                ", fid=" + fid +
+                ", counts=" + counts +
+                ", name='" + name + '\'' +
+                ", ctime=" + ctime +
+                ", atime=" + atime +
+                '}';
+    }
+
+    private String name;
+
     private Date ctime;
 
     private Date atime;
@@ -63,15 +78,12 @@ public class UserFeature {
         this.atime = atime;
     }
 
-    @Override
-    public String toString() {
-        return "UserFeature{" +
-                "id=" + id +
-                ", uid=" + uid +
-                ", fid=" + fid +
-                ", counts=" + counts +
-                ", ctime=" + ctime +
-                ", atime=" + atime +
-                '}';
+    public String getName() {
+        return name;
+    }
+
+    public UserFeature setName(String name) {
+        this.name = name;
+        return this;
     }
 }

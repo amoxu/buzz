@@ -213,6 +213,11 @@
             <artifactId>jsoup</artifactId>
             <version>1.10.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>2.4.0</version>
+        </dependency>
 
 
     </dependencies>

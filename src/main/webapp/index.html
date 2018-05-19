@@ -93,6 +93,46 @@
     <div class="layui-row">
         <div class="layui-col-md9" id="content">
             <div data-id="buzz">
+                <li class="card clearfix">
+                    <div class="card_detail" style="margin-left: 17px">
+                        <div class="card_nick"><a href="http://music.163.com/#/user/home?id=343265766" target="_blank"
+                                                  class="ws16 W_fb S_txt1">Efrvzem</a></div>
+                        <div class="float_right"><a href="javascript:void(0);" id="push-like" data-id="5"><i
+                                class="iconfont" style="font-size: x-large;margin-left: 1em; color: #FF5900"></i></a><a
+                                href="javascript:void(0);" id="push-dislike" data-id="5"><i class="iconfont"
+                                                                                           style="font-size: x-large;margin-left: 1em; color: #2D93CA"></i></a>
+                        </div>
+                        <div class="card_time">2018-02-14 01:12:25</div>
+                        <div class="card_text ws14">ئۆزۈڭ سۆيگەننى ھەرگىز يالغۇز تاشلاپ قويما، سەن تاشلىغان ھەر بىر
+                            مىنۇت ئۇنى ياتنىڭ يىنىغا باشلايدۇ ????
+                        </div>
+                        <div class="float_right">——来自 <a target="_blank" href="http://music.163.com/#/artist?id=39092">Mustafa
+                            Ceceli</a> 《<a target="_blank" href="http://music.163.com/song?id=518092464">Simsiyah</a>》
+                            <a>网易云</a></div>
+                        <div class="layui-row">
+                            <ul class="inline">
+                                <li class="like" data-id="1174034"><a href="javascript:;"><i
+                                        class="iconfont icon-dianzan"></i>
+                                    <num>15</num>
+                                </a></li>
+                                <li class="comment" data-id="1174034"><a href="javascript:;"><i class="layui-icon"></i></a>
+                                </li>
+                                <li class="share" data-id="1174034"><a href="javascript:;"><i
+                                        class="layui-icon"></i></a></li>
+                                <li class="report" data-id="1174034"><a href="javascript:;"><i class="layui-icon"></i></a>
+                                </li>
+                            </ul>
+                            <div class="commentAll">
+                                <div class="reviewArea clearfix"></div>
+                                <div class="comment-show">
+                                    <ul class="hf-list-con"></ul>
+                                </div>
+                            </div>
+                            <div class="comment-pl-block clearfix"><a href="../buzz/comment.html?id=1174034"
+                                                                      class="float_right">查看更多</a></div>
+                        </div>
+                    </div>
+                </li>
             </div>
 
             <div style="text-align: center;font-size: x-large">...</div>
@@ -125,7 +165,7 @@
                 </ul>
                 <div style="clear: both"></div>
             </div>
-             <div data-id="topic"></div>
+            <div data-id="topic"></div>
             <hr>
         </div>
 
@@ -189,8 +229,8 @@
                 '<a href="http://music.163.com/#/user/home?id=' + result.userId + '" target="_blank" class="ws16 W_fb S_txt1">' + result.userName + '</a>' +
                 '</div>' +
                 '<div class="float_right">' +
-                '<a href="javascript:void(0);" id="push-like" data-id=""><i class="iconfont" style="font-size: x-large;margin-left: 1em; color: #FF5900"></i></a>' +
-                '<a href="javascript:void(0);" id="push-dislike" data-id=""><i class="iconfont" style="font-size: x-large;margin-left: 1em; color: #2D93CA"></i></a>' +
+                '<a href="javascript:void(0);" id="push-like" data-id="' + result.id + '"><i class="iconfont" style="font-size: x-large;margin-left: 1em; color: #FF5900"></i></a>' +
+                '<a href="javascript:void(0);" id="push-dislike" data-id="' + result.id + '"><i class="iconfont" style="font-size: x-large;margin-left: 1em; color: #2D93CA"></i></a>' +
                 '</div>' +
                 '<div class="card_time">' + result.ctime + '</div>' +
                 '<div class="card_text ws14">' + result.content + '</div>';
@@ -376,7 +416,7 @@
     $.get("/index/column", function (result) {
 
         $.each(result.data, function (idx, result) {
-            $(`.topic-column a[data-name=${idx}]`).attr('href', "");
+            $(`.topic-column a[data-name=${idx}]`).attr('data-id', result.tid);
             $(`.topic-column a[data-name=${idx}] span`).text(result.topic);
         });
 
@@ -411,9 +451,37 @@
 
         });
     });
-    $("#push-like").on("click", function () {
-        $("div[data-id='buzz']").slideUp("normal");
-        $("div[data-id='buzz']").slideDown("normal");
+    $("div[data-id='buzz']").on("click", "#push-like,#push-dislike", function () {
+        let dislike = this.id.find('dislike');
+        let dom = $(this);
+        let url = "/buzz";
+        if (dislike) {
+            url += "/dislike";
+        } else {
+            url += "/like";
+        }
+
+        $.ajax({
+            url: url
+            , data: {'id': dom.attr('data-id')}
+            ,type:'post'
+            ,success:function (res) {
+                layer.msg(res.msg);
+                if (res.status === 0) {
+                    //success
+                    dom.parents('.buzz').find('comment-pl-block').click;
+
+                }else {
+                    $("div[data-id='buzz']").slideUp("normal");
+                    $("div[data-id='buzz']").slideDown("normal");
+                }
+            }
+            ,error:function (res) {
+                layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+                return false;
+            }
+        });
+
     });
 
 
@@ -437,7 +505,7 @@
                 bcid = rcid;
             }
             $.ajax({
-                url: '/'+type+'/' + bcid + "/" + rcid
+                url: '/' + type + '/' + bcid + "/" + rcid
                 , type: 'post'
                 , data: {"data": aes.encrypt(content)}
                 , success: function (res) {
@@ -467,7 +535,11 @@
     (function () {
         $('#content').on('click', '.topic', function () {
             var tid = $(this).attr('data-id');
-            window.location.href = "./topic.html?tid="+tid;
+            window.location.href = "./topic.html?tid=" + tid;
+        });
+        $('#content').on('click', '.topic-column li', function () {
+            var tid = $(this).find('a').attr('data-id');
+            window.location.href = "./topic.html?tid=" + tid;
         });
     })();
     <!--点击回复动态创建回复块 子栏目-->
@@ -511,7 +583,7 @@
             var did = dom.attr('data-id');
             var text = "给你分享一个来自乐热评的消息：" +
                 dom.parents('.card_detail').find('.card_text').text() +
-                "\n点击查看原文：http://localhost/"+type+"/comment.html?id=" + did;
+                "\n点击查看原文：http://localhost/" + type + "/comment.html?id=" + did;
             layer.prompt({
                 formType: 2,
                 value: text,
@@ -536,7 +608,7 @@
                 var cid = $(this).attr('data-id');
                 $.ajax({
 
-                    url: '/like/'+type+'/' + cid
+                    url: '/like/' + type + '/' + cid
                     , type: 'post'
                     , success: function (res) {
                         layer.msg(res.msg);
@@ -609,6 +681,8 @@
             }
         });
     })();
+
+
 </script>
 <script type="text/javascript" src="js/nearby.js"></script>
 </body>

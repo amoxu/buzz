@@ -8,6 +8,8 @@
         <result column="counts" property="counts" jdbcType="DOUBLE"/>
         <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
         <result column="atime" property="atime" jdbcType="TIMESTAMP"/>
+        <result column="name" property="name" jdbcType="TIMESTAMP"/>
+
     </resultMap>
     <sql id="Example_Where_Clause">
         <where>
@@ -70,15 +72,18 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-    id, uid, fid, counts, ctime, atime
+    user_feature.id, user_feature.uid, user_feature.fid, user_feature.counts, user_feature.ctime, user_feature.atime
   </sql>
     <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.UserFeatureExample">
         select
         <if test="distinct">
             distinct
         </if>
+
         <include refid="Base_Column_List"/>
+        ,f.name
         from user_feature
+        LEFT JOIN feature f ON user_feature.fid = f.fid
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -244,4 +249,24 @@
             #{feature.counts,jdbcType=DOUBLE})
         </foreach>
     </insert>
+    <insert id="insertBatchByReplace" parameterType="map">
+
+        INSERT ignore INTO user_feature(uid,fid,counts)
+        VALUES
+        <foreach collection="fids" item="fid" separator=",">
+            (#{uid},
+            #{fid},
+            0)
+        </foreach>
+    </insert>
+
+    <update id="updateCountWithFids" parameterType="map">
+        UPDATE user_feature SET counts = counts+#{count}
+        WHERE uid =#{uid}
+        and fid in
+        <foreach collection="fids" item="fid" separator="," open="(" close=")">
+            #{fid}
+        </foreach>
+
+    </update>
 </mapper>

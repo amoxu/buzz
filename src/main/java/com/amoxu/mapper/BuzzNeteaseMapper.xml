@@ -341,6 +341,44 @@
             limit ${example.offset}, ${example.limit}
         </if>
     </select>
+    <select id="selectUserRecommend" resultMap="listMap" parameterType="map">
+        /* 查询首页 按时间排序*/
+        SELECT
+        <include refid="Base_Column_List"/>
+        , like_buzz.uid as userLike
+        ,
+        <if test="onlineId != null ">
+            #{onlineId}
+        </if>
+        <if test="onlineId == null ">
+            NULL
+        </if>
+        AS onlineId
+        FROM buzz_netease
+
+        LEFT JOIN like_buzz ON buzz_netease.id = like_buzz.buzz_id AND like_buzz.uid=
+
+        <if test="onlineId != null">
+            #{onlineId}
+        </if>
+        <if test="onlineId == null">
+            0
+        </if>
+
+        <if test="key != null">
+            <foreach collection="key" item="listItem" open="(" close=")"
+                     separator="or,">
+               buzz_netease.keyword like '%'#{listItem}'%'
+            </foreach>
+        </if>
+
+        <if test="example.orderByClause != null">
+            order by ${example.orderByClause}
+        </if>
+        <if test="example.limit!=0">
+            limit ${example.offset}, ${example.limit}
+        </if>
+    </select>
 
     <select id="selectTopReply" resultMap="listMap" parameterType="map">
         SELECT

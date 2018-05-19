@@ -31,6 +31,8 @@ public interface BuzzNeteaseMapper {
     
     List<BuzzNetease> selectMain(@Param("onlineId") Integer uid, @Param("example") BuzzNeteaseExample buzzExample);
 
+    List<BuzzNetease> selectUserRecommend(@Param("onlineId") Integer uid,@Param("key") List keyword, @Param("example") BuzzNeteaseExample buzzExample);
+
     List<BuzzNetease> selectTopReply(@Param("onlineId") Integer uid, @Param("example") BuzzNeteaseExample buzzExample);
 
 

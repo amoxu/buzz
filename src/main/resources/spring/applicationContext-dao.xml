@@ -59,5 +59,11 @@
         <property name="sqlSessionFactoryBeanName" value="sessionFactory"/>
     </bean>
 
+    <!--线程池异步添加用户爱好-->
+    <bean id="featherExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="5" />
+        <property name="maxPoolSize" value="10" />
+        <property name="queueCapacity" value="25" />
+    </bean>
 
 </beans>

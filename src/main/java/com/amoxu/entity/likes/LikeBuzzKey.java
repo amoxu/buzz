@@ -9,15 +9,17 @@ public class LikeBuzzKey {
         return buzzId;
     }
 
-    public void setBuzzId(Integer buzzId) {
+    public LikeBuzzKey setBuzzId(Integer buzzId) {
         this.buzzId = buzzId;
+        return this;
     }
 
     public Integer getUid() {
         return uid;
     }
 
-    public void setUid(Integer uid) {
+    public LikeBuzzKey setUid(Integer uid) {
         this.uid = uid;
+        return this;
     }
 }

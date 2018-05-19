@@ -30,4 +30,14 @@ public interface UserFeatureMapper {
     int updateByPrimaryKey(UserFeature record);
 
     int insertBatch(List<UserFeature> list);
+
+    int updateCountWithFids(@Param("uid") Integer uid,
+                            @Param("count") Double count,
+                            @Param("fids") List<Integer> featureIdList
+    );
+
+
+    int insertBatchByReplace(@Param("uid") Integer uid, @Param("fids") List<Integer> list);
+
+
 }

@@ -33,4 +33,7 @@ public interface LikeBuzzMapper {
 
     ProcCallResult callLikeProc(ProcCallResult callResult);
 
+    int ignoreIntoByPk(LikeBuzzKey likeBuzzKey);
+
+
 }

@@ -22,12 +22,27 @@ public class BuzzController {
     @Resource(name = "buzzServiceImpl")
     private BuzzService buzzService;
 
+    /*喜欢热评*/
+    @RequestMapping(value = "/like", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+    @ResponseBody
+    public String likeBuzz(@PathVariable("id") Integer bid) {
+        return buzzService.likeBuzz(bid).toString();
+    }
+
+    /*不喜欢喜欢热评*/
+    @RequestMapping(value = "/dislike", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+    @ResponseBody
+    public String dislikeBuzz(@PathVariable("id") Integer bid) {
+        return buzzService.dislikeBuzz(bid).toString();
+    }
+
     /*获取热评回复列表*/
     @RequestMapping(value = "/comment/reply/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
     @ResponseBody
     public String commentReply(PageResult<Comments> pageResult, @PathVariable("id") Integer cid) {
         return buzzService.commentDetail(cid, pageResult).toString();
     }
+
     /*获取热评*/
     @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
     @ResponseBody

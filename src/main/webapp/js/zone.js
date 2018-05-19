@@ -1,8 +1,7 @@
 var setting = {
     show: function showInfo(res) {
-
         if (res) {
-            if (res.status == 0) {
+            if (res.status === 0) {
                 $('.head').attr("src", res['data'].icons);
                 $('.tit').html(res['data'].nickname);//nickname
                 $('.data i').html(res['data'].sex === '男' ? '&#xe662;' : '&#xe661;');//sex
@@ -13,7 +12,6 @@ var setting = {
             } else {
                 layer.alert(res.msg);
             }
-
         }
     }
     , error: function (res) {
@@ -49,7 +47,8 @@ var setting = {
 layui.use(['element', 'jquery'], function () {
     var element = layui.element;
     var $ = layui.jquery;
-    var userInfo = $.cookie("user").user;
+    var userInfo = $.cookie("user")?$.cookie("user").user:false;
+
     if (true || $.isEmptyObject(userInfo)) {
         /*0表示自身ID*/
         $.ajaxSettings.async = false;
@@ -69,7 +68,7 @@ layui.use(['element', 'jquery'], function () {
 
     setting.show(userInfo);
     if (userInfo) {
-        if (userInfo.status == 0) {
+        if (userInfo.status === 0) {
             var sex = userInfo['data'].sex;
 
             $("input[title=" + sex + "]").attr("checked", true);
