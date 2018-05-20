@@ -95,6 +95,9 @@ public class User implements Cloneable, Serializable {
         return this;
     }
 
+    private Integer focus;
+
+
     @JSONField(serialize = false)
     private State userState = null;
     @JSONField(serialize = false)
@@ -228,5 +231,14 @@ public class User implements Cloneable, Serializable {
         this.note = note == null ? null : note.trim();
         return this;
 
+    }
+
+    public Integer getFocus() {
+        return focus;
+    }
+
+    public User setFocus(Integer focus) {
+        this.focus = focus;
+        return this;
     }
 }

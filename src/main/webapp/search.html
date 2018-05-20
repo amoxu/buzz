@@ -74,7 +74,7 @@
                                 <thead>
                                 <tr>
                                     <th lay-data="{field:'cid', width: 120}">ID</th>
-                                    <th lay-data="{field:'user',templet: '<div>{{d.user.nickname}}</div>', width: 120}">
+                                    <th lay-data="{field:'user',templet: '<div>{{d.sendUser.nickname}}</div>', width: 120}">
                                         用户名
                                     </th>
                                     <th lay-data="{field:'ctime', width: 120}">时间</th>
@@ -119,7 +119,7 @@
                                 <thead>
                                 <tr>
                                     <th lay-data="{field:'uid', width: 120}">ID</th>
-                                    <th lay-data="{field:'nickname', width: 120}">用户名</th>
+                                    <th lay-data="{field:'nickname', width: 120,templet: '<div><a target=\'_blank\' href=\'../user/user.html?id={{d.uid}}\'>{{d.nickname}}</a></div>'}">用户名</th>
                                     <th lay-data="{field:'city', width: 120}">地区</th>
                                     <th lay-data="{field:'introduce'}">介绍</th>
                                 </tr>

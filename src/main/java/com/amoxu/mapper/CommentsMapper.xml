@@ -10,6 +10,8 @@
         <result column="feeling" property="feeling" jdbcType="DOUBLE"/>
         <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
         <result column="buzz_id" property="buzzId" jdbcType="INTEGER"/>
+
+        <association property="sendUser" resultMap="userCommonInfoMap" columnPrefix="send_"></association>
     </resultMap>
     <sql id="Example_Where_Clause">
         <where>
@@ -80,8 +82,11 @@
         <if test="distinct">
             distinct
         </if>
+
         <include refid="Base_Column_List"/>
+        ,user.nickname as send_nickname
         from comments
+        LEFT JOIN buzz.user on comments.uid = user.uid
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>

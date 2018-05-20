@@ -1,20 +1,21 @@
 package com.amoxu.service.impl;
 
-import com.amoxu.entity.Message;
-import com.amoxu.entity.MessageExample;
-import com.amoxu.entity.PageResult;
-import com.amoxu.entity.User;
+import com.amoxu.entity.*;
 import com.amoxu.mapper.MessageMapper;
+import com.amoxu.mapper.PermissionMapper;
 import com.amoxu.service.MessageService;
 import com.amoxu.util.StaticEnum;
 import com.amoxu.util.ToolKit;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 
 @Service
@@ -24,13 +25,14 @@ public class MessageServiceImpl implements MessageService {
     private MessageMapper msgMapper;
 
     @Autowired
+    private PermissionMapper permissionMapper;
+
+    @Autowired
     private SqlSessionFactory sqlSessionFactory;
 
-/**
- *
- * 返回不是成功就返回错误信息
- *
- * */
+    /**
+     * 返回不是成功就返回错误信息
+     */
     @Override
     public String sendMsg(int suid, int ruid, String content) {
 
@@ -51,13 +53,12 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * 用户删除消息时，通过权限和操作id进行判断
-     *
+     * <p>
      * 如果权限是管理员则可以进行操作，
      * 如果是用户进行操作时，则是对于信息的id和用户id同时进行判断，相同进行删除
-     *
-     * */
+     */
     @Override
-    public boolean deleteMsg(Subject subject,Integer mid) {
+    public boolean deleteMsg(Subject subject, Integer mid) {
         try {
             if (subject.hasRole("管理员")) {
                 return 1 == msgMapper.deleteByPrimaryKey(mid);
@@ -84,11 +85,39 @@ public class MessageServiceImpl implements MessageService {
 
     /*获取对应ID用户收到的消息*/
     @Override
-    public PageResult<Message> getMessage(PageResult<Message> pageResult, int uid) {
+    public AjaxResult<List<Message>> getMessage(PageResult<Message> pageResult, int uid) {
+        AjaxResult<List<Message>> ajaxResult = new AjaxResult<>();
+
+        Permission permission = permissionMapper.selectByPrimaryKey(uid);
+        if (permission == null) {
+            ajaxResult.failed();
+            ajaxResult.setMsg(StaticEnum.USER_NOT_EXIST);
+            return ajaxResult;
+        }
+        Integer messageRole = permission.getMessage();
+
+        Subject subject = SecurityUtils.getSubject();
+
+        if (!subject.isAuthenticated() && messageRole > 0) {
+            ajaxResult.failed();
+            ajaxResult.setMsg(StaticEnum.PERMISSION_DENIED);
+            return ajaxResult;
+        }
+        /*TODO 进行权限授权*/
+        Integer viewId = ((User) subject.getPrincipal()).getUid();
+
+
+
+        /*int uid = 1;*/
+        logger.info(pageResult);
+
+        ajaxResult.ok();
+
 
         MessageExample example = new MessageExample();
-        MessageExample.Criteria criteria = example.createCriteria();
-        criteria.andRuidEqualTo(uid);
+        example.or().andRuidEqualTo(uid);
+        example.or().andSuidEqualTo(uid);
+
         /**
          *  在这里不用关闭连接池，接着进行第二次查询
          *
@@ -110,6 +139,9 @@ public class MessageServiceImpl implements MessageService {
             sqlSession.close();
         }
 
-        return pageResult;
+        ajaxResult.setData(pageResult.getList());
+
+        ajaxResult.setCount(pageResult.getCount());
+        return ajaxResult;
     }
 }

@@ -73,10 +73,10 @@
 
                         <div class="clearfix ">
                             <div class="inf layui-form-label float_left">个性签名：</div>
-                            <div class="inf "></div>
+                            <div class="inf">&nbsp;</div>
 
                             <div class="inf layui-form-label float_left">邮箱：</div>
-                            <div class="inf"></div>
+                            <div class="inf">&nbsp;</div>
                         </div>
 
 
@@ -165,7 +165,7 @@
                                 "<div class=\"date-dz-right pull-right comment-pl-block\">\n" +
                                 "<a href=\"javascript:;\" class=\"f-opt send\" data-id='" + friend.uid + "'>发消息</a>\n" +
                                 "<span class=\"pull-left date-dz-line\">|</span>\n" +
-                                "<a href=\"../user/" + friend.uid + "/my.html\" class=\"f-opt zone\" data-id='1' >TA的空间</a>\n" +
+                                "<a href="+zone(friend.uid)+" class=\"f-opt zone\" data-id='1' >TA的空间</a>\n" +
                                 "<span class=\"pull-left date-dz-line\">|</span>\n" +
                                 "<a href=\"javascript:;\" class=\"f-opt cancel\" data-id='" + friend.uid + "' data-name='" + friend.nickname + "'>取消关注</a>\n" +
                                 "</div>\n" +
@@ -198,7 +198,7 @@
                 }
                 , error: function (res) {
                     layer.alert("错误码：" + res.status);
-                    $("#page").html("Oops，错误码：" + res.status);
+                    $('.f-show').html("<p style='text-align:center;-ms-text-align-last: center;text-align-last: center;'>Opoos,错误码：" + res.status+"</p>");
                 }
             });
 

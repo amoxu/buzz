@@ -228,11 +228,17 @@
     <result column="content" property="content" jdbcType="VARCHAR"/>
     <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
 
-    <result column="icons" property="user.icons" jdbcType="VARCHAR"/>
-    <result column="nickname" property="user.nickname" jdbcType="VARCHAR"/>
+    <result column="icons" property="sendUser.icons" jdbcType="VARCHAR"/>
+    <result column="nickname" property="sendUser.nickname" jdbcType="VARCHAR"/>
+
+    <result column="re_icons" property="receiveUser.icons" jdbcType="VARCHAR"/>
+    <result column="re_nickname" property="receiveUser.nickname" jdbcType="VARCHAR"/>
+
   </resultMap>
   <sql id="GetMsg_Column_List">
-    mid, suid, ruid, content, message.ctime, user.icons,user.nickname
+    mid,  content, message.ctime,
+    suid,send.icons,send.nickname,
+    ruid,receive.icons AS re_icons,receive.nickname AS re_nickname
   </sql>
   <!--/*WHERE friends.suid = #{suid,jdbcType=INTEGER}*/-->
   <select id="selectByExampleSelective" resultMap="MsgUser" parameterType="com.amoxu.entity.MessageExample">
@@ -242,7 +248,8 @@
     </if>
     <include refid="GetMsg_Column_List"/>
     FROM buzz.message
-    LEFT JOIN buzz.user ON user.uid = message.suid
+    LEFT JOIN buzz.user send ON send.uid = message.suid
+    LEFT JOIN buzz.user receive ON receive.uid = message.ruid
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>

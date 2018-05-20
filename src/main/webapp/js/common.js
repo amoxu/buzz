@@ -1,6 +1,4 @@
-function zone(id) {
-    return '"../user/' + id + '/my.html"';
-}
+
 
 /*主评论回复 创建回复模块*/
 /*(function () {
@@ -178,7 +176,7 @@ function buildReply(data, uid, receiveUserName) {
             "<div class=\"pl-text hfpl-text clearfix\">" +
             "<a href=" + zone(data.sendUser.uid) + " class=\"comment-size-name\">" +
             data.sendUser.nickname +
-            "</a><span class=\"my-pl-con\">回复<a href=" + zone(uid) + " class=\"atName\">@" +
+            "</a><span class=\"my-pl-con\">回复<a href='" + zone(uid) + "' class=\"atName\">@" +
             receiveUserName +
             "</a> : " +
             data.content +
@@ -225,7 +223,7 @@ function addList(res) {
         '</div> ' +
         '<div class="comment-show-con-list pull-left clearfix">' +
         '<div class="pl-text clearfix"> ' +
-        '<a href="javascript:;" class="comment-size-name">'
+        '<a href="' + zone(res.sendUser.uid)  +'" class="comment-size-name">'
         + res.sendUser.nickname + //昵称
         '</a>' +
         ' <span class="my-pl-con">&nbsp;'

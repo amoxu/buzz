@@ -193,7 +193,7 @@ public class UserController {
         User info = userService.getUserInfo(id);
         if (info == null) {
             result.failed();
-            result.setMsg(StaticEnum.OPT_UNLOGIN);
+            result.setMsg(StaticEnum.OPT_ERROR);
             return result.toString();
         }
 
@@ -203,13 +203,13 @@ public class UserController {
          *
          * ======================
          */
-        info.setPassword(null);
+/*        info.setPassword(null);
         info.setUserState(null);
         info.setCtime(null);
         info.setNote(null);
         info.setRoles(null);
         info.setRid(null);
-        info.setState(null);
+        info.setState(null);*/
         /**
          * =====================
          * */

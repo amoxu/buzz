@@ -17,7 +17,7 @@
     </context-param>
 
     <listener>
-        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+        <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
     </listener>
     <!--不拦截静态文件-->
     <servlet-mapping>

@@ -6,6 +6,7 @@ import com.amoxu.entity.likes.LikeBuzzKey;
 import com.amoxu.exception.UnLoginException;
 import com.amoxu.mapper.BuzzNeteaseMapper;
 import com.amoxu.mapper.CommentsMapper;
+import com.amoxu.mapper.UserFeatureMapper;
 import com.amoxu.mapper.likes.LikeBuzzMapper;
 import com.amoxu.service.BuzzService;
 import com.amoxu.service.UserFeatureService;
@@ -39,6 +40,9 @@ public class BuzzServiceImpl implements BuzzService {
     private BuzzNeteaseMapper buzzNeteaseMapper;
     @Autowired
     private CommentsMapper commentsMapper;
+    @Autowired
+    private UserFeatureMapper userFeatureMapper;
+
 
     @Resource(name = "userFeatureServiceImpl")
     private UserFeatureService userFeatureService;
@@ -66,8 +70,7 @@ public class BuzzServiceImpl implements BuzzService {
             /*获取总条数*/
             int allCount = buzzCache.getBuzzCount();
 
-            logger.info("\n=====================总信息条数是：" + allCount + "\n=====================");
-
+            logger.info("\n=====================\n总信息条数是：" + allCount + "\n=====================");
 
             Subject subject;
             boolean authenticated;
@@ -77,7 +80,7 @@ public class BuzzServiceImpl implements BuzzService {
 
             buzzExample.setOffset(pageResult.getOffset());
             buzzExample.setLimit(pageResult.getLimit());
-
+            int count;
             switch (type) {
                 case "discover":
                     random = new Random();
@@ -89,6 +92,8 @@ public class BuzzServiceImpl implements BuzzService {
                         ids.add(random.nextInt(allCount - 2) + 1);
                     }
                     buzzExampleCriteria.andIdIn(ids);
+                    count = sqlSessionMapper.countByExample(buzzExample);
+                    pageResult.setCount(count);
 
                     break;
                 case "hot":
@@ -107,6 +112,8 @@ public class BuzzServiceImpl implements BuzzService {
                     return pageResult;
                 case "thumb":
                     buzzExample.setOrderByClause("buzz_netease.liked_num desc");
+                    pageResult.setCount(allCount);
+
                     break;
                 case "recommend":
                     subject = SecurityUtils.getSubject();
@@ -124,14 +131,20 @@ public class BuzzServiceImpl implements BuzzService {
                         ids.add(random.nextInt(allCount - 2) + 1);
                     }
                     buzzExampleCriteria.andIdIn(ids);
+                    count = sqlSessionMapper.countByExample(buzzExample);
+                    pageResult.setCount(count);
+
                     break;
                 default:
+                    buzzExample.setLimit(10);
+                    buzzExample.setOffset(0);
+                    pageResult.setCount(allCount);
+
                     break;
             }
 
             List<BuzzNetease> buzzNeteaseList;
-            int count = sqlSessionMapper.countByExample(buzzExample);
-            pageResult.setCount(count);
+
 
             subject = SecurityUtils.getSubject();
             authenticated = subject.isAuthenticated();
@@ -156,13 +169,61 @@ public class BuzzServiceImpl implements BuzzService {
     public AjaxResult index() {
         int allCount = buzzCache.getBuzzCount();
         Random random = new Random();
-        AjaxResult detailMain;
-        while (true) {
-            detailMain = getDetailMain(random.nextInt(allCount));
-            if (detailMain.getCount() > 0) {
-                return detailMain;
-            }
+
+
+        List<BuzzNetease> buzzNeteases;
+        Integer uid;
+
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            uid = ((User) subject.getPrincipal()).getUid();
+        } else {
+            uid = 0;
         }
+        UserFeatureExample example = new UserFeatureExample();
+        example.setLimit(5);
+        example.setOrderByClause("rand()");
+        UserFeatureExample.Criteria criteria = example.createCriteria();
+        criteria.andUidEqualTo(uid);
+
+        List<UserFeature> userFeatures = userFeatureMapper.selectByExample(example);
+        List<String> keyword = new ArrayList<>();
+
+        for (UserFeature feature : userFeatures) {
+            keyword.add(feature.getName());
+        }
+        BuzzNeteaseExample buzzExample = new BuzzNeteaseExample();
+        buzzExample.setLimit(1);
+        buzzExample.setOffset(0);
+        if (userFeatures.size() == 0) {
+            BuzzNeteaseExample.Criteria buzzExampleCriteria = buzzExample.createCriteria();
+            ArrayList<Integer> ids = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+                if (allCount < 2) {
+                    allCount = 3;
+                }
+                ids.add(random.nextInt(allCount - 2) + 1);
+            }
+            buzzExampleCriteria.andIdIn(ids);
+            buzzNeteases = buzzNeteaseMapper.selectMain(uid, buzzExample);
+
+        } else {
+            for (int i = 0; i < keyword.size(); i++) {
+                keyword.set(i, "%" + keyword.get(i) + "%");
+                buzzExample.or(buzzExample.createCriteria().andKeywordLike(keyword.get(i)));
+            }
+
+            int count = buzzNeteaseMapper.countByExample(buzzExample);
+            buzzExample.setOffset(new Random().nextInt(count));
+            buzzNeteases = buzzNeteaseMapper.selectUserRecommend(uid, keyword, buzzExample);
+        }
+
+        AjaxResult<List<BuzzNetease>> ajaxResult = new AjaxResult<>();
+        ajaxResult.ok();
+        ajaxResult.setData(buzzNeteases);
+        ajaxResult.setCount(buzzNeteases.size());
+
+        return ajaxResult;
 
     }
 
@@ -186,10 +247,10 @@ public class BuzzServiceImpl implements BuzzService {
         likeBuzzMapper.ignoreIntoByPk(likeBuzzKey);
 
         //用户已经点赞 -> 相关用户爱好+2
-        BuzzNetease buzzNetease = buzzNeteaseMapper.selectByPrimaryKey(bid);
+        BuzzNetease buzzNetease = buzzNeteaseMapper.selectByPrimaryKey(bid);//获取关键词
         String keyword = buzzNetease.getKeyword();
         String[] split = keyword.split("/");
-        userFeatureService.setUserFeature(uid, 1.0, split);
+        userFeatureService.setUserFeature(uid, 1.0, split);//对兴趣进行加一
         ajaxResult.ok();
         return ajaxResult;
 
@@ -197,8 +258,24 @@ public class BuzzServiceImpl implements BuzzService {
 
     @Override
     public AjaxResult dislikeBuzz(Integer bid) {
+        AjaxResult<String> ajaxResult = new AjaxResult<>();
 
-        return null;
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (!authenticated) {
+            ajaxResult.failed().setMsg(StaticEnum.OPT_UNLOGIN);
+            return ajaxResult;
+        }
+        User principal = (User) subject.getPrincipal();
+        Integer uid = principal.getUid();
+        likeBuzzMapper.deleteByPrimaryKey(new LikeBuzzKey().setBuzzId(bid).setUid(uid));
+        //用户已经点赞 -> 相关用户爱好+2
+        BuzzNetease buzzNetease = buzzNeteaseMapper.selectByPrimaryKey(bid);//获取关键词
+        String keyword = buzzNetease.getKeyword();
+        String[] split = keyword.split("/");
+        userFeatureService.setUserFeature(uid, -1.0, split);//对兴趣进行加一
+        ajaxResult.ok();
+        return ajaxResult;
     }
 
     @Override

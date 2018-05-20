@@ -15,14 +15,6 @@ public class Message {
 
     private Date ctime;
 
-    public User getUser() {
-        return user;
-    }
-
-    public Message setUser(User user) {
-        this.user = user;
-        return this;
-    }
 
     @Override
     public String toString() {
@@ -32,11 +24,13 @@ public class Message {
                 ", ruid=" + ruid +
                 ", content='" + content + '\'' +
                 ", ctime=" + ctime +
-                ", user=" + user +
+                ", sendUser=" + sendUser +
+                ", receiveUser=" + receiveUser +
                 '}';
     }
 
-    private User user;
+    private User sendUser;
+    private User receiveUser;
 
 
     public Integer getMid() {
@@ -77,5 +71,23 @@ public class Message {
 
     public void setCtime(Date ctime) {
         this.ctime = ctime;
+    }
+
+    public User getReceiveUser() {
+        return receiveUser;
+    }
+
+    public Message setReceiveUser(User receiveUser) {
+        this.receiveUser = receiveUser;
+        return this;
+    }
+
+    public User getSendUser() {
+        return sendUser;
+    }
+
+    public Message setSendUser(User sendUser) {
+        this.sendUser = sendUser;
+        return this;
     }
 }

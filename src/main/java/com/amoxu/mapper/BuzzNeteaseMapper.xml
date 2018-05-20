@@ -366,9 +366,10 @@
         </if>
 
         <if test="key != null">
+            WHERE
             <foreach collection="key" item="listItem" open="(" close=")"
-                     separator="or,">
-               buzz_netease.keyword like '%'#{listItem}'%'
+                     separator="or">
+               buzz_netease.keyword like  #{listItem}
             </foreach>
         </if>
 

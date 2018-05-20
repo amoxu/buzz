@@ -200,5 +200,4 @@
     VALUES (#{uid},#{buzzId})
   </insert>
 
-
 </mapper>

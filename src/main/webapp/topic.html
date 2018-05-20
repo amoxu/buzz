@@ -24,8 +24,7 @@
             <li class="layui-nav-item"><a href="./search.html">搜索</a></li>
 
             <li class="layui-nav-item"><a href="./events.html">动态</a></li>
-            <li class="layui-nav-item layui-layout-right">
-            </li>
+            <li class="layui-nav-item layui-layout-right"></li>
         </ul>
     </div>
     <!--[if lt IE 9]>
@@ -293,7 +292,7 @@
                                         '</div>' +
                                         '<div class="card_detail">' +
                                         '<div class="card_nick">' +
-                                        '<a href="javascript:;" target="_blank" class="W_f14 W_fb S_txt1">' + result.sendUser.nickname + '</a>' +
+                                        '<a href='+zone(result.sendUser.uid)+' target="_blank" class="W_f14 W_fb S_txt1">' + result.sendUser.nickname + '</a>' +
                                         '</div>' +
                                         '<div class="card_time">' + result.ctime + '</div>' +
                                         '<a href="javascript:;" class="topic" data-id="' + result.ttid + '">#' + result.topic + '#</a>' +

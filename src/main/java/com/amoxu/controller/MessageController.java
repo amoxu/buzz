@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @Controller
 public class MessageController {
@@ -87,39 +86,12 @@ public class MessageController {
 
     @RequestMapping(
             method = RequestMethod.GET
-            , value = {"/msg", "/msg/{suid}"}
+            , value = {"/msg", "/msg/{userID}"}
             , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
     )
     @ResponseBody
-    public String getMsg(PageResult<Message> pageResult, @PathVariable(value = "suid", required = false) Integer suid) {
-
-        AjaxResult<List<Message>> ajaxResult = new AjaxResult<>();
-        int uid;
-        if (suid != null) {
-            uid = suid;
-        } else {
-            Subject subject = SecurityUtils.getSubject();
-
-            if (!subject.isAuthenticated()) {
-                ajaxResult.failed();
-                ajaxResult.setMsg(StaticEnum.OPT_UNLOGIN);
-                return ajaxResult.toString();
-            }
-
-            uid = ((User) subject.getPrincipal()).getUid();
-        }
-
-
-
-        /*int uid = 1;*/
-        logger.info(pageResult);
-
-        ajaxResult.ok();
-        pageResult = messageService.getMessage(pageResult, uid);
-
-        ajaxResult.setData(pageResult.getList());
-
-        ajaxResult.setCount(pageResult.getCount());
-        return ajaxResult.toString();
+    public String getMsg(PageResult<Message> pageResult, @PathVariable(value = "userID", required = false) Integer userID) {
+        return messageService.getMessage(pageResult, userID).toString();
     }
+
 }

@@ -1,5 +1,6 @@
 package com.amoxu.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.amoxu.entity.MailUrlBuilder;
 import com.amoxu.entity.User;
 import com.amoxu.entity.UserExample;
@@ -125,15 +126,34 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserInfo(Integer uid) throws UnLoginException {
         User user;
+        Subject subject = SecurityUtils.getSubject();
         if (uid == StaticEnum.SELF_ID) {
-            Subject subject = SecurityUtils.getSubject();
+
             if (!subject.isAuthenticated()) {
                 throw new UnLoginException();
             }
             user = ((User) subject.getPrincipal()).clone();
             logger.info(user);
         } else {
-            user = mapper.selectByPrimaryKey(uid);
+            if (subject.isAuthenticated()) {
+                user = mapper.selectByKeyAndUser(uid, ((User) subject.getPrincipal()).getUid());
+            } else {
+                user = mapper.selectByPrimaryKey(uid);
+            }
+            if (user == null) {
+                return new User()
+                        .setIcons("https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp")
+                        .setSex("男")
+                        .setUid(-1)
+                        .setEmail("*")
+                        .setBirth(new Date(0))
+                        .setCity("无")
+                        .setNickname("用户不存在");
+            } else {
+                user = user.clone();
+            }
+            logger.info(JSON.toJSONString(user));
+
         }
 
         return user;

@@ -16,6 +16,10 @@
     <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
     <result column="introduce" property="introduce" jdbcType="VARCHAR"/>
     <result column="note" property="note" jdbcType="VARCHAR"/>
+
+    <!--是否关注-->
+    <result column="focus" property="focus" jdbcType="INTEGER"/>
+
     <association property="userState" column="state" select="com.amoxu.mapper.StateMapper.selectByPrimaryKey"/>
     <association property="roles" column="rid" select="com.amoxu.mapper.RolesMapper.selectByPrimaryKey"/>
   </resultMap>
@@ -78,8 +82,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    uid, nickname, rid, icons, email, password, sex, birth, city, state, ctime, introduce, 
-    note
+   user. uid,user. nickname, user.rid, user.icons, user.email,user. password, user.sex, user.birth, user.city,
+   user.state, user.ctime, user.introduce, user. note
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.amoxu.entity.UserExample">
     select
@@ -108,6 +112,14 @@
     <include refid="Base_Column_List"/>
     from user
     where uid = #{uid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByKeyAndUser" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    ,	!ISNULL(f.suid) AS focus
+    from user
+    LEFT JOIN friends f ON USER.uid = f.duid AND f.suid= #{1}
+    where uid = #{0,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user

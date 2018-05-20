@@ -1,5 +1,7 @@
 package com.amoxu.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.amoxu.entity.AjaxResult;
 import com.amoxu.entity.Message;
 import com.amoxu.entity.PageResult;
 import com.amoxu.service.MessageService;
@@ -10,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-service.xml"
@@ -33,6 +36,7 @@ public class MessageServiceImplTest {
         PageResult<Message> pageResult = new PageResult<>();
         pageResult.setLimit(10);
         pageResult.setOffset(0);
-        logger.info(messageService.getMessage(pageResult, 1));
+        AjaxResult<List<Message>> message = messageService.getMessage(pageResult, 1);
+        logger.info(JSON.toJSONString(message));
     }
 }

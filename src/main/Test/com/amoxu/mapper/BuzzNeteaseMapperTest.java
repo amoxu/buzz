@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class BuzzNeteaseMapperTest {
 
     @Autowired
     SqlSessionFactory sqlSessionFactory;
+
     @Test
     public void selectMain() {
         BuzzNeteaseExample buzzNeteaseExample = new BuzzNeteaseExample();
@@ -40,6 +42,7 @@ public class BuzzNeteaseMapperTest {
         List<BuzzNetease> buzzNeteases = mapper.selectTopReply(1, buzzNeteaseExample);
         logger.info(JSON.toJSONString(buzzNeteases));
     }
+
     @Test
     public void selectMains() {
         mapper.update(1, "1111");
@@ -87,7 +90,7 @@ public class BuzzNeteaseMapperTest {
                     next = iterator.next();
                     try {
                         String content = next.getContent();
-                        System.out.println("===========content is ："+content);
+                        System.out.println("===========content is ：" + content);
 
                         keyword = HanlpUtil.getKeyword(content);
                         if (StringUtils.isBlank(keyword)) {
@@ -102,8 +105,24 @@ public class BuzzNeteaseMapperTest {
                 sqlSession.commit();
 
             }
-        }  finally {
+        } finally {
             sqlSession.close();
         }
+    }
+
+    @Test
+    public void selectUserFeature() {
+
+        BuzzNeteaseExample buzzExample = new BuzzNeteaseExample();
+        buzzExample.setLimit(1);
+        buzzExample.setOffset(0);
+        List<String> list = Arrays.asList("阿杜/成就/当时/不然的话/火".split("/"));
+        logger.warn(JSON.toJSONString(list));
+        for (int i = 0; i < list.size(); i++) {
+            list.set(i, "%" + list.get(i) + "%");
+        }
+        List<BuzzNetease> buzzNeteases = mapper.selectUserRecommend(1, list, buzzExample);
+        logger.info(JSON.toJSONString(buzzNeteases));
+
     }
 }

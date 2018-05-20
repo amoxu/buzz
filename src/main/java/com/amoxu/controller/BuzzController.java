@@ -6,6 +6,7 @@ import com.amoxu.entity.PageResult;
 import com.amoxu.entity.BuzzNetease;
 import com.amoxu.exception.UnLoginException;
 import com.amoxu.service.BuzzService;
+import com.sun.istack.internal.NotNull;
 import org.apache.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -23,16 +24,16 @@ public class BuzzController {
     private BuzzService buzzService;
 
     /*喜欢热评*/
-    @RequestMapping(value = "/like", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+    @RequestMapping(value = "/like", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
     @ResponseBody
-    public String likeBuzz(@PathVariable("id") Integer bid) {
+    public String likeBuzz(@RequestParam("id") Integer bid) {
         return buzzService.likeBuzz(bid).toString();
     }
 
     /*不喜欢喜欢热评*/
-    @RequestMapping(value = "/dislike", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+    @RequestMapping(value = "/dislike", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
     @ResponseBody
-    public String dislikeBuzz(@PathVariable("id") Integer bid) {
+    public String dislikeBuzz(@RequestParam("id") Integer bid) {
         return buzzService.dislikeBuzz(bid).toString();
     }
 
@@ -68,7 +69,7 @@ public class BuzzController {
      */
     @RequestMapping(value = "/{type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
     @ResponseBody
-    public String buzz(PageResult<BuzzNetease> pageResult, @PathVariable("type") String type) throws UnLoginException {
+    public String buzz(@NotNull PageResult<BuzzNetease> pageResult, @PathVariable("type") String type) throws UnLoginException {
 
         AjaxResult<List<BuzzNetease>> ajaxResult = new AjaxResult<>();
         logger.info(pageResult);

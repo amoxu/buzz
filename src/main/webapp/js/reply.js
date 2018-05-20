@@ -1,5 +1,5 @@
 function zone(id) {
-    return '"../user/' + id + '/my.html"';
+    return '"../user/user.html?id=' + id + '"';
 }
 
 /*主评论回复 创建回复模块*/

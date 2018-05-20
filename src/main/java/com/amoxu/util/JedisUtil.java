@@ -3,7 +3,7 @@ package com.amoxu.util;
 import com.alibaba.fastjson.JSON;
 import com.amoxu.entity.BuzzNetease;
 import com.dyuproject.protostuff.LinkedBuffer;
-import com.dyuproject.protostuff.ProtostuffIOUtil;
+import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisDataException;
@@ -1006,7 +1006,7 @@ public class JedisUtil {
     public static <T> byte[] enSeri(T value) {
         @SuppressWarnings("unchecked")
         RuntimeSchema<T> schema = (RuntimeSchema<T>) RuntimeSchema.createFrom(value.getClass());
-        byte[] data = ProtostuffIOUtil.toByteArray(value, schema,
+        byte[] data = ProtobufIOUtil.toByteArray(value, schema,
                 LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));
         return data;
     }
@@ -1023,7 +1023,15 @@ public class JedisUtil {
         }
         RuntimeSchema<T> schema = RuntimeSchema.createFrom(clazz);
         T result = schema.newMessage();
-        ProtostuffIOUtil.mergeFrom(data, result, schema);
+        /*
+        *java.lang.RuntimeException: Reading from a byte array threw an IOException (should never happen).
+        * com.dyuproject.protostuff.ProtobufException: Protocol message contained an invalid tag (zero).
+        * 更新了一个字段 但是序列化信息没有还是原来的
+        * 解决方案是更新序列化信息或者还原之后再更新
+        *
+        *
+        * */
+        ProtobufIOUtil.mergeFrom(data, result, schema);
         return result;
     }
 
@@ -1041,9 +1049,8 @@ public class JedisUtil {
         @SuppressWarnings("unchecked")
         RuntimeSchema<T> schema = (RuntimeSchema<T>) RuntimeSchema.getSchema(list.get(0).getClass());
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ProtostuffIOUtil.writeListTo(out, list, schema, LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));
-        byte[] byteArray = out.toByteArray();
-        return byteArray;
+        ProtobufIOUtil.writeListTo(out, list, schema, LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));
+        return out.toByteArray();
     }
 
     /**
@@ -1059,8 +1066,7 @@ public class JedisUtil {
             return null;
         }
         RuntimeSchema<T> schema = RuntimeSchema.createFrom(clazz);
-        List<T> result = ProtostuffIOUtil.parseListFrom(new ByteArrayInputStream(data), schema);
-        return result;
+        return ProtobufIOUtil.parseListFrom(new ByteArrayInputStream(data), schema);
     }
 
 

@@ -9,12 +9,12 @@
             var html = "";
             html += '<div class="layui-show-lg-inline-block"><div class="inline">';
             for (var i = 0; i < res.count / 2; i++) {
-                html += '<li><img src="' + res.data[i].icons + '" class="head"/></li>';
+                html += '<li><a href='+zone(res.data[i].uid )+'> <img src="' + res.data[i].icons + '" class="head"/></a></li>';
             }
             html += '</div></div>';
             html += '<div class="layui-show-lg-inline-block"><div class="inline">';
             for (var i = res.count / 2; i < res.count; i++) {
-                html += '<li><img src="' + res.data[i].icons + '" class="head"/></li>';
+                html += '<li><a href='+zone(res.data[i].uid )+'> <img src="' + res.data[i].icons + '" class="head"/></a></li>';
             }
             html += '</div></div>';
             $('ul.nearby').html(html);

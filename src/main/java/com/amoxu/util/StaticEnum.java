@@ -51,4 +51,7 @@ public final class StaticEnum {
 
     public static final String ERROR_PARSE = "解析失败";
 
+    public static final String USER_NOT_EXIST = "用户不存在";
+
+    public static final String PERMISSION_DENIED = "没有权限访问";
 }

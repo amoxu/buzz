@@ -73,10 +73,10 @@
 
                         <div class="clearfix ">
                             <div class="inf layui-form-label float_left">个性签名：</div>
-                            <div class="inf "></div>
+                            <div class="inf">&nbsp;</div>
 
                             <div class="inf layui-form-label float_left">邮箱：</div>
-                            <div class="inf"></div>
+                            <div class="inf">&nbsp;</div>
                         </div>
 
 
@@ -143,28 +143,33 @@
                         $("#page").html("");
                         res.data.forEach(function (message) {
                             dom.append(
-                                "<div class=\"comment-show-con clearfix\">\n" +
-                                "<div class=\"comment-show-con-img pull-left\">\n" +
-                                "<img src=\"" + message.user.icons + "\" alt=\"\">\n" +
-                                "</div>\n" +
-                                "<div class=\"f-list pull-left clearfix\">\n" +
+                                "<div class=\"comment-show-con clearfix\">" +
+                                "<div class=\"comment-show-con-img pull-left\">" +
+                                "<img src=\"" + message.sendUser.icons + "\" alt=\"\">" +
+                                "</div>" +
+                                "<div class=\"f-list pull-left clearfix\">" +
                                 "<div class=\"pl-text clearfix\">" +
-                                "<a href= \"../user/" + message.suid + "/my.html\" class=\"f-name\">" + message.user.nickname + "</a>:\n" +
-                                "</div>\n" +
-                                "<div class=\"date-dz\">\n" +
-                                "<span class=\"f-note pull-left comment-time\">留言：" + message.content + "</span>\n" +
-                                "<div class=\"date-dz-right pull-right comment-pl-block\">\n" +
-                                "<a class=\"f-opt time\">" + new Date(message.ctime).time() + "</a>\n" +
+                                "<a href= \"../user/user.html?id=" + message.suid + "\" class=\"f-name\">" + message.sendUser.nickname + "</a>" +
+                                " <span style=\"margin-right: 4px\">To</span>" +
+                                "<img class='icon-sm' " +
+                                "src=\""+message.receiveUser.icons+"\" alt=\"\">" +
+                                "<a href=\"../user/user.html?id="+message.ruid+"\" class=\"f-name\">"+message.receiveUser.nickname+"</a>"+
+                                ":" +
+                                "</div>" +
+                                "<div class=\"date-dz\">" +
+                                "<span class=\"f-note pull-left comment-time\">留言：" + message.content + "</span>" +
+                                "<div class=\"date-dz-right pull-right comment-pl-block\">" +
+                                "<a class=\"f-opt time\">" + new Date(message.ctime).time() + "</a>" +
                                 "<span class=\"pull-left date-dz-line\">&nbsp;</span>" +
-                                "<a href=\"javascript:;\" class=\"f-opt send\" data-id='" + message.suid + "'>回复</a>\n"
+                                "<a href=\"javascript:;\" class=\"f-opt send\" data-id='" + message.suid + "'>回复</a>"
                                 + "<span class=\"pull-left date-dz-line\">|</span>" +
-                                "<a href=\"javascript:;\" class=\"f-opt delete-msg\" data-id='" + message.mid + "'>删除</a>\n" +
-                                "<span class=\"pull-left date-dz-line\">|</span>\n" +
-                                "<a href=\"../user/" + message.suid + "/my.html\" class=\"f-opt zone\">TA的空间</a>\n" +
-                                "</div>\n" +
-                                "</div>\n" +
-                                "<div class=\"hf-list-con\"></div>\n" +
-                                "</div>\n" +
+                                "<a href=\"javascript:;\" class=\"f-opt delete-msg\" data-id='" + message.mid + "'>删除</a>" +
+                                "<span class=\"pull-left date-dz-line\">|</span>" +
+                                "<a href=\"../user/user.html?id=" + message.suid + "\" class=\"f-opt zone\">TA的空间</a>" +
+                                "</div>" +
+                                "</div>" +
+                                "<div class=\"hf-list-con\"></div>" +
+                                "</div>" +
                                 "</div>"
                             );
                         });
@@ -191,7 +196,7 @@
                 }
                 , error: function (res) {
                     layer.alert("错误码：" + res.status);
-                    $("#page").html("Opoos，错误码：" + res.status);
+                    $('.f-show').html("<p style='text-align:center;-ms-text-align-last: center;text-align-last: center;'>Opoos,错误码：" + res.status+"</p>");
                 }
             });
 

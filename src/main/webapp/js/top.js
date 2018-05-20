@@ -1,6 +1,9 @@
 window.onscroll = function () {
     scrollFunction()
 };
+function zone(id) {
+    return '"../user/user.html?id=' + id + '"';
+}
 /*页面添加返回顶部按钮*/
 (function () {
     var btn = "<ul class='layui-fixbar'><li class=\"top-btn layui-icon layui-fixbar-top \" lay-type=\"top\">&#xe619;</li></ul>";
@@ -194,3 +197,79 @@ $(".top-btn").on("click", function () {
     });
 })();
 
+var setting = {
+    show: function showInfo(res) {
+        if (res) {
+            if (res.status === 0) {
+                $('.head').attr("src", res['data'].icons);
+                $('.tit').html(res['data'].nickname);//nickname
+                $('.data i').html(res['data'].sex === '男' ? '&#xe662;' : '&#xe661;');//sex
+                $('.data ').find('li')[1].innerHTML = Math.floor((Date.now() - new Date(res['data'].birth)) / 1000 / 60 / 60 / 365 / 24) + '岁';//old
+                $('.data ').find('li')[2].innerHTML = res['data'].city;//city
+                $('.inf ')[1].innerHTML = !res['data']['indroduce'] ? '无。' : res['data']['indroduce'];//city
+                $('.inf ')[3].innerHTML = res['data'].email;//city
+                if (res['data']['focus'] === 1) {
+                    $('#j-name-wrap button').attr
+                }
+            } else {
+                layer.alert(res.msg);
+            }
+        }
+    }
+    , error: function (res) {
+        layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+    }
+    , permission: function (res) {
+
+        var permit = res;
+        for (var key in permit) {
+            var dds = $('select[name=' + key + ']').parent().find("dd");
+            for (var i = 0; i < dds.length; i++) {
+                if (dds[i].getAttribute("lay-value") == permit[key]) {
+                    dds[i].click();
+                }
+            }
+        }
+        /*class选择器 调用点击事件 控制是否出现在附近*/
+        if (permit['nearby'] === 1) {
+            $('.layui-unselect.layui-form-switch:not(.layui-form-onswitch)').click();
+        } else {
+            $('.layui-unselect.layui-form-switch.layui-form-onswitch').click();
+        }
+
+    }
+    , reload: function () {
+        $.removeCookie("user")
+
+        $.get("/user/info/0", function (res) {
+            $.cookie("user", {  'user': res});
+        });
+    }
+};
+function initInfo() {
+    var uid = getHashData("id");
+    if (!uid || !(uid>0)) {
+        var res = {"data":{"birth":"2018-01-01 00:00:00","city":"北京-西城","ctime":"2018-04-07 14:28:10","email":"*","icons":"//www.gravatar.com/avatar/00000000000000000000000000000000?d=mp","introduce":"无","nickname":"用户不存在","sex":"男","uid":-1},"status":0};
+        setting.show(res);
+        $('.name button').attr("class", "float_left layui-btn layui-btn-normal layui-btn-xs layui-btn-disabled");
+
+        $('.f-show').html("<p style='text-align:center;-ms-text-align-last: center;text-align-last: center;'>Opoos,用户不存在</p>");
+    }else {
+        $('.hf-con-block').find('a').each(function (idx, val) {
+            let href = $(val).attr('href');
+            $(val).attr('href',href+"?id="+uid)
+        });
+
+        $.ajax({
+            url: "/user/info/" + uid
+            ,type:'get'
+            , success: function (res) {
+                setting.show(res);
+            }
+            ,error:function (res) {
+                layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+                return false;
+            }
+        });
+    }
+}

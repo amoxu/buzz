@@ -31,7 +31,13 @@ public interface BuzzNeteaseMapper {
     
     List<BuzzNetease> selectMain(@Param("onlineId") Integer uid, @Param("example") BuzzNeteaseExample buzzExample);
 
-    List<BuzzNetease> selectUserRecommend(@Param("onlineId") Integer uid,@Param("key") List keyword, @Param("example") BuzzNeteaseExample buzzExample);
+
+    /**
+     * !!!!!!
+     * keyword 必须封装为 %keyword%的形式
+     *
+     * */
+    List<BuzzNetease> selectUserRecommend(@Param("onlineId") Integer uid,@Param("key") List<String> keyword, @Param("example") BuzzNeteaseExample buzzExample);
 
     List<BuzzNetease> selectTopReply(@Param("onlineId") Integer uid, @Param("example") BuzzNeteaseExample buzzExample);
 
