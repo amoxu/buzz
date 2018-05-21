@@ -9,16 +9,18 @@ public class FriendsKey {
         return suid;
     }
 
-    public void setSuid(Integer suid) {
+    public FriendsKey setSuid(Integer suid) {
         this.suid = suid;
+        return this;
     }
 
     public Integer getDuid() {
         return duid;
     }
 
-    public void setDuid(Integer duid) {
+    public FriendsKey setDuid(Integer duid) {
         this.duid = duid;
+        return this;
     }
 
     @Override

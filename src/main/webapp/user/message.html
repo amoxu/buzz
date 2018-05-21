@@ -105,6 +105,7 @@
 
 <script src="../layui/layui.js"></script>
 <script src="../js/top.js"></script>
+<script src="../js/user.js"></script>
 
 <script>
     //注意：导航 依赖 element 模块，否则无法进行功能性操作
@@ -126,6 +127,13 @@
                     , type: "get"
                     , success: function (res) {
                         if (res.status === 0) {
+                            if ( res.count === 0) {
+                                $('.f-show').html("<p style='text-align:center;-ms-text-align-last: center;text-align-last: center;'>"+
+                                   "没有可显示的消息"
+                                    +"</p>");
+                                return false;
+                            }
+
                             var dom = $('.f-show');
                             dom.html("");
                             $("#page").html("");
@@ -137,11 +145,11 @@
                                     "</div>" +
                                     "<div class=\"f-list pull-left clearfix\">" +
                                     "<div class=\"pl-text clearfix\">" +
-                                    "<a href= \"../user/user.html?id=" + message.suid + "\" class=\"f-name\">" + message.sendUser.nickname + "</a>" +
+                                    "<a href= "+zone(message.suid)+" class=\"f-name\">" + message.sendUser.nickname + "</a>" +
                                     " <span style=\"margin: 0 2px\">To</span>" +
                                     "<img class='icon-sm' " +
                                     "src=\""+message.receiveUser.icons+"\" alt=\"\">" +
-                                    "<a href=\"../user/user.html?id="+message.ruid+"\" class=\"f-name\">"+message.receiveUser.nickname+"</a>"+
+                                    "<a href="+zone(message.ruid)+" class=\"f-name\">"+message.receiveUser.nickname+"</a>"+
                                     ":" +
                                     "</div>" +
                                     "<div class=\"date-dz\">" +
@@ -149,11 +157,9 @@
                                     "<div class=\"date-dz-right pull-right comment-pl-block\">" +
                                     "<a class=\"f-opt time\">" + new Date(message.ctime).time() + "</a>" +
                                     "<span class=\"pull-left date-dz-line\">&nbsp;</span>" +
-                                    "<a href=\"javascript:;\" class=\"f-opt send\" data-id='" + message.suid + "'>回复</a>"
-                                    + "<span class=\"pull-left date-dz-line\">|</span>" +
-                                    "<a href=\"javascript:;\" class=\"f-opt delete-msg\" data-id='" + message.mid + "'>删除</a>" +
+                                    "<a href=\"javascript:;\" class=\"f-opt send\" data-id='" + message.suid + "'>回复</a>"+
                                     "<span class=\"pull-left date-dz-line\">|</span>" +
-                                    "<a href=\"../user/user.html?id=" + message.suid + "\" class=\"f-opt zone\">TA的空间</a>" +
+                                    "<a href="+zone(message.suid)+" class=\"f-opt zone\">TA的空间</a>" +
                                     "</div>" +
                                     "</div>" +
                                     "<div class=\"hf-list-con\"></div>" +
@@ -179,6 +185,11 @@
                                     }
                                 }
                             });
+                        }
+                        else {
+                            $('.f-show').html("<p style='text-align:center;-ms-text-align-last: center;text-align-last: center;'>" +
+                                    res.msg+
+                                "</p>");
                         }
 
                     }

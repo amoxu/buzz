@@ -1,6 +1,7 @@
 package com.amoxu.service.impl;
 
 import com.amoxu.entity.*;
+import com.amoxu.mapper.FriendsMapper;
 import com.amoxu.mapper.MessageMapper;
 import com.amoxu.mapper.PermissionMapper;
 import com.amoxu.service.MessageService;
@@ -26,6 +27,8 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private PermissionMapper permissionMapper;
+    @Autowired
+    private FriendsMapper friendsMapper;
 
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
@@ -85,8 +88,17 @@ public class MessageServiceImpl implements MessageService {
 
     /*获取对应ID用户收到的消息*/
     @Override
-    public AjaxResult<List<Message>> getMessage(PageResult<Message> pageResult, int uid) {
+    public AjaxResult<List<Message>> getMessage(PageResult<Message> pageResult, Integer uid) {
         AjaxResult<List<Message>> ajaxResult = new AjaxResult<>();
+
+        Subject subject = SecurityUtils.getSubject();
+        if (uid == null && subject.isAuthenticated()) {
+            uid = ((User) subject.getPrincipal()).getUid();
+        } else if (uid == null && !subject.isAuthenticated()) {
+            ajaxResult.failed();
+            ajaxResult.setMsg(StaticEnum.OPT_UNLOGIN);
+            return ajaxResult;
+        }
 
         Permission permission = permissionMapper.selectByPrimaryKey(uid);
         if (permission == null) {
@@ -96,16 +108,36 @@ public class MessageServiceImpl implements MessageService {
         }
         Integer messageRole = permission.getMessage();
 
-        Subject subject = SecurityUtils.getSubject();
-
-        if (!subject.isAuthenticated() && messageRole > 0) {
+         if (!subject.isAuthenticated() && messageRole > 0) {
             ajaxResult.failed();
             ajaxResult.setMsg(StaticEnum.PERMISSION_DENIED);
             return ajaxResult;
-        }
-        /*TODO 进行权限授权*/
-        Integer viewId = ((User) subject.getPrincipal()).getUid();
+        } else if (messageRole > 0) {
+            Integer viewId = ((User) subject.getPrincipal()).getUid();
 
+            if (messageRole == 2 && viewId != uid) {
+                //仅自己可见
+                ajaxResult.failed();
+                ajaxResult.setMsg(StaticEnum.PERMISSION_DENIED);
+                return ajaxResult;
+            }
+            if (messageRole == 1 && viewId != uid) {
+                //朋友可见
+                FriendsExample friendsExample = new FriendsExample();
+                friendsExample.or().andSuidEqualTo(uid).andDuidEqualTo(viewId);
+                List<Friends> friends = friendsMapper.selectByExample(friendsExample);
+                if (friends != null && friends.size() > 0) {
+                    /*
+                     * 不用friends == null || friends.size() <= 0
+                     * 避免空指针异常
+                     * */
+                } else {
+                    ajaxResult.failed();
+                    ajaxResult.setMsg(StaticEnum.PERMISSION_DENIED);
+                    return ajaxResult;
+                }
+            }
+        }
 
 
         /*int uid = 1;*/

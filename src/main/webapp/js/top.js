@@ -62,7 +62,7 @@ function getHashStringArgs() {
 /*获取地址中的参数*/
 function getHashData(key) {
     let url = window.location.href ? window.location.href : "";
-    url = url.split(/[?,&]/);
+    url = url.split(/[?,&,#!,#]/);
     console.log(url);
     for (let i = 0; i < url.length; i++) {
         let item = url[i].split('=');
@@ -208,8 +208,9 @@ var setting = {
                 $('.data ').find('li')[2].innerHTML = res['data'].city;//city
                 $('.inf ')[1].innerHTML = !res['data']['indroduce'] ? '无。' : res['data']['indroduce'];//city
                 $('.inf ')[3].innerHTML = res['data'].email;//city
-                if (res['data']['focus'] === 1) {
-                    $('#j-name-wrap button').attr
+                if (res['data']['focus'] === 1 ||res['data']['uid']  === jQuery.cookie('user')['user']['data']['uid'] ) {
+                    $('#j-name-wrap button').text("已关注");
+                    $('#j-name-wrap button').attr('class','float_left layui-btn layui-btn-normal layui-btn-xs layui-btn-disabled');
                 }
             } else {
                 layer.alert(res.msg);
@@ -239,7 +240,7 @@ var setting = {
 
     }
     , reload: function () {
-        $.removeCookie("user")
+        $.removeCookie("user");
 
         $.get("/user/info/0", function (res) {
             $.cookie("user", {  'user': res});

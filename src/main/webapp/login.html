@@ -146,7 +146,6 @@
                 } else {
                     layer.msg("登录成功！");
                     $.cookie('unLogin', {'statue': true});
-                    $.cookie("user", {'user': res});
                     self.location = window.history.back();
                     window.location.reload();
                 }

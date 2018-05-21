@@ -5,7 +5,6 @@ import com.amoxu.entity.Friends;
 import com.amoxu.entity.PageResult;
 import com.amoxu.entity.User;
 import com.amoxu.service.FriendsService;
-import com.amoxu.util.StaticEnum;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -17,11 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.List;
 
-/**
- * TODO 做一个拦截器，在需要登录的任务的时候检测用户是否登录，统一返回
- */
 
 @Controller
 public class FriendsController {
@@ -41,29 +36,7 @@ public class FriendsController {
     public String friendsList(
             PageResult<Friends> pageResult
             , @PathVariable(value = "id", required = false) Integer id) {
-
-        AjaxResult<List<Friends>> ajaxResult = new AjaxResult<>();
-
-
-
-        if (id == null){
-            Subject subject = SecurityUtils.getSubject();
-            if (subject.isAuthenticated()) {
-                User thisUser = (User) subject.getPrincipal();
-                id = thisUser.getUid();
-            } else {
-                ajaxResult.failed();
-                ajaxResult.setMsg(StaticEnum.OPT_UNLOGIN);
-                return ajaxResult.toString();
-            }
-        }
-
-        pageResult = friendsService.getFriends(id, pageResult);
-
-        ajaxResult.ok();
-        ajaxResult.setData(pageResult.getList());
-        ajaxResult.setCount(pageResult.getCount());
-        return ajaxResult.toString();
+        return friendsService.getFriends(id, pageResult).toString();
     }
 
     @RequestMapping(

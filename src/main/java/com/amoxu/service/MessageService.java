@@ -13,6 +13,7 @@ public interface MessageService {
 
     boolean deleteMsg(Subject subject, Integer mid);
 
-    AjaxResult<List<Message>> getMessage(PageResult<Message> pageResult, int uid);
 
+    /*获取对应ID用户收到的消息*/
+    AjaxResult<List<Message>> getMessage(PageResult<Message> pageResult, Integer uid);
 }

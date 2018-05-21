@@ -1,17 +1,19 @@
 package com.amoxu.service.impl;
 
-import com.amoxu.entity.Friends;
-import com.amoxu.entity.FriendsExample;
-import com.amoxu.entity.FriendsKey;
-import com.amoxu.entity.PageResult;
+import com.amoxu.entity.*;
 import com.amoxu.mapper.FriendsMapper;
+import com.amoxu.mapper.PermissionMapper;
 import com.amoxu.service.FriendsService;
 import com.amoxu.util.StaticEnum;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class FriendsServiceImpl implements FriendsService {
@@ -19,6 +21,8 @@ public class FriendsServiceImpl implements FriendsService {
     @Autowired
     private FriendsMapper friendsMapper;
 
+    @Autowired
+    private PermissionMapper permissionMapper;
 
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
@@ -39,11 +43,67 @@ public class FriendsServiceImpl implements FriendsService {
     }
 
     @Override
-    public PageResult<Friends> getFriends(Integer id, PageResult<Friends> pageResult) {
+    public AjaxResult<List<Friends>> getFriends(Integer uid, PageResult<Friends> pageResult) {
+
+        AjaxResult<List<Friends>> ajaxResult = new AjaxResult<>();
+
+        Subject subject = SecurityUtils.getSubject();
+        if (uid == null && subject.isAuthenticated()) {
+            uid = ((User) subject.getPrincipal()).getUid();
+        } else if (uid == null && !subject.isAuthenticated()) {
+            ajaxResult.failed();
+            ajaxResult.setMsg(StaticEnum.OPT_UNLOGIN);
+            return ajaxResult;
+        }
+
+        Permission permission = permissionMapper.selectByPrimaryKey(uid);
+        if (permission == null) {
+            ajaxResult.failed();
+            ajaxResult.setMsg(StaticEnum.USER_NOT_EXIST);
+            return ajaxResult;
+        }
+        Integer messageRole = permission.getFriend();
+
+        if (!subject.isAuthenticated() && messageRole > 0) {
+            ajaxResult.failed();
+            ajaxResult.setMsg(StaticEnum.PERMISSION_DENIED);
+            return ajaxResult;
+        } else if (messageRole > 0) {
+            Integer viewId = ((User) subject.getPrincipal()).getUid();
+
+            if (messageRole == 2 && viewId != uid) {
+                //仅自己可见
+                ajaxResult.failed();
+                ajaxResult.setMsg(StaticEnum.PERMISSION_DENIED);
+                return ajaxResult;
+            }
+            if (messageRole == 1 && viewId != uid) {
+                //朋友可见
+                FriendsExample friendsExample = new FriendsExample();
+                friendsExample.or().andSuidEqualTo(uid).andDuidEqualTo(viewId);
+                List<Friends> friends = friendsMapper.selectByExample(friendsExample);
+                if (friends != null && friends.size() > 0) {
+                    /*
+                     * 不用friends == null || friends.size() <= 0
+                     * 避免空指针异常
+                     * */
+                } else {
+                    ajaxResult.failed();
+                    ajaxResult.setMsg(StaticEnum.PERMISSION_DENIED);
+                    return ajaxResult;
+                }
+            }
+        }
+
+
+        /*int uid = 1;*/
+        logger.info(pageResult);
+
+        ajaxResult.ok();
 
         FriendsExample example = new FriendsExample();
         FriendsExample.Criteria criteria = example.createCriteria();
-        criteria.andSuidEqualTo(id);
+        criteria.andSuidEqualTo(uid);
         example.setLimit(pageResult.getLimit());
         example.setOffset(pageResult.getOffset());
 
@@ -61,7 +121,11 @@ public class FriendsServiceImpl implements FriendsService {
             sqlSession.close();
         }
 
-        return pageResult;
+        ajaxResult.setData(pageResult.getList());
+
+        ajaxResult.setCount(pageResult.getCount());
+        return ajaxResult;
+
     }
 
 }

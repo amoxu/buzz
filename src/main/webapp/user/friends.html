@@ -118,6 +118,7 @@
 
 <script src="../layui/layui.js"></script>
 <script src="../js/top.js"></script>
+<script src="../js/user.js"></script>
 
 <script>
     //注意：导航 依赖 element 模块，否则无法进行功能性操作
@@ -135,11 +136,16 @@
             var uid = getHashData("id");
             if (uid>0) {
                 $.ajax({
-                    url: "/friend?offset=" + (pidx - 1) * 10 + "&limit=" + 10
-
+                    url: "/friend/"+uid+"?offset=" + (pidx - 1) * 10 + "&limit=" + 10
                     , type: "get"
                     , success: function (res) {
-                        if (res.status === 0) {
+                        if (res.status === 0 ) {
+                            if ( res.count === 0) {
+                                $('.f-show').html("<p style='text-align:center;-ms-text-align-last: center;text-align-last: center;'>"+
+                                   "没有可显示的消息"
+                                    +"</p>");
+                                return false;
+                            }
                             var dom = $('.f-show');
                             dom.html("");
                             $("#page").html("");
@@ -158,8 +164,6 @@
                                     "<a href=\"javascript:;\" class=\"f-opt send\" data-id='" + friend.uid + "'>发消息</a>\n" +
                                     "<span class=\"pull-left date-dz-line\">|</span>\n" +
                                     "<a href=" + zone(friend.uid) + " class=\"f-opt zone\" data-id='1' >TA的空间</a>\n" +
-                                    "<span class=\"pull-left date-dz-line\">|</span>\n" +
-                                    "<a href=\"javascript:;\" class=\"f-opt cancel\" data-id='" + friend.uid + "' data-name='" + friend.nickname + "'>取消关注</a>\n" +
                                     "</div>\n" +
                                     "</div>\n" +
                                     "<div class=\"hf-list-con\"></div>\n" +
@@ -186,7 +190,11 @@
                                 }
                             });
                         }
-
+                        else {
+                            $('.f-show').html("<p style='text-align:center;-ms-text-align-last: center;text-align-last: center;'>" +
+                                res.msg+
+                                "</p>");
+                        }
                     }
                     , error: function (res) {
                         layer.alert("错误码：" + res.status);
