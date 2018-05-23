@@ -79,7 +79,7 @@ public class SearchServiceImpl implements SearchService {
                         userCriteria.andUidEqualTo(Integer.valueOf(key));
                     }
                 } catch (NumberFormatException e) {
-                    e.printStackTrace();
+                    logger.error("Exception: ",e);
 
                     logger.debug("转换失败");
                 }

@@ -2,7 +2,13 @@
 layui.use(['element', 'jquery'], function () {
     var element = layui.element;
     var $ = layui.jquery;
-    var userInfo = $.cookie("user")?$.cookie("user").user:false;
+    var userInfo;
+    try {
+        userInfo = $.cookie("user")?$.cookie("user").user:false;
+    }catch (e){
+        userInfo = null;
+    }
+
 
     if (true || $.isEmptyObject(userInfo)) {
         /*0表示自身ID*/

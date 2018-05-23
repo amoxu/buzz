@@ -11,6 +11,7 @@ import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
@@ -31,6 +32,8 @@ public class RecommendCacheDao {
     private BuzzNeteaseMapper buzzNeteaseMapper;
     @Autowired
     BuzzCacheDao buzzCache;
+
+    private final Logger logger = Logger.getLogger(RecommendCacheDao.class);
 
     private RuntimeSchema<BuzzNetease> schema = (RuntimeSchema<BuzzNetease>) RuntimeSchema.getSchema(BuzzNetease.class);
     private String key;
@@ -82,17 +85,17 @@ public class RecommendCacheDao {
                     buzzNeteases = buzzNeteaseMapper.selectUserRecommend(uid, keyword, buzzExample);
                 }
 
-                System.out.println("the count get from db is :" + buzzNeteases);
+                //System.out.println("the count get from db is :" + buzzNeteases);
 
                 setBuzzCount(uid, buzzNeteases);
                 return buzzNeteases;
             }
             buzzNeteases = ProtostuffIOUtil.parseListFrom(new ByteArrayInputStream(bytes), schema);
 
-            System.out.println("the count get from redis is :" + buzzNeteases);
+            //System.out.println("the count get from redis is :" + buzzNeteases);
             return buzzNeteases;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
 
         } finally {
             JedisPoolUtil.closeJedis(jedis);
@@ -118,7 +121,7 @@ public class RecommendCacheDao {
             byte[] byteArray = out.toByteArray();
             jedis.setex(key.getBytes(),secondsLeftToday, byteArray);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         } finally {
             JedisPoolUtil.closeJedis(jedis);
         }

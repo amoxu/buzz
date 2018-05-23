@@ -43,7 +43,7 @@ public class TopicControllerTest {
                     .andExpect(status().isOk())
                     .andReturn().getResponse().getContentAsString();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         }
 
         logger.info(s);
@@ -61,7 +61,7 @@ public class TopicControllerTest {
                     .andExpect(status().isOk())
                     .andReturn().getResponse().getContentAsString();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         }
 
         logger.info(s);
@@ -77,7 +77,7 @@ public class TopicControllerTest {
                     .andExpect(status().isOk())
                     .andReturn().getResponse().getContentAsString();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         }
 
         logger.info(s);

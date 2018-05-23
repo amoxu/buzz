@@ -25,7 +25,7 @@
             <li class="layui-nav-item layui-this"><a href="./index.html">首页</a></li>
             <li class="layui-nav-item"><a href="./search.html">搜索</a></li>
 
-            <li class="layui-nav-item"><a href="./events.html">动态</a></li>
+            <li class="layui-nav-item"><a href="./event.html">动态</a></li>
             <li class="layui-nav-item layui-layout-right">
             </li>
         </ul>
@@ -141,11 +141,11 @@
                 if (1 === res["status"]) {
                     layer.msg(res['msg']);
                     setTimeout("$(\"#captcha\").click()", 2000);
-
                     return false;
                 } else {
                     layer.msg("登录成功！");
                     $.cookie('unLogin', {'statue': true});
+                    $.cookie("user", {'user':res.data});
                     self.location = window.history.back();
                     window.location.reload();
                 }

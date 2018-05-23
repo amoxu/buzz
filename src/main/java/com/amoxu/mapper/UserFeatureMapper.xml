@@ -261,7 +261,8 @@
     </insert>
 
     <update id="updateCountWithFids" parameterType="map">
-        UPDATE user_feature SET counts = counts+#{count}
+        UPDATE user_feature
+        SET counts =IF (0>#{count} AND(ABS(#{count})>counts), ABS(#{count}), counts) + (#{count})
         WHERE uid =#{uid}
         and fid in
         <foreach collection="fids" item="fid" separator="," open="(" close=")">

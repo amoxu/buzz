@@ -113,7 +113,7 @@
     values (#{tid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{topic,jdbcType=VARCHAR}, 
       #{ctime,jdbcType=TIMESTAMP}, #{coefficient,jdbcType=DOUBLE})
   </insert>
-  <insert id="insertSelective" parameterType="com.amoxu.entity.Topic">
+  <insert id="insertSelective" parameterType="com.amoxu.entity.Topic" keyProperty="tid" useGeneratedKeys="true">
     insert into topic
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="tid != null">

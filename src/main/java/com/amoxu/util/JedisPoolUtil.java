@@ -1,6 +1,7 @@
 package com.amoxu.util;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.apache.log4j.Logger;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -13,6 +14,7 @@ import java.net.URL;
 import java.util.Properties;
 
 public class JedisPoolUtil {
+    private static final Logger logger = Logger.getLogger(JedisPoolUtil.class);
 
     private static final String PROPERTIES_PATH = "redis.properties";
     private static JedisPool jedisPool;
@@ -22,7 +24,7 @@ public class JedisPoolUtil {
         try {
             init();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         }
     }
 

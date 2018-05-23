@@ -1,7 +1,6 @@
 package com.amoxu.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.amoxu.entity.Events;
+import com.amoxu.entity.Event;
 import com.amoxu.entity.PageResult;
 import com.amoxu.service.EventService;
 import org.apache.log4j.Logger;
@@ -21,20 +20,13 @@ public class EventServiceImplTest {
     private EventService eventService;
     private Logger logger = Logger.getLogger(getClass());
 
-    @Test
-    public void replyOrPublish() {
-        eventService.replyOrPublish(1,null,"这是一条测试数据");
-    }
 
     @Test
     public void getEvents() {
-        PageResult<Events> pageResult = new PageResult<>();
+        PageResult<Event> pageResult = new PageResult<>();
         pageResult.setOffset(0);
         pageResult.setLimit(20);
         long bg = System.currentTimeMillis();
-        PageResult<Events> events = eventService.getEvents(pageResult);
-
-        logger.info(JSON.toJSONString(events));
 /*
         long ed = System.currentTimeMillis();
         logger.info(ed - bg);
@@ -43,4 +35,7 @@ public class EventServiceImplTest {
 */
 
     }
+
+
+
 }

@@ -43,7 +43,8 @@
 
 
 
-        <table tableName="coordinate" domainObjectName="Coordinate"/>
+        <table tableName="article" domainObjectName="Article"/>
+        <table tableName="article_comment" domainObjectName="ArticleComment"/>
 
     </context>
 </generatorConfiguration>

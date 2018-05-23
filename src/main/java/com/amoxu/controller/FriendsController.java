@@ -4,6 +4,7 @@ import com.amoxu.entity.AjaxResult;
 import com.amoxu.entity.Friends;
 import com.amoxu.entity.PageResult;
 import com.amoxu.entity.User;
+import com.amoxu.exception.UnLoginException;
 import com.amoxu.service.FriendsService;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -68,5 +69,11 @@ public class FriendsController {
         return ajaxResult.toString();
     }
 
+    /*关注好友*/
+    @RequestMapping(value = "/friend/{uid}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf8")
+    @ResponseBody
+    public String focusUser(@PathVariable("uid") Integer uid) throws UnLoginException {
+        return friendsService.addFriend(uid).toString();
+    }
 
 }

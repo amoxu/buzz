@@ -38,7 +38,7 @@ public class MessageController {
             User thisUser = (User) SecurityUtils.getSubject().getPrincipal();
             suid = thisUser.getUid();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
             ajaxResult.failed();
             ajaxResult.setMsg(StaticEnum.OPT_UNLOGIN);
             return ajaxResult.toString();

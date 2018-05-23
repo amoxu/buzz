@@ -2,6 +2,7 @@ package com.amoxu.util;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import sun.misc.BASE64Decoder;
@@ -16,6 +17,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Component
 public class ToolKit {
+    private static final Logger logger = Logger.getLogger(ToolKit.class);
 
 
     //密钥 (需要前端和后端保持一致)
@@ -34,7 +36,7 @@ public class ToolKit {
         try {
             return aesDecrypt(encrypt, KEY);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
             return null;
         }
     }
@@ -50,7 +52,7 @@ public class ToolKit {
         try {
             return aesEncrypt(content, KEY);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
             return null;
         }
     }
@@ -155,7 +157,7 @@ public class ToolKit {
             md.update(src.getBytes());
             return Hex.encodeHexString(md.digest());
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         }
         return null;
     }

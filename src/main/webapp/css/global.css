@@ -2352,22 +2352,15 @@ button.btn {
     height: 22px;
 }
 
-/*
-.f-note {
-    position: relative;
-    line-height: 20px;
-    max-height: 40px;
-    overflow: hidden;
+.focus {
+    margin: 7px;
 }
 
-.f-note:after {
-    content: "...";
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding-left: 40px;
-    background: -webkit-linear-gradient(left, transparent, #fff 55%);
-    background: -o-linear-gradient(right, transparent, #fff 55%);
-    background: -moz-linear-gradient(right, transparent, #fff 55%);
-    background: linear-gradient(to right, transparent, #fff 55%);
-}*/
+
+.announcement li {
+    /*必须在父标签上才生效，a、ul上不显示...*/
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
+}

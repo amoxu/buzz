@@ -12,6 +12,7 @@ import com.amoxu.service.BuzzService;
 import com.amoxu.service.UserFeatureService;
 import com.amoxu.util.StaticEnum;
 import com.amoxu.util.ToolKit;
+import com.amoxu.util.WriteLogUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -43,7 +44,8 @@ public class BuzzServiceImpl implements BuzzService {
     @Autowired
     private UserFeatureMapper userFeatureMapper;
 
-
+    @Autowired
+    private WriteLogUtil writeLogUtil;
     @Resource(name = "userFeatureServiceImpl")
     private UserFeatureService userFeatureService;
 
@@ -170,7 +172,6 @@ public class BuzzServiceImpl implements BuzzService {
         int allCount = buzzCache.getBuzzCount();
         Random random = new Random();
 
-
         List<BuzzNetease> buzzNeteases;
         Integer uid;
 
@@ -269,7 +270,7 @@ public class BuzzServiceImpl implements BuzzService {
         User principal = (User) subject.getPrincipal();
         Integer uid = principal.getUid();
         likeBuzzMapper.deleteByPrimaryKey(new LikeBuzzKey().setBuzzId(bid).setUid(uid));
-        //用户已经点赞 -> 相关用户爱好+2
+        //取消点赞 -> 相关用户爱好-1
         BuzzNetease buzzNetease = buzzNeteaseMapper.selectByPrimaryKey(bid);//获取关键词
         String keyword = buzzNetease.getKeyword();
         String[] split = keyword.split("/");
@@ -282,7 +283,7 @@ public class BuzzServiceImpl implements BuzzService {
     public AjaxResult replyComment(Integer rcid, Integer bcid, String data) {
         AjaxResult<Comments> ret = new AjaxResult<>();
         Comments shareComment = new Comments();
-
+        Integer uid;
         try {
             if (StringUtils.isBlank(data) || rcid == null || bcid == null) {
                 ret.failed();
@@ -294,7 +295,8 @@ public class BuzzServiceImpl implements BuzzService {
             if (!subject.isAuthenticated()) {
                 return ret.failed().setMsg(StaticEnum.OPT_UNLOGIN);
             } else {
-                shareComment.setUid(((User) subject.getPrincipal()).getUid());
+                uid = ((User) subject.getPrincipal()).getUid();
+                shareComment.setUid(uid);
             }
 
             data = ToolKit.aesDecrypt(data);
@@ -305,7 +307,7 @@ public class BuzzServiceImpl implements BuzzService {
         shareComment.setBuzzId(bcid);
         shareComment.setRcid(rcid);
         shareComment.setContent(data);
-
+        writeLogUtil.writeLog(uid, "/buzz/comment.html?id=" + bcid, "发表了评论：" + data);
         commentsMapper.insertSelective(shareComment);
         shareComment = commentsMapper.selectByPrimaryKey(shareComment.getCid());
 

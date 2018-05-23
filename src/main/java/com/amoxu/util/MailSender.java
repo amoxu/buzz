@@ -3,6 +3,7 @@ package com.amoxu.util;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.mail.SimpleMailMessage;
@@ -40,6 +41,8 @@ public class MailSender {
     @Autowired
     private TaskExecutor taskExecutor;
 
+    private final Logger logger = Logger.getLogger(getClass());
+
     /**
      * 构建邮件内容，发送邮件。
      *
@@ -69,7 +72,7 @@ public class MailSender {
 //            模板中用${XXX}站位，map中key为XXX的value会替换占位符内容。
             text = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
         } catch (IOException | TemplateException e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         }
         /*sendMail(to, null, text);*/
         this.taskExecutor.execute(new SendMailThread(to, subject, text));
@@ -116,7 +119,7 @@ public class MailSender {
             messageHelper.setText(content, true);
             javaMailSender.send(message);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         }
     }
 }

@@ -88,6 +88,7 @@ public class UserController {
 
                 AuthenticationToken token = new UsernamePasswordToken(username, password);
                 subject.login(token);
+                ajaxResult.setData(subject.getPrincipal());/*获取用户信息*/
                 ajaxResult.ok();
                 ajaxResult.setMsg("登录成功");
             } else {
@@ -95,11 +96,11 @@ public class UserController {
                 ajaxResult.setMsg("验证码错误");
             }
         } catch (AuthenticationException e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
             ajaxResult.failed();
             ajaxResult.setMsg("账号或密码错误");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
             ajaxResult.failed();
             ajaxResult.setMsg("请尝试重新登录");
         }

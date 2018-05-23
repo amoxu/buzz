@@ -23,7 +23,7 @@
             <li class="layui-nav-item layui-this"><a href="./index.html">首页</a></li>
             <li class="layui-nav-item"><a href="./search.html">搜索</a></li>
 
-            <li class="layui-nav-item"><a href="./events.html">动态</a></li>
+            <li class="layui-nav-item"><a href="./event.html">动态</a></li>
             <li class="layui-nav-item layui-layout-right">
             </li>
         </ul>
@@ -40,11 +40,11 @@
 
     <div class="layui-carousel" id="carousel">
         <div carousel-item>
-            <div>条目1</div>
-            <div>条目2</div>
-            <div>条目3</div>
-            <div>条目4</div>
-            <div>条目5</div>
+            <div><a href="/article/1"><img src="img/carousel1.png" height="200" width="1140"/></a></div>
+            <div><a href="/article/2"><img src="img/carousel2.png" height="200" width="1140"/></a></div>
+            <div><a href="/article/3"><img src="img/carousel3.png" height="200" width="1140"/></a></div>
+            <div><a href="/article/4"><img src="img/carousel4.png" height="200" width="1140"/></a></div>
+            <!--<div><a href="/article/1"><img src="img/carousel5.png" height="200" width="1140"/></a></div>-->
         </div>
     </div>
     <div class="layui-row">
@@ -95,31 +95,25 @@
             <div data-id="buzz">
                 <li class="card clearfix">
                     <div class="card_detail" style="margin-left: 17px">
-                        <div class="card_nick"><a href="http://music.163.com/#/user/home?id=343265766" target="_blank"
-                                                  class="ws16 W_fb S_txt1">Efrvzem</a></div>
-                        <div class="float_right"><a href="javascript:void(0);" id="push-like" data-id="5"><i
-                                class="iconfont" style="font-size: x-large;margin-left: 1em; color: #FF5900"></i></a><a
-                                href="javascript:void(0);" id="push-dislike" data-id="5"><i class="iconfont"
-                                                                                           style="font-size: x-large;margin-left: 1em; color: #2D93CA"></i></a>
+                        <div class="card_nick"><a href="http://music.163.com/#/user/home?id=313718494" target="_blank"
+                                                  class="ws16 W_fb S_txt1">思see</a></div>
+                        <div class="card_time">2017-12-14 23:43:22</div>
+                        <div class="card_text ws14">
+                            有人说：要感谢前任让你成长，让你变得更好。我觉得不是这样，那些痛不欲生，撕心裂肺的日子，都是你咬着牙一天天熬过来的，凭什么要谢别人，你要谢谢你自己。
                         </div>
-                        <div class="card_time">2018-02-14 01:12:25</div>
-                        <div class="card_text ws14">ئۆزۈڭ سۆيگەننى ھەرگىز يالغۇز تاشلاپ قويما، سەن تاشلىغان ھەر بىر
-                            مىنۇت ئۇنى ياتنىڭ يىنىغا باشلايدۇ ????
-                        </div>
-                        <div class="float_right">——来自 <a target="_blank" href="http://music.163.com/#/artist?id=39092">Mustafa
-                            Ceceli</a> 《<a target="_blank" href="http://music.163.com/song?id=518092464">Simsiyah</a>》
-                            <a>网易云</a></div>
+                        <div class="float_right">——来自 <a target="_blank" href="http://music.163.com/#/artist?id=10473">袁娅维</a>
+                            《<a target="_blank" href="http://music.163.com/song?id=523251118">说散就散</a>》 <a>网易云</a></div>
                         <div class="layui-row">
                             <ul class="inline">
-                                <li class="like" data-id="1174034"><a href="javascript:;"><i
+                                <li class="like" data-id="1126526"><a href="javascript:;"><i
                                         class="iconfont icon-dianzan"></i>
-                                    <num>15</num>
+                                    <num>431175</num>
                                 </a></li>
-                                <li class="comment" data-id="1174034"><a href="javascript:;"><i class="layui-icon"></i></a>
+                                <li class="comment" data-id="1126526"><a href="javascript:;"><i class="layui-icon"></i></a>
                                 </li>
-                                <li class="share" data-id="1174034"><a href="javascript:;"><i
+                                <li class="share" data-id="1126526"><a href="javascript:;"><i
                                         class="layui-icon"></i></a></li>
-                                <li class="report" data-id="1174034"><a href="javascript:;"><i class="layui-icon"></i></a>
+                                <li class="report" data-id="1126526"><a href="javascript:;"><i class="layui-icon"></i></a>
                                 </li>
                             </ul>
                             <div class="commentAll">
@@ -128,7 +122,7 @@
                                     <ul class="hf-list-con"></ul>
                                 </div>
                             </div>
-                            <div class="comment-pl-block clearfix"><a href="../buzz/comment.html?id=1174034"
+                            <div class="comment-pl-block clearfix"><a href="../buzz/comment.html?id=1126526"
                                                                       class="float_right">查看更多</a></div>
                         </div>
                     </div>
@@ -174,7 +168,7 @@
                 <div class="ws18 up25">活动</div>
                 <hr>
                 <ul>
-                    <div class="layui-show-lg-inline-block">
+                    <div class=" announcement">
                         <li><a>活动1..............</a></li>
                         <li><a>活动2..............</a></li>
                         <li><a>活动3..............</a></li>
@@ -217,6 +211,7 @@
             , width: '100%' //设置容器宽度
             , height: 200 //设置容器宽度
             , arrow: 'hover' //始终显示箭头
+            , indicator: 'none'
         });
     });
     $.get('/index/buzz', function (result) {
@@ -296,7 +291,7 @@
                 '</div>' +
                 '<div class="card_detail">' +
                 '<div class="card_nick">' +
-                '<a href='+zone(result.sendUser.uid)+' target="_blank" class="W_f14 W_fb S_txt1">' + result.sendUser.nickname + '</a>' +
+                '<a href=' + zone(result.sendUser.uid) + ' target="_blank" class="W_f14 W_fb S_txt1">' + result.sendUser.nickname + '</a>' +
                 '</div>' +
                 '<div class="card_time">' + result.ctime + '</div>' +
                 '<i class="layui-icon layui-icon-headset" style="color: #1E9FFF;"></i>   <a>' + result.music.singer.name + '</a> 的<a  target="_blank" href="' + result.music.link +
@@ -360,7 +355,7 @@
                     '</div>' +
                     '<div class="card_detail">' +
                     '<div class="card_nick">' +
-                    '<a href='+zone(result.sendUser.uid)+' target="_blank" class="W_f14 W_fb S_txt1">' + result.sendUser.nickname + '</a>' +
+                    '<a href=' + zone(result.sendUser.uid) + ' target="_blank" class="W_f14 W_fb S_txt1">' + result.sendUser.nickname + '</a>' +
                     '</div>' +
                     '<div class="card_time">' + result.ctime + '</div>' +
                     '<a href="javascript:;" class="topic" data-id="' + result.ttid + '">#' + result.topic + '#</a>' +
@@ -464,19 +459,19 @@
         $.ajax({
             url: url
             , data: {'id': dom.attr('data-id')}
-            ,type:'post'
-            ,success:function (res) {
+            , type: 'post'
+            , success: function (res) {
                 layer.msg(res.msg);
                 if (res.status === 0) {
                     //success
                     dom.parents('.buzz').find('comment-pl-block').click;
 
-                }else {
+                } else {
                     $("div[data-id='buzz']").slideUp("normal");
                     $("div[data-id='buzz']").slideDown("normal");
                 }
             }
-            ,error:function (res) {
+            , error: function (res) {
                 layer.alert("错误码：" + res.status + "<br>" + res.statusText);
                 return false;
             }
@@ -500,10 +495,18 @@
         } else {
             var loadIdx = layer.load(1);
             var rcid = oThis.attr("data-id");
+            if (type === "buzz") {
+                if (!oThis.parents('.comment-show').length) {
+                    rcid = 0;
+                    /*如果是根列表回复，回复ID设置为0*/
+                }
+            }
+
             var bcid = oThis.parents('.commentAll').siblings('.inline').find('.comment').attr("data-id");
             if (!bcid) {
                 bcid = rcid;
             }
+
             $.ajax({
                 url: '/' + type + '/' + bcid + "/" + rcid
                 , type: 'post'

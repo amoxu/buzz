@@ -80,7 +80,7 @@ public class MessageServiceImpl implements MessageService {
                 return 1 == msgMapper.deleteByExample(example);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
             return false;
         }
 

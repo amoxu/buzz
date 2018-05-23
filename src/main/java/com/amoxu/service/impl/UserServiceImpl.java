@@ -71,7 +71,8 @@ public class UserServiceImpl implements UserService {
                 logger.warn("邮箱已存在");
                 return StaticEnum.REG_MAIL_ERROR;/*用户已存在*/
             }
-            e.printStackTrace();
+
+            logger.error("Exception: ",e);
         }
         if (1 == code) {
             return StaticEnum.REG_SUCCESS;
@@ -247,7 +248,7 @@ public class UserServiceImpl implements UserService {
             }
             return StaticEnum.MAIL_VER_ERROR;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
             return StaticEnum.MAIL_VER_ERROR;
         }
     }
@@ -334,7 +335,7 @@ public class UserServiceImpl implements UserService {
         try {
             url = StaticEnum.PREFIX_ICON + md5 + "?d=" + URLEncoder.encode("https://icon.amoxuk.com/icon/" + url + ".jpg", "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         }
         logger.info(url);
         user.setIcons(url);

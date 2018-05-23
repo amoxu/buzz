@@ -1,5 +1,6 @@
 package com.amoxu.util;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -55,5 +56,16 @@ public final class NetworkUtil {
         } else {
             return request.getRemoteAddr();
         }
+    }
+
+    public static String argsArrayToString(Object[] paramsArray) {
+        String params = "";
+        if (paramsArray != null && paramsArray.length > 0) {
+            for (int i = 0; i < paramsArray.length; i++) {
+                Object jsonObject = JSON.toJSONString(paramsArray[i]);
+                params += jsonObject.toString() + " ";
+            }
+        }
+        return params.trim();
     }
 }

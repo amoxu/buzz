@@ -11,7 +11,6 @@ public class CustomException extends Exception {
     public String message;
 
     CustomException(String message) {
-        super(message);
         AjaxResult<String> ajaxResult = new AjaxResult<>();
         ajaxResult.failed();
         ajaxResult.setMsg(message);

@@ -11,6 +11,7 @@ import com.amoxu.mapper.MusicShareMapper;
 import com.amoxu.service.MusicService;
 import com.amoxu.util.StaticEnum;
 import com.amoxu.util.ToolKit;
+import com.amoxu.util.WriteLogUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -36,6 +37,8 @@ public class MusicServiceImpl implements MusicService {
     @Autowired
     private MusicMapper musicMapper;
     private Logger logger = Logger.getLogger(getClass());
+    @Autowired
+    private WriteLogUtil writeLogUtil;
 
     @Override
     public AjaxResult<MusicShare> shareMusic(String data) throws UnLoginException {
@@ -64,14 +67,21 @@ public class MusicServiceImpl implements MusicService {
 
 
         MusicShare musicShare = new MusicShare();
-        musicShare.setUid(((User) subject.getPrincipal()).getUid());
+        Integer uid = ((User) subject.getPrincipal()).getUid();
+
+        musicShare.setUid(uid);
         musicShare.setMid(musicInfo.getMid());
         musicShare.setContent(content);
 
         musicShareMapper.insertSelective(musicShare);
 
+
         result.ok();
         result.setData(musicShareMapper.selectByPrimaryKey(musicShare.getOid()));
+        writeLogUtil.writeLog(uid,
+                "/music/comment.html?id=" + musicShare.getOid(),
+                "分享了音乐：《" + song + "》 " + content);
+
         return result;
     }
 
@@ -143,6 +153,7 @@ public class MusicServiceImpl implements MusicService {
     public AjaxResult replyComment(Integer rcid, Integer bcid, String data) {
         AjaxResult<MusicShareComment> ret = new AjaxResult<>();
         MusicShareComment shareComment = new MusicShareComment();
+        Integer uid;
 
         try {
             if (StringUtils.isBlank(data) || rcid == null || bcid == null) {
@@ -155,7 +166,8 @@ public class MusicServiceImpl implements MusicService {
             if (!subject.isAuthenticated()) {
                 return ret.failed().setMsg(StaticEnum.OPT_UNLOGIN);
             } else {
-                shareComment.setUid(((User) subject.getPrincipal()).getUid());
+                 uid = ((User) subject.getPrincipal()).getUid();
+                shareComment.setUid(uid);
             }
 
             data = ToolKit.aesDecrypt(data);
@@ -172,6 +184,7 @@ public class MusicServiceImpl implements MusicService {
         shareComment = shareCommentMapper.selectByPrimaryKey(shareComment.getCid());
 
         ret.ok().setData(shareComment);
+        writeLogUtil.writeLog(uid, "/buzz/comment.html?id=" + bcid, "评论了音乐分享：" + data);
 
         return ret;
     }

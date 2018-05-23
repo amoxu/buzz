@@ -115,4 +115,39 @@ layui.use(['jquery', 'layer'], function () {
             }
         }
     );
+
+    $('#focus').on('click', function () {
+        var id = getHashData("id");
+        if (!id) {
+            layer.msg("用户不存在。");
+            return false;
+        }
+        if(!$.cookie("user")) {
+            layer.msg("请登录后操作");
+            return false;
+        }
+        layer.confirm('确定关注该用户？', function (index) {
+            var loadIdx = layer.load(1);
+            $.ajax({
+                url: '/friend/'+id
+                , type: 'post'
+                , success: function (res) {
+                    layer.close(loadIdx);
+                    if (res.status === 0) {
+                        layer.msg("关注成功");
+                        return false;
+                    } else {
+                        layer.alert(res.msg);
+                    }
+                    return false;
+                }
+                , error: function (res) {
+                    layer.close(loadIdx);
+                    layer.msg("错误码：" + res.status + "<br>" + res.statusText);
+                }
+
+            });
+            layer.close(index);
+        });
+    });
 });

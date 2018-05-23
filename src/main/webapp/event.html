@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>乐热评-因为热爱所以快乐</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="./alicon/iconfont.css">
+
+    <link rel="stylesheet" href="css/comment.css">
+    <script src="js/aes.js"></script>
+
+</head>
+<body class="mbg">
+
+<!-- 你的HTML代码 -->
+<div class="layui-header header header-doc ">
+    <div class="layui-main pbg">
+        <a class="logo" href="./index.html"><img src="img/logo.png"/>
+        </a>
+        <ul class="layui-nav layui-layout-left" lay-filter="">
+            <li class="layui-nav-item "><a href="./index.html">首页</a></li>
+            <li class="layui-nav-item"><a href="./search.html">搜索</a></li>
+
+            <li class="layui-nav-item layui-this"><a href="./event.html">动态</a></li>
+            <li class="layui-nav-item layui-layout-right">
+            </li>
+        </ul>
+    </div>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</div>
+
+
+<div class="layui-main pbg">
+    <div class="layui-row">
+        <div class="layui-col-md9">
+            <div class="commentAll events ">                            <!--评论区域 begin-->
+                <div class="reviewArea clearfix">
+                    <div class="flex-text-wrap">
+                        <pre class="pre"><span></span><br></pre>
+                        <textarea class="content comment-input events-input" placeholder="输入内容"></textarea>
+                    </div>
+                    <a href="javascript:;" class="plBtn">发动态</a>
+                </div>
+                <!--评论区域 end-->
+                <!--回复区域 begin-->
+                <div class="comment-show">
+                    <ul id="content"></ul>
+                </div>
+                <!--回复区域 end-->
+            </div>
+
+        </div>
+
+        <div class="layui-col-md3">
+            <div class="layui-box ">
+                <div class="ws18 up25">活动</div>
+                <hr>
+                <ul>
+                    <div class=" announcement">
+                        <li><a>活动1..............</a></li>
+                        <li><a>活动2..............</a></li>
+                        <li><a>活动3..............</a></li>
+                    </div>
+                </ul>
+                <hr>
+            </div>
+            <div class="layui-box">
+                <div class="ws18">附近</div>
+                <hr>
+                <ul class="nearby"></ul>
+                <hr>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="footer">
+        &copy;Copyright 2018 乐热评<br>
+        感谢：<a>Layui</a>,<a>Bootstrap</a>,<a>网易云</a>,<a>QQ音乐</a>,<a>酷我音乐</a>...<br>
+        联系我们：<a href="mailto:amoxuk@aliyun.com">amoxuk#aliyun.com(#换成@)</a>
+    </div>
+
+
+</div>
+<script src="layui/layui.js"></script>
+<script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script src="js/jquery.session.js"></script>
+<script type="text/javascript" src="js/jquery.flexText.js"></script>
+<script src="js/common.js"></script>
+
+<script src="js/top.js"></script>
+
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use(['element', 'layer'], function () {
+        var element = layui.element;
+    });
+
+    $('.commentAll').on('click', '.comment-show .hf-pl', function () {
+        var oThis = $(this);
+        //获取输入内容
+        console.log("this is in self page");
+        var content = oThis.siblings('.flex-text-wrap').find('.hf-input').val();
+        var receiveName = oThis.siblings('.flex-text-wrap').find('.hf-input').attr("data-name");
+        console.log(content);
+        if (content.replace(/^ +| +$/g, '') === '' || content.trim().length < 1) {
+            /*输入内容为空*/
+            layer.msg("输入内容为空。");
+            return false;
+        } else {
+            var loadIdx = layer.load(1);
+            var rcid = oThis.attr("data-id");
+            if (!oThis.parents('.date-dz').length) {
+                rcid = 0;
+                /*如果是根列表回复，回复ID设置为0*/
+            }
+            var bcid = oThis.parents('.commentAll').siblings('.inline').find('.comment').attr("data-id");
+            if (!bcid) {
+                bcid = rcid;
+            }
+            $.ajax({
+                url: '/event/' + bcid + "/" + rcid
+                , type: 'post'
+                , data: {"data": aes.encrypt(content)}
+                , success: function (res) {
+                    layer.close(loadIdx);
+                    if (res.status === 0) {
+                        layer.msg("发表成功");
+                        var oHtml = buildReply(res.data,
+                            oThis.attr('data-id'),
+                            receiveName
+                        );
+                        addReply(oHtml, oThis);
+
+                        return false;
+                    } else {
+                        layer.alert(res.msg);
+                    }
+                    return false;
+                },
+                error: function (res) {
+                    layer.close(loadIdx);
+                    layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+                    return false;
+                }
+            });
+
+
+        }
+    });
+
+    layui.use('flow', function () {
+        var $ = layui.jquery; //不用额外加载jQuery，flow模块本身是有依赖jQuery的，直接用即可。
+        var flow = layui.flow;
+        flow.load({
+            elem: '#content' //指定列表容器
+            , done: function (page, next) { //到达临界点（默认滚动触发），触发下一页
+                setTimeout(function () {
+                    var lis = [];
+                    $.get('/event?limit=10&offset=' + (page - 1) * 10, function (res) {
+                        if (res.status === 1) {
+                            layer.msg(res.msg);
+                            return false;
+                        }
+                        //假设你的列表返回在data集合中
+                        layui.each(res.data, function (index, result) {
+                            var tmp = '<li class="card clearfix">' +
+                                '<div class="float_left">' +
+                                '<img src=' + result.sendUser.icons + ' class="head"/>' +
+                                '</div>' +
+                                '<div class="card_detail">' +
+                                '<div class="card_nick">' +
+                                '<a href=' + zone(result.sendUser.uid) + ' target="_blank" class="W_f14 W_fb S_txt1">' + result.sendUser.nickname + '</a>' +
+                                '</div>' +
+                                '<div class="card_time">' + result.ctime + '</div>' +
+                                '<div class="card_text ws14">' + result.content + '</div>' +
+                                '<div class="layui-row">' +
+                                '<ul class="inline">' +
+                                '<li class="like" data-id="' + result.cid + '">' +
+                                '<a href="javascript:;" >';
+
+                            if (result.userLike) {
+                                tmp += '<i class="iconfont icon-dianzan1"></i>';
+                            } else {
+                                tmp += '<i class="iconfont icon-dianzan"></i>';
+                            }
+                            tmp += '<num>' + result.likes + '</num>' +
+                                '</a>' +
+                                '</li>' +
+                                '<li class="comment" data-id="' + result.cid + '">' +
+                                '<a href="javascript:;" ><i class="layui-icon">&#xe63a;</i>' +
+                                '</a>' +
+                                '</li>' +
+                                '<li class="share" data-id="' + result.cid + '">' +
+                                '<a href="javascript:;" ><i class="layui-icon">&#xe641;</i></a>' +
+                                '</li>' +
+                                '<li class="report" data-id="' + result.cid + '">' +
+                                '<a href="javascript:;" ><i class="layui-icon">&#xe6c5;</i></a>' +
+                                '</li>' +
+                                '</ul>' +
+                                '<div class="commentAll">' +
+                                '<div class="reviewArea clearfix"></div>' +
+                                '<div class="comment-show">';
+                            if (result.comment.length > 0) {
+                                var child = buildReply(result.comment);
+                                tmp += '<ul class="hf-list-con" style="display: block;">' + child + '</ul>';
+                            } else {
+                                tmp += '<ul class="hf-list-con"></ul>';
+                            }
+                            tmp +=
+                                '</div>' +
+                                '</div>' +
+                                '<div class="comment-pl-block clearfix">' +
+                                '<a href="../event/comment.html?id=' + result.cid + '" class="float_right">查看更多</a>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>' +
+                                '</li>';
+                            lis.push(tmp);
+
+                        });
+                        next(lis.join(''), page < res.count / 10);
+                    });
+
+                }, 500);
+            }
+        });
+    });
+    $(".events .plBtn").on('click', function () {
+        if (!$.cookie("user")) {
+            layer.msg("请登录后发动态");
+            return false;
+        }
+        var dom = this;
+        var content = $(this).siblings('.flex-text-wrap').find('.comment-input').val();
+        console.log(content);
+        var loadIdx = layer.load(1);
+        if (content.length < 1) {
+            layer.close(loadIdx);
+            layer.alert("请输入内容。");
+            return false;
+        }
+
+        $.ajax({
+            url: '/event'
+            , type: 'post'
+            , data: {"data": aes.encrypt(content)}
+            , success: function (res) {
+                layer.close(loadIdx);
+                if (res.status === 0) {
+                    /*清空输入框*/
+                    $(dom).siblings('.flex-text-wrap').find('.comment-input').val('');
+                    addList(res.data);
+                    layer.msg("发表成功");
+                } else {
+                    layer.alert(res.msg);
+                }
+                return false;
+            },
+            error: function (res) {
+                layer.close(loadIdx);
+                layer.alert("错误码：" + res.status + "<br>" + res.statusText);
+                return false;
+            }
+        });
+        return false;
+    });
+    <!--点赞-->
+    (function () {
+        $('.commentAll').on('click', '.comment-show .date-dz-z,li.like', function () {
+            var thumbNum = $(this).find('.z-num').html();
+            thumbNum = thumbNum?thumbNum: $(this).find('num').html();
+            if ($.cookie('user') == null) {
+                layer.msg("点赞需要登录。");
+                return false;
+            } else {
+                var dom = this;
+                $.ajax({
+                    url: '/like/event/' + $(this).attr("data-id")
+                    , type: 'post'
+                    , success: function (res) {
+                        layer.msg(res.msg);
+                        if (res.status === 0) {
+                            /*操作成功*/
+                            if (res.count === 1) {
+                                /*点赞*/
+                                thumbNum++;
+                                if ($(dom).find('.iconfont').length) {
+                                    $(dom).find('.iconfont').addClass('icon-dianzan1').removeClass('icon-dianzan');
+                                } else {
+                                    $(dom).addClass('date-dz-z-click');
+                                    $(dom).find('.date-dz-z-click-red').addClass('red');
+                                }
+                                $(dom).find('num').html(thumbNum);
+
+                            } else {
+                                /*取消点赞*/
+                                thumbNum--;
+                                if ($(dom).find('.iconfont').length) {
+                                    /*主页面*/
+                                    $(dom).find('.iconfont').addClass('icon-dianzan').removeClass('icon-dianzan1');
+                                } else {
+                                    $(dom).removeClass('date-dz-z-click red');
+                                    $(dom).find('.date-dz-z-click-red').removeClass('red');
+                                }
+                                $(dom).find('num').html(thumbNum);
+
+                            }
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    }
+                    , error: function (res) {
+                        layer.msg("错误码：" + res.status + "<br>" + res.statusText);
+                    }
+                });
+                return false;
+            }
+        });
+    })();
+    <!--分享-->
+    (function () {
+        $('.comment-show').on('click', '.share', function () {
+            var dom = $(this);
+            var did = dom.attr('data-id');
+            var text = "给你分享一个来自乐热评的消息：" +
+                dom.parents('.card_detail').find('.card_text').text() +
+                "\n点击查看原文：http://localhost/event/comment.html?id=" + did;
+            layer.prompt({
+                formType: 2,
+                value: text,
+                title: '复制内容分享',
+            }, function (value, index, elem) {
+                layer.close(index);
+            });
+        });
+    })();
+</script>
+<script type="text/javascript" src="js/nearby.js"></script>
+</body>
+</html>

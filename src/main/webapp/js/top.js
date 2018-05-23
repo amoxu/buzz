@@ -164,7 +164,7 @@ $(".top-btn").on("click", function () {
 
         var idx = window.location.href;
 
-        if (idx.includes('events') ) {
+        if (idx.includes('event') ) {
             idx = 1001;
         } else if (idx.includes("topic")|| type === "topic") {
             idx = 1002;
@@ -243,7 +243,9 @@ var setting = {
         $.removeCookie("user");
 
         $.get("/user/info/0", function (res) {
-            $.cookie("user", {  'user': res});
+            if (res.status === 0) {
+                $.cookie("user", {'user': res.data});
+            }
         });
     }
 };

@@ -1,8 +1,11 @@
 package com.amoxu.util.Datx;
 
+import org.apache.log4j.Logger;
+
 import java.util.regex.Pattern;
 
 public class Util {
+    private static final Logger logger = Logger.getLogger(Util.class);
 
     private static final Pattern IPV4_PATTERN = Pattern.compile("^(([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){1}(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){2}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
 
@@ -33,7 +36,7 @@ public class Util {
                 ((bytes[2] & 0xFF) << 8) |
                 bytes[3];
         } catch (java.net.UnknownHostException e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         }
 
         return 0;

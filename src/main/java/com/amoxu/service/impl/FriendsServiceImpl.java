@@ -1,6 +1,7 @@
 package com.amoxu.service.impl;
 
 import com.amoxu.entity.*;
+import com.amoxu.exception.UnLoginException;
 import com.amoxu.mapper.FriendsMapper;
 import com.amoxu.mapper.PermissionMapper;
 import com.amoxu.service.FriendsService;
@@ -128,4 +129,23 @@ public class FriendsServiceImpl implements FriendsService {
 
     }
 
+    @Override
+    public AjaxResult addFriend(Integer uid) throws UnLoginException {
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            throw new UnLoginException();
+        }
+        int suid = ((User) subject.getPrincipal()).getUid();
+        Friends friends = new Friends();
+        friends.setSuid(suid);
+        friends.setDuid(uid);
+        int i = friendsMapper.insertSelective(friends);
+        AjaxResult<String> ajaxResult = new AjaxResult<>();
+        if (i > 0) {
+            ajaxResult.ok();
+        } else {
+            ajaxResult.failed();
+        }
+        return ajaxResult;
+    }
 }

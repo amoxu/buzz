@@ -21,7 +21,7 @@
             <li class="layui-nav-item "><a href="../index.html">首页</a></li>
             <li class="layui-nav-item "><a href="../search.html">搜索</a></li>
 
-            <li class="layui-nav-item"><a href="../events.html">动态</a></li>
+            <li class="layui-nav-item"><a href="../event.html">动态</a></li>
             <li class="layui-nav-item layui-layout-right layui-this">
                 <a href="javascript:;">我的</a>
                 <dl class="layui-nav-child">
@@ -99,43 +99,8 @@
                     <div class="layui-row">
                         <div class="layui-col-xs6 layui-col-md12">
                             <div class="f-show">
-                                <div class="comment-show-con clearfix">
-                                    <div class="comment-show-con-img pull-left"></div>
-                                    <div class="f-list pull-left clearfix">
-                                        <div class="m-time clearfix"><span class="e-time">2018-1-15 13:12:44</span>
-                                        </div>
-                                        <div class="date-dz">
-                                            <span class="f-note pull-left comment-time">“真正的离开关门声最小”</span>
-                                            <div class="date-dz-right pull-right comment-pl-block">
-                                                <a href="javascript:;" class="f-opt">查看原文</a>
-                                                <span class="pull-left date-dz-line">|</span>
-                                                <a href="javascript:;" class="f-opt">点赞数</a>
-                                                <span class="pull-left date-dz-line">|</span>
-                                                <a href="javascript:;" class="f-opt">评论数</a>
-                                            </div>
-                                        </div>
-                                        <div class="hf-list-con"></div>
-                                    </div>
-                                </div>
-                                <div class="comment-show-con clearfix">
-                                    <div class="comment-show-con-img pull-left"></div>
-                                    <div class="f-list pull-left clearfix">
-                                        <div class="m-time clearfix"><span class="e-time">2018-1-15 13:12:44</span>
-                                        </div>
-                                        <div class="date-dz">
-                                            <span class="f-note pull-left comment-time">“真正的离开关门声最小”</span>
-                                            <div class="date-dz-right pull-right comment-pl-block">
-                                                <a href="javascript:;" class="f-opt">查看原文</a>
-                                                <span class="pull-left date-dz-line">|</span>
-                                                <a href="javascript:;" class="f-opt">点赞数</a>
-                                                <span class="pull-left date-dz-line">|</span>
-                                                <a href="javascript:;" class="f-opt">评论数</a>
-                                            </div>
-                                        </div>
-                                        <div class="hf-list-con"></div>
-                                    </div>
-                                </div>
                             </div>
+                            <div id="page" class="layui-fluid layui-col-md-offset3"></div>
                         </div>
                     </div>
 
@@ -171,63 +136,111 @@
     layui.use(['element', 'jquery'], function () {
         var element = layui.element;
         var $ = layui.jquery;
-        var userInfo = $.cookie("user").user;
-        if ($.isEmptyObject(userInfo)) {
-            /*0表示自身ID*/
+        var userInfo;
+        try {
+            userInfo = $.cookie("user").user;
+        } catch (e) {
+            $.removeCookie("user");
+            $.removeCookie("unLogin");
+            //window.location.href = "../login.html";
+            //return false;
+        }
+
+/*        if ($.isEmptyObject(userInfo)) {
+            /!*0表示自身ID*!/
             $.get("/user/info/0", function (res) {
                 $.cookie("user", {'user': res});
                 setting.show(res);
             });
         } else {
             setting.show(userInfo);
+        }*/
+
+
+        page(getHashStringArgs()['!offset'] ? getHashStringArgs()['!offset'] : 1);
+
+        function page(pidx) {
+            layui.use(['laypage'], function () {
+                var laypage = layui.laypage;
+                var uid = getHashData("id");
+                if (!uid) {
+                    uid = 0;
+                }
+                var url = '/recent/' + uid;
+                //开启HASH
+                $.ajax({
+                    url: url+"?offset=" + (pidx - 1) * 10 + "&limit=" + 10
+                    , type: "get"
+                    , success: function (res) {
+                        if (res.status === 0) {
+                            if ( res.count === 0) {
+                                $('.f-show').html("<p style='text-align:center;-ms-text-align-last: center;text-align-last: center;'>"+
+                                    "没有可显示的消息"
+                                    +"</p>");
+                                return false;
+                            }
+                            var dom = $('.f-show');
+                            dom.html("");
+                            $("#page").html("");
+                            res.data.forEach(function (res) {
+                                dom.append(
+                                    '<div class="comment-show-con clearfix">' +
+                                    '    <div class="comment-show-con-img pull-left"></div>' +
+                                    '    <div class="f-list pull-left clearfix">' +
+                                    '        <div class="m-time clearfix"><span class="e-time">' +res.ctime+
+                                    '</span>' +
+                                    '        </div>' +
+                                    '        <div class="date-dz">' +
+                                    '            <span class="f-note pull-left comment-time">' +res.content+
+                                    '</span>' +
+                                    '            <div class="date-dz-right pull-right comment-pl-block">' +
+                                    '                <a href="' +res.url+
+                                    '" class="f-opt" style="color: rgb(235, 115, 80)">查看原文</a>' +
+                                    '            </div>' +
+                                    '        </div>' +
+                                    '        <div class="hf-list-con"></div>' +
+                                    '    </div>' +
+                                    '</div>'
+                                );
+                            });
+
+                            laypage.render({
+                                elem: 'page'
+                                , count: res.count //数据总数，从服务端得到
+                                , limit: 10
+                                , groups: 4 /*	连续出现的页码个数	Number	5*/
+                                , curr: pidx /*必须加这个，否则分页不会走*/
+                                , hash: 'offset'
+                                , jump: function (obj, first) {
+                                    //obj包含了当前分页的所有参数，比如：
+                                    /*console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                                    console.log(obj.limit); //得到每页显示的条数*/
+                                    if (!first) {
+                                        page(obj.curr);
+                                        return false;
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            $('.f-show').html("<p style='text-align:center;-ms-text-align-last: center;text-align-last: center;'>" +
+                                res.msg+
+                                "</p>");
+                        }
+                    }
+                    , error: function (res) {
+                        layer.alert("错误码：" + res.status);
+                        $('.f-show').html("<p style='text-align:center;-ms-text-align-last: center;text-align-last: center;'>Opoos,错误码：" + res.status+"</p>");
+                    }
+                });
+
+
+            });
         }
 
     });
 
-    layui.use('carousel', function () {
-        var carousel = layui.carousel;
-        //建造实例
-        carousel.render({
-            elem: '#carousel'
-            , width: '100%' //设置容器宽度
-            , height: 200 //设置容器宽度
-            , arrow: 'hover' //始终显示箭头
-        });
-    });
 
-    layui.use('table', function () {
-        var table = layui.table;
-        table.render({
-            elem: '.demo'
-            ,
-            skin: 'line' //行边框风格
-            ,
-            data: [{"id": 1, "用户": 2, "内容": 3}, {"id": 1, "用户": 2, "内容": 3}, {"id": 1, "用户": 2, "内容": 3}, {
-                "id": 1,
-                "用户": 2,
-                "内容": 3
-            }, {"id": 1, "用户": 2, "内容": 3}, {"id": 1, "用户": 2, "内容": 3}]
-            ,
-            page: false
-            ,
-            cols: [[
-                {field: "id", title: "id", width: 120}
-                , {field: "用户", title: "用户"}
-                , {field: "时间", title: "时间"}
-                , {field: "内容", title: "内容"}
-            ]]
-        });
-    });
-    layui.use(['laypage'], function () {
-        var laypage = layui.laypage
-        //开启HASH
-        laypage.render({
-            elem: 'searchpage'
-            , count: 500
-            , curr: location.hash.replace('#!fenye=', '') //获取hash值为fenye的当前页
-            , hash: 'fenye' //自定义hash值
-        });
-    });
 </script>
 </body>
 </html>

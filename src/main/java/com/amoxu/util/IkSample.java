@@ -65,14 +65,14 @@ public class IkSample {
             ts.end(); // Perform end-of-stream operations, e.g. set the final offset.
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         } finally {
             // 释放TokenStream的所有资源
             if (ts != null) {
                 try {
                     ts.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("Exception: ",e);
                 }
             }
         }

@@ -90,20 +90,20 @@ public class LuceneIndexAndSearchDemo {
             }
 
         } catch (ParseException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         } finally {
             if (ireader != null) {
                 try {
                     ireader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("Exception: ",e);
                 }
             }
             if (directory != null) {
                 try {
                     directory.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("Exception: ",e);
                 }
             }
         }

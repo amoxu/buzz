@@ -21,13 +21,13 @@ public class BuzzCacheDao {
             if (bytes == null || bytes.length == 0) {
                 count = buzzNeteaseMapper.countByExample(null);
 
-                System.out.println("the count get from db is :" + count);
+                //System.out.println("the count get from db is :" + count);
 
                 setBuzzCount(count);
                 return count;
             }
             count = JedisUtil.deSeri(bytes, Integer.class);
-            System.out.println("the count get from redis is :" + count);
+            //System.out.println("the count get from redis is :" + count);
             return count;
         }finally {
             JedisPoolUtil.closeJedis(jedis);

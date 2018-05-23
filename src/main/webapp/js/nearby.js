@@ -20,4 +20,19 @@
             $('ul.nearby').html(html);
         });
     }
+    if ($(".announcement").length) {
+        $.get('/article', function (res) {
+            if (res.status === 1) {
+                layer.msg(res.msg);
+                return;
+            }
+            var html = "";
+            res.data.forEach(function (res) {
+                console.log(res);
+                html += '<li><a href="'+res.url+'">'+res.name+'</a></li>';
+            });
+            $('.announcement').html(html);
+        });
+    }
+
 })();

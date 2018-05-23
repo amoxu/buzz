@@ -73,7 +73,7 @@
       distinct
     </if>
     <include refid="Base_Column_List"/>
-    from like_events
+    from like_event
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>
@@ -92,29 +92,29 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.amoxu.entity.likes.LikeEventsKey">
     select
     <include refid="Base_Column_List"/>
-    from like_events
+    from like_event
     where uid = #{uid,jdbcType=INTEGER}
     and events_id = #{eventsId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="com.amoxu.entity.likes.LikeEventsKey">
-    delete from like_events
+    delete from like_event
     where uid = #{uid,jdbcType=INTEGER}
       and events_id = #{eventsId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.amoxu.entity.likes.LikeEventsExample">
-    delete from like_events
+    delete from like_event
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>
   </delete>
   <insert id="insert" parameterType="com.amoxu.entity.likes.LikeEvents">
-    insert into like_events (uid, events_id, ctime
+    insert into like_event (uid, events_id, ctime
       )
     values (#{uid,jdbcType=INTEGER}, #{eventsId,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.amoxu.entity.likes.LikeEvents">
-    insert into like_events
+    insert into like_event
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="uid != null">
         uid,
@@ -139,13 +139,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.amoxu.entity.likes.LikeEventsExample" resultType="java.lang.Integer">
-    select count(*) from like_events
+    select count(*) from like_event
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update like_events
+    update like_event
     <set>
       <if test="record.uid != null">
         uid = #{record.uid,jdbcType=INTEGER},
@@ -162,7 +162,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update like_events
+    update like_event
     set uid = #{record.uid,jdbcType=INTEGER},
     events_id = #{record.eventsId,jdbcType=INTEGER},
     ctime = #{record.ctime,jdbcType=TIMESTAMP}
@@ -171,7 +171,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.amoxu.entity.likes.LikeEvents">
-    update like_events
+    update like_event
     <set>
       <if test="ctime != null">
         ctime = #{ctime,jdbcType=TIMESTAMP},
@@ -181,7 +181,7 @@
     and events_id = #{eventsId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.amoxu.entity.likes.LikeEvents">
-    update like_events
+    update like_event
     set ctime = #{ctime,jdbcType=TIMESTAMP}
     where uid = #{uid,jdbcType=INTEGER}
       and events_id = #{eventsId,jdbcType=INTEGER}

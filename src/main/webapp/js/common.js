@@ -1,5 +1,3 @@
-
-
 /*主评论回复 创建回复模块*/
 /*(function () {
     $("#content .comment").on('click', ".reply",function () {
@@ -22,7 +20,7 @@
     });
 })();*/
 (function () {
-    $("#content.comment").on('click', ".comment",function () {
+    $("#content.comment").on('click', ".comment", function () {
         if (!$.cookie("user")) {
             layer.msg("请登录后评论");
             return false;
@@ -33,10 +31,39 @@
         var fhN = '回复@' + fhName + "：";
         //var oInput = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.hf-con');
         var fhHtml = '<div class="hf-con pull-left"> ' +
-            '<pre class="pre" style="padding: 6px 15px;"><span></span><br></pre>'+
+            '<pre class="pre" style="padding: 6px 15px;"><span></span><br></pre>' +
             '<textarea class="content comment-input hf-input" data-name="' + fhName +
             '" placeholder="' + fhN + '"></textarea> <a href="javascript:;" class="hf-pl" data-id="'
             + $(this).find('a').attr('data-id') + '">评论</a></div>';
+        //显示回复
+        if (!$(this).is('.hf-con-block')) {
+            $(this).parents('.card_detail').find('.reviewArea').html(fhHtml);
+            $(this).addClass('hf-con-block');
+            $('.content').flexText();
+            //input框自动聚焦
+            $(this).parents('.card_detail').find('.hf-input').val('').focus().val();
+        } else {
+            $(this).removeClass('hf-con-block');
+            $(this).parents('.card_detail').find('.hf-con').remove();
+        }
+    });
+})();
+(function () {
+    $(".commentAll").on('click', ".comment", function () {
+        if (!$.cookie("user")) {
+            layer.msg("请登录后评论");
+            return false;
+        }
+        //获取回复人的名字
+        var fhName = $(this).parents('.card_detail').find('.S_txt1').html();
+        //回复@
+        var fhN = '回复@' + fhName + "：";
+        //var oInput = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.hf-con');
+        var fhHtml = '<div class="hf-con pull-left"> ' +
+            '<pre class="pre" style="padding: 6px 15px;"><span></span><br></pre>' +
+            '<textarea class="content comment-input hf-input" data-name="' + fhName +
+            '" placeholder="' + fhN + '"></textarea> <a href="javascript:;" class="hf-pl" data-id="'
+            + $(this).attr('data-id') + '">评论</a></div>';
         //显示回复
         if (!$(this).is('.hf-con-block')) {
             $(this).parents('.card_detail').find('.reviewArea').html(fhHtml);
@@ -99,7 +126,7 @@
 (function () {
 
     $('.commentAll').on('click', '.comment-show .hf-pl', function () {
-        if (window.location.href.includes('events.html')) {
+        if (window.location.href.includes('event.html')) {
             return false;
         }
         var oThis = $(this);
@@ -126,10 +153,10 @@
 
 /*添加回复列表*/
 function addReply(oHtml, dom) {
-    dom.parents('.hf-con').parents('.comment-show-con-list')
-        .find('.hf-list-con').css('display', 'block')
-        .prepend(oHtml) && dom.parents('.hf-con').siblings('.date-dz-right')
-        .find('.pl-hf').addClass('hf-con-block') && dom.parents('.hf-con').remove();
+    dom.parents('.commentAll').find('.hf-list-con').css('display', 'block').prepend(oHtml)
+    && dom.parents('.commentAll').siblings('.inline').find('.comment').removeClass('hf-con-block')/*移出回复输入框css块*/
+    && dom.parents('.hf-con').remove();
+    /*移出回复输入框*/
 }
 
 /*构造子回复列表*/
@@ -161,7 +188,7 @@ function buildReply(data, uid, receiveUserName) {
                     "<span class=\"pull-left date-dz-line\">|</span> " +
                     '<a data-id="' + data.cid + '" href="javascript:;" ' +
                     likeClazz +
-                    '</i>赞 (<i class="z-num">' + data.likes + '</i>)</a> </div> </div>';
+                    '</i>赞 (<num>' + data.likes + '</num>)</a> </div> </div>';
             });
         }
         return str;
@@ -189,7 +216,7 @@ function buildReply(data, uid, receiveUserName) {
             "<span class=\"pull-left date-dz-line\">|</span> " +
             '<a data-id="' + data.cid + '" href="javascript:;" ' +
             likeClazz +
-            '</i>赞 (<i class="z-num">' + data.likes + '</i>)</a> </div> </div>';
+            '</i>赞 (<num>' + data.likes + '</num>)</a> </div> </div>';
         return str;
     }
 }
@@ -217,35 +244,33 @@ function buildReply(data, uid, receiveUserName) {
  */
 function addList(res) {
     //发布动态
-    var oHtml = '<li><div class="card clearfix">' +
-        '<div class="comment-show-con-img pull-left">' +
-        '<img src="' + res.sendUser.icons + '" alt="">' +
-        '</div> ' +
-        '<div class="comment-show-con-list pull-left clearfix">' +
-        '<div class="pl-text clearfix"> ' +
-        '<a href="' + zone(res.sendUser.uid)  +'" class="comment-size-name">'
-        + res.sendUser.nickname + //昵称
-        '</a>' +
-        ' <span class="my-pl-con">&nbsp;'
-        + res.content + //内容
-        '</span>' +
-        ' </div> ' +
-        '<div class="date-dz"> ' +
-        '<span class="date-dz-left pull-left comment-time">'
-        + res.ctime + // 时间
-        '</span> ' +
-        '<div class="date-dz-right pull-right comment-pl-block">' +
-        /*   '<a href="javascript:;" class="removeBlock" data-id="' + res.cid + '">删除</a> ' +*/
-        '<a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left" data-id="' + res.cid + '">回复</a> ' +
-        '<span class="pull-left date-dz-line">|</span> ' +
-        '<a data-id="' + res.cid + '"href="javascript:;" ' +
-        'class="date-dz-z pull-left"><i  class="date-dz-z-click-red">' +
-        '</i>赞 (<i class="z-num">' + res.likes + '</i>)</a> ' +
-        '</div> </div><div class="hf-list-con"></div></div> </div></li>';
-    /*if (oSize.replace(/(^\s*)|(\s*$)/g, "") != '') {*/
-    /*判断内容是否为空*/
+    var html =
+        '<li class="card clearfix">' +
+        '<div class="float_left">' +
+        '<img src="';
 
-    $('#content').prepend(oHtml);
+    html += res.sendUser.icons ? res.sendUser.icons : $.cookie("user").user.icons;
+
+    html += '" class="head"></div>' +
+        '<div class="card_detail">' +
+        '<div class="card_nick">' +
+        '<a href=' + zone(res.sendUser.uid) + ' target="_blank" class="W_f14 W_fb S_txt1">' + res.sendUser.nickname +
+        '</a></div><div class="card_time">' + res.ctime +
+        '</div><div class="card_text ws14">' + res.content +
+        '</div><div class="layui-row">' +
+        '<ul class="inline"><li class="like" data-id="' + res.cid +
+        '"><a href="javascript:;"><i class="iconfont icon-dianzan"></i>' +
+        '<num>0</num></a></li><li class="comment" data-id="' + res.cid +
+        '"><a href="javascript:;">' +
+        '<i class="layui-icon"></i></a></li><li class="share" data-id="' + res.cid +
+        '"><a href="javascript:;">' +
+        '<i class="layui-icon"></i></a></li><li class="report" data-id="' + res.cid +
+        '"><a href="javascript:;">' +
+        '<i class="layui-icon"></i></a></li></ul><div class="commentAll"><div class="reviewArea clearfix">' +
+        '</div><div class="comment-show"><ul class="hf-list-con"></ul></div></div><div class="comment-pl-block clearfix">' +
+        '<a href="../event/comment.html?id=' + res.cid +
+        '" class="float_right">查看更多</a></div></div></div></li>';
+    $('#content').prepend(html);
 
 
 }

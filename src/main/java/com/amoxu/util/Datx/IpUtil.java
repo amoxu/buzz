@@ -7,6 +7,7 @@ import com.amoxu.mapper.CoordinateMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 public class IpUtil {
 
+    private static final Logger logger = Logger.getLogger(IpUtil.class);
 
 
     private static final Pattern IPV4_PATTERN = Pattern.compile("^(([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){1}(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){2}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
@@ -46,7 +48,7 @@ public class IpUtil {
                     ((bytes[2] & 0xFF) << 8) |
                     bytes[3];
         } catch (java.net.UnknownHostException e) {
-            e.printStackTrace();
+            logger.error("Exception: ",e);
         }
 
         return 0;
@@ -92,7 +94,7 @@ public class IpUtil {
                 loc = new StringBuilder();
 
                 for (int j = 0; j < i; j++) {
-                    System.out.println("idx :" + strings[j]);
+                    //System.out.println("idx :" + strings[j]);
                     if (StringUtils.isNotBlank(strings[j])) {
                         list.add(strings[j]);
                         loc.append(strings[j]).append("%");
@@ -149,7 +151,7 @@ public class IpUtil {
             String[] strings = city.find("61.190.213.226");
             List<String> list = new ArrayList<>();
             for (String s : strings) {
-                System.out.println("idx :" + s);
+                //System.out.println("idx :" + s);
                 if (StringUtils.isNotBlank(s)) {
                     list.add(s);
                     loc += "%" + s;

@@ -10,6 +10,7 @@ import com.amoxu.mapper.TopicMapper;
 import com.amoxu.service.TopicService;
 import com.amoxu.util.StaticEnum;
 import com.amoxu.util.ToolKit;
+import com.amoxu.util.WriteLogUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -29,6 +30,8 @@ public class TopicServiceImpl implements TopicService {
 
     @Autowired
     private  FriendsMapper friendsMapper;
+    @Autowired
+    private WriteLogUtil writeLogUtil;
 
     private Logger logger = Logger.getLogger(getClass());
     @Override
@@ -128,12 +131,14 @@ public class TopicServiceImpl implements TopicService {
         if (!subject.isAuthenticated()) {
             return StaticEnum.OPT_UNLOGIN;
         }
-        User u = (User) subject.getPrincipal();
-        t.setUid(u.getUid());
+        Integer uid = ((User) subject.getPrincipal()).getUid();
+
+        t.setUid(uid);
         t.setTopic(topic);
         try {
             int insert = topicMapper.insertSelective(t);
             if (insert != 0) {
+                writeLogUtil.writeLog(uid, "/topic.html?tid=" + t.getTid(), "创建话题：" + topic);
                 return StaticEnum.OPT_SUCCESS;
             } else {
                 return "创建失败";
@@ -172,7 +177,10 @@ public class TopicServiceImpl implements TopicService {
 
         TopicComment topicComment = new TopicComment();
         topicComment.setTtid(tid);
-        topicComment.setUid(((User) subject.getPrincipal()).getUid());
+        Integer uid = ((User) subject.getPrincipal()).getUid();
+
+        topicComment.setUid(uid);
+
         topicComment.setBaseCid(0);
         topicComment.setContent(jsonObject.getString("comment"));
 
@@ -184,6 +192,10 @@ public class TopicServiceImpl implements TopicService {
         topicComment.setCtime(new Date());
         topicComment.setLikes(0);
         /*构造返回值参数*/
+        writeLogUtil.writeLog(uid,
+                "/topic/comment.html?id=" + topicComment.getCid(),
+                "发表了话题内容：" + topicComment.getContent());
+
 
         return topicComment;
 
@@ -205,13 +217,13 @@ public class TopicServiceImpl implements TopicService {
             result.setMsg(StaticEnum.OPT_UNLOGIN);
             return result;
         }
-        User u = (User) subject.getPrincipal();
+        Integer uid = ((User) subject.getPrincipal()).getUid();
 
         data = ToolKit.aesDecrypt(data);
         TopicComment comment = new TopicComment();
         comment.setRcid(rcid);
         comment.setBaseCid(bcid);
-        comment.setUid(u.getUid());
+        comment.setUid(uid);
         comment.setContent(data);
         comment.setTtid(0);/*回复子列表时，话题ID为0*/
 
@@ -221,6 +233,10 @@ public class TopicServiceImpl implements TopicService {
 
         result.ok();
         result.setData(comment);
+
+        writeLogUtil.writeLog(uid,
+                "/topic/comment.html?id=" + bcid,
+                "回复话题内容：" + data);
         return result;
     }
 
