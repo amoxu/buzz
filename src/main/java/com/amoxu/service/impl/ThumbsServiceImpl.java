@@ -23,6 +23,12 @@ public class ThumbsServiceImpl implements ThumbsService {
     @Autowired
     private LikeBuzzMapper likeBuzzMapper;
 
+    @Autowired
+    LikeArticleCommentMapper likeArticleCommentMapper;
+
+    @Autowired
+    LikeArticleMapper likeArticleMapper;
+
 
     @Autowired
     private LikeMusicShareCommentMapper likeMusicShareCommentMapper;
@@ -80,6 +86,20 @@ public class ThumbsServiceImpl implements ThumbsService {
     public boolean likeBuzz(Integer cid) throws UnLoginException {
         callResult = paramWraper(cid);
         likeBuzzMapper.callLikeProc(callResult);
+        return callResult.getUid() == 1;
+    }
+
+    @Override
+    public boolean likeArticleComment(Integer cid) throws UnLoginException {
+        callResult = paramWraper(cid);
+        likeArticleCommentMapper.callLikeProc(callResult);
+        return callResult.getUid() == 1;
+    }
+
+    @Override
+    public boolean likeArticle(Integer cid) throws UnLoginException {
+        callResult = paramWraper(cid);
+        likeArticleMapper.callLikeProc(callResult);
         return callResult.getUid() == 1;
     }
 }

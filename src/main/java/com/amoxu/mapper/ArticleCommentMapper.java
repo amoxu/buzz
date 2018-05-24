@@ -1,9 +1,9 @@
 package com.amoxu.mapper;
 
-import com.amoxu.entity.ArticleComment;
-import com.amoxu.entity.ArticleCommentExample;
-import java.util.List;
+import com.amoxu.entity.*;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ArticleCommentMapper {
     int countByExample(ArticleCommentExample example);
@@ -27,4 +27,8 @@ public interface ArticleCommentMapper {
     int updateByPrimaryKeySelective(ArticleComment record);
 
     int updateByPrimaryKey(ArticleComment record);
+
+    List<ArticleComment> selectChild(@Param("onlineId") Integer onlineId, @Param("baseId") Integer baseId, @Param("example") ArticleCommentExample example);
+    User getReceive(@Param("rcid")Integer rcid, @Param("baseId")Integer buzzId);
+
 }

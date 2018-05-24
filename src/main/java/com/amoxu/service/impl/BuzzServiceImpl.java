@@ -252,8 +252,8 @@ public class BuzzServiceImpl implements BuzzService {
         String keyword = buzzNetease.getKeyword();
         String[] split = keyword.split("/");
         userFeatureService.setUserFeature(uid, 1.0, split);//对兴趣进行加一
-        ajaxResult.ok();
-        return ajaxResult;
+        return index();
+
 
     }
 
@@ -275,8 +275,7 @@ public class BuzzServiceImpl implements BuzzService {
         String keyword = buzzNetease.getKeyword();
         String[] split = keyword.split("/");
         userFeatureService.setUserFeature(uid, -1.0, split);//对兴趣进行加一
-        ajaxResult.ok();
-        return ajaxResult;
+        return index();
     }
 
     @Override

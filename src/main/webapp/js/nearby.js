@@ -27,9 +27,9 @@
                 return;
             }
             var html = "";
-            res.data.forEach(function (res) {
+            res.data.forEach(function (res,idx) {
                 console.log(res);
-                html += '<li><a href="'+res.url+'">'+res.name+'</a></li>';
+                html += '<li><a href="'+res.url+'">'+(idx+1)+"."+res.name+'</a></li>';
             });
             $('.announcement').html(html);
         });

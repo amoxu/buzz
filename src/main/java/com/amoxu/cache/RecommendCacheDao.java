@@ -35,7 +35,6 @@ public class RecommendCacheDao {
 
     private final Logger logger = Logger.getLogger(RecommendCacheDao.class);
 
-    private RuntimeSchema<BuzzNetease> schema = (RuntimeSchema<BuzzNetease>) RuntimeSchema.getSchema(BuzzNetease.class);
     private String key;
     public List<BuzzNetease> getCommend(Integer uid) {
         Jedis jedis = JedisPoolUtil.getJedis();
@@ -85,14 +84,16 @@ public class RecommendCacheDao {
                     buzzNeteases = buzzNeteaseMapper.selectUserRecommend(uid, keyword, buzzExample);
                 }
 
-                //System.out.println("the count get from db is :" + buzzNeteases);
+                logger.debug("the count get from db is :" + buzzNeteases);
 
                 setBuzzCount(uid, buzzNeteases);
                 return buzzNeteases;
             }
+             RuntimeSchema<BuzzNetease> schema = (RuntimeSchema<BuzzNetease>) RuntimeSchema.getSchema(BuzzNetease.class);
+
             buzzNeteases = ProtostuffIOUtil.parseListFrom(new ByteArrayInputStream(bytes), schema);
 
-            //System.out.println("the count get from redis is :" + buzzNeteases);
+            logger.debug("the count get from redis is :" + buzzNeteases);
             return buzzNeteases;
         } catch (IOException e) {
             logger.error("Exception: ",e);
@@ -115,8 +116,9 @@ public class RecommendCacheDao {
             /*设置0点过期*/
             int secondsLeftToday = (int) ((86400000 -
                                 DateUtils.getFragmentInMilliseconds(Calendar.getInstance(), Calendar.DATE))/1000);
-
             ByteArrayOutputStream out = new ByteArrayOutputStream();
+            RuntimeSchema<BuzzNetease> schema = (RuntimeSchema<BuzzNetease>) RuntimeSchema.getSchema(BuzzNetease.class);
+
             ProtostuffIOUtil.writeListTo(out, buzzNeteases, schema, LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));
             byte[] byteArray = out.toByteArray();
             jedis.setex(key.getBytes(),secondsLeftToday, byteArray);

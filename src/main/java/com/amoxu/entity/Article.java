@@ -1,6 +1,7 @@
 package com.amoxu.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,6 +18,12 @@ public class Article {
     @JSONField(format = "yyyy-MM-dd")
     private Date stime;
 
+    private String url;
+
+    private String author;
+
+    private Integer likes;
+
     @Override
     public String toString() {
         return "Article{" +
@@ -28,15 +35,14 @@ public class Article {
                 ", url='" + url + '\'' +
                 ", author='" + author + '\'' +
                 ", likes=" + likes +
+                ", userLike=" + userLike +
                 ", content='" + content + '\'' +
                 '}';
     }
 
-    private String url;
+    @JSONField(serialzeFeatures = SerializerFeature.WriteNullNumberAsZero)
+    private Integer userLike;
 
-    private String author;
-
-    private Integer likes;
 
     private String content;
 
@@ -112,6 +118,15 @@ public class Article {
 
     public Article setUrl(String url) {
         this.url = url;
+        return this;
+    }
+
+    public Integer getUserLike() {
+        return userLike;
+    }
+
+    public Article setUserLike(Integer userLike) {
+        this.userLike = userLike;
         return this;
     }
 }

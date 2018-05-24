@@ -21,7 +21,7 @@ public interface ArticleMapper {
 
     List<Article> selectByExample(ArticleExample example);
 
-    Article selectByPrimaryKey(Integer id);
+    Article selectByPrimaryKey(@Param("id") Integer id, @Param("uid") Integer uid);
 
     int updateByExampleSelective(@Param("record") Article record, @Param("example") ArticleExample example);
 

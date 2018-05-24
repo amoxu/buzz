@@ -20,21 +20,21 @@
                         userId="root" password="950815x">
         </jdbcConnection>
 
-        <javaModelGenerator targetPackage="com.amoxu.entity"
+        <javaModelGenerator targetPackage="com.amoxu.entity.likes"
                             targetProject="F:\JWP\buzz\src\main\java">
                             <!--targetProject="F:\mybatis-generator-core-1.3.2\lib">-->
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="com.amoxu.mapper"
+        <sqlMapGenerator targetPackage="com.amoxu.mapper.likes"
                          targetProject="F:\JWP\buzz\src\main\java">
                        <!--  targetProject="F:\mybatis-generator-core-1.3.2\lib">-->
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.amoxu.mapper"
+                             targetPackage="com.amoxu.mapper.likes"
                              targetProject="F:\JWP\buzz\src\main\java">
                             <!-- targetProject="F:\mybatis-generator-core-1.3.2\lib">-->
             <property name="enableSubPackages" value="true"/>
@@ -43,8 +43,8 @@
 
 
 
-        <table tableName="article" domainObjectName="Article"/>
-        <table tableName="article_comment" domainObjectName="ArticleComment"/>
+        <table tableName="like_article" domainObjectName="LikeArticle"/>
+        <table tableName="like_article_comment" domainObjectName="LikeArticleComment"/>
 
     </context>
 </generatorConfiguration>

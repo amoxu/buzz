@@ -22,7 +22,7 @@ public class ArticleServiceImplTest {
     private ArticleMapper articleMapper;
     @Test
     public void getArticle() {
-        Article article = articleMapper.selectByPrimaryKey(1);
+        Article article = articleMapper.selectByPrimaryKey(1, 1);
         System.out.println(article.getContent());
 
     }

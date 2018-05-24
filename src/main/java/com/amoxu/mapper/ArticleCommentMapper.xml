@@ -109,7 +109,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.amoxu.entity.ArticleComment" >
+  <insert id="insert" parameterType="com.amoxu.entity.ArticleComment"  useGeneratedKeys="true" keyProperty="id">
     insert into article_comment (id, base_id, uid, 
       content, ctime, raid, 
       likes)
@@ -117,7 +117,7 @@
       #{content,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, #{raid,jdbcType=INTEGER}, 
       #{likes,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.amoxu.entity.ArticleComment" >
+  <insert id="insertSelective" parameterType="com.amoxu.entity.ArticleComment" useGeneratedKeys="true" keyProperty="id" >
     insert into article_comment
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -248,4 +248,106 @@
       likes = #{likes,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <sql id="My_By_Example_Where_Clause">
+
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          and
+          <trim prefix="(" suffix=")" prefixOverrides="and">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                           separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+
+  </sql>
+  <resultMap id="userCommonInfoMap" type="com.amoxu.entity.User">
+    <result property="nickname" column="nickname"/>
+    <result property="icons" column="icons"/>
+    <result property="uid" column="uid"/>
+  </resultMap>
+
+  <resultMap id="listMap" type="com.amoxu.entity.ArticleComment" extends="BaseResultMap">
+    <result column="userLike" property="userLike"/>
+    <association property="sendUser" resultMap="userCommonInfoMap" columnPrefix="send_"></association>
+    <association property="receiveUser" column="{rcid = raid,baseId=base_id}" select="getReceive"></association>
+  </resultMap>
+  <select id="selectChild" resultMap="listMap" parameterType="map">
+    /*查询回复列表*/
+    SELECT
+    msc.id,
+    msc.base_id,
+    msc.uid,
+    msc.content,
+    msc.ctime,
+    msc.raid,
+    msc.likes /*发送方信息*/
+    ,
+    u1.nickname AS send_nickname,
+    u1.icons AS send_icons,
+    u1.uid AS send_uid,
+    /*是否点赞*/
+    c2.uid AS userLike
+    FROM
+    article_comment msc
+    LEFT JOIN buzz. USER u1 ON u1.uid = msc.uid /*发表用户的信息*/
+    LEFT JOIN like_article_comment c2 ON msc.id = c2.acid AND c2.uid=
+    <if test="onlineId != null">
+      #{onlineId}
+    </if>
+    <if test="onlineId == null">
+      0
+    </if>
+
+    WHERE msc.base_id = #{baseId}
+    <include refid="My_By_Example_Where_Clause"/>
+
+    <if test="example.orderByClause != null">
+      order by ${example.orderByClause}
+    </if>
+    <if test="example.limit!=0">
+      limit ${example.offset}, ${example.limit}
+    </if>
+  </select>
+  <!--
+     param : rcid    回复id 不为0时 查rcid的uid
+             baseid  rcid为0时查baseid的 uid
+     -->
+  <select id="getReceive" resultMap="userCommonInfoMap" parameterType="map">
+    <if test="rcid != 0">/*回复评论*/
+      SELECT user.uid,`user`.icons,`user`.nickname
+      from buzz.user
+      LEFT JOIN article_comment a ON user.uid = a.uid
+      where a.id = #{rcid}
+    </if>
+    <if test="rcid == 0">/*回复文章。*/
+      SELECT
+      author nickname
+      from article
+      where article.id = #{baseId}
+      limit 1
+    </if>
+
+  </select>
+
+
+
 </mapper>

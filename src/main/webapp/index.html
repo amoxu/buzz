@@ -97,6 +97,11 @@
                     <div class="card_detail" style="margin-left: 17px">
                         <div class="card_nick"><a href="http://music.163.com/#/user/home?id=313718494" target="_blank"
                                                   class="ws16 W_fb S_txt1">思see</a></div>
+                        <div class="float_right"><a href="javascript:void(0);" id="push-like" data-id="1126526"><i
+                                class="iconfont" style="font-size: x-large;margin-left: 1em; color: #FF5900"></i></a><a
+                                href="javascript:void(0);" id="push-dislike" data-id="1126526"><i class="iconfont"
+                                                                                                 style="font-size: x-large;margin-left: 1em; color: #2D93CA"></i></a>
+                        </div>
                         <div class="card_time">2017-12-14 23:43:22</div>
                         <div class="card_text ws14">
                             有人说：要感谢前任让你成长，让你变得更好。我觉得不是这样，那些痛不欲生，撕心裂肺的日子，都是你咬着牙一天天熬过来的，凭什么要谢别人，你要谢谢你自己。
@@ -133,7 +138,7 @@
 
             <!--推荐歌曲-->
 
-            <div data-id="music"></div>
+            <div data-id="share"></div>
             <div class="topic-column">
                 <ul>
                     <li>
@@ -213,6 +218,39 @@
             , arrow: 'hover' //始终显示箭头
             , indicator: 'none'
         });
+    });
+    layui.use('layer', function () {
+        let layer = layui.layer;
+        let tips_idx;
+        let pushLike = $('#push-like');
+        let pushDisLike = $('#push-dislike');
+        let  buzz =$("div[data-id='buzz']");
+
+        buzz.on('mouseenter','#push-like', function () {
+            tips_idx = layer.tips('喜欢之后会给你推荐更多相似的哦', '#push-like', {
+                tips: [1, '#FF8330']
+            });
+        });
+        buzz.on('mouseleave','#push-like', function () {
+            layer.close(tips_idx);
+        });
+
+        buzz.on('mouseenter','#push-dislike', function () {
+            tips_idx = layer.tips('不喜欢，换一条', '#push-dislike', {
+                tips: [1, '#06799F']
+            });
+        });
+        buzz.on('mouseleave','#push-dislike', function () {
+            layer.close(tips_idx);
+        });
+
+        pushLike.on('click', function () {
+            /*点击喜欢*/
+        });
+        pushDisLike.on('click', function () {
+            /*点击不喜欢*/
+        });
+
     });
     $.get('/index/buzz', function (result) {
         var tmp = "";
@@ -342,7 +380,7 @@
                 '</li>';
         })
 
-        $('div[data-id="music"]').html(tmp);
+        $('div[data-id="share"]').html(tmp);
 
     });
     $.get('/index/topic', function (result) {
@@ -416,36 +454,7 @@
         });
 
     });
-    layui.use('layer', function () {
-        let layer = layui.layer;
-        let tips_idx;
-        let pushLike = $('#push-like');
-        let pushDisLike = $('#push-dislike');
-        pushLike.mouseenter(function () {
-            tips_idx = layer.tips('喜欢之后会给你推荐更多相似的哦', '#push-like', {
-                tips: [1, '#FF8330']
-            });
-        });
-        pushLike.mouseleave(function () {
-            layer.close(tips_idx);
-        });
-        pushLike.on('click', function () {
-            /*点击喜欢*/
 
-        });
-        pushDisLike.mouseenter(function () {
-            tips_idx = layer.tips('不喜欢，换一条', '#push-dislike', {
-                tips: [1, '#06799F']
-            });
-        });
-        pushDisLike.mouseleave(function () {
-            layer.close(tips_idx);
-        });
-        pushDisLike.on('click', function () {
-            /*点击不喜欢*/
-
-        });
-    });
     $("div[data-id='buzz']").on("click", "#push-like,#push-dislike", function () {
         let dislike = this.id.find('dislike');
         let dom = $(this);
@@ -464,11 +473,76 @@
                 layer.msg(res.msg);
                 if (res.status === 0) {
                     //success
-                    dom.parents('.buzz').find('comment-pl-block').click;
-
-                } else {
                     $("div[data-id='buzz']").slideUp("normal");
+                    var tmp = "";
+
+                    $.each(res.data, function (idx, result) {
+                        tmp += '<li class="card clearfix">' +
+                            '<div class="card_detail" style="margin-left: 17px">' +
+                            '<div class="card_nick">' +
+                            '<a href="http://music.163.com/#/user/home?id=' + result.userId + '" target="_blank" class="ws16 W_fb S_txt1">' + result.userName + '</a>' +
+                            '</div>' +
+                            '<div class="float_right">' +
+                            '<a href="javascript:void(0);" id="push-like" data-id="' + result.id + '"><i class="iconfont" style="font-size: x-large;margin-left: 1em; color: #FF5900"></i></a>' +
+                            '<a href="javascript:void(0);" id="push-dislike" data-id="' + result.id + '"><i class="iconfont" style="font-size: x-large;margin-left: 1em; color: #2D93CA"></i></a>' +
+                            '</div>' +
+                            '<div class="card_time">' + result.ctime + '</div>' +
+                            '<div class="card_text ws14">' + result.content + '</div>';
+                        if (result.bereplied) {
+                            tmp += '<div class="card_text ws14"> <strong>回复消息</strong>：' + result.bereplied + '</div>';
+                        }
+                        tmp += '<div class="float_right">——来自 <a target="_blank" href="http://music.163.com/#/artist?id='
+                            + result.music.sid + '">' + result.music.singer.name +
+                            '</a> 《<a target="_blank"  href="' + result.music.link + '">' +
+                            result.music.name + '</a>》 <a>' + result.music.source.name + '</a></div>' +
+                            '<div class="layui-row">' +
+                            '<ul class="inline">' +
+                            '<li class="like" data-id="' + result.id + '">' +
+                            '<a href="javascript:;" >';
+
+                        if (result.userLike) {
+                            tmp += '<i class="iconfont icon-dianzan1"></i>';
+                        } else {
+                            tmp += '<i class="iconfont icon-dianzan"></i>';
+                        }
+                        tmp += '<num>' + result.likedNum + '</num>' +
+                            '</a>' +
+                            '</li>' +
+                            '<li class="comment" data-id="' + result.id + '">' +
+                            '<a href="javascript:;" ><i class="layui-icon">&#xe63a;</i>' +
+                            '</a>' +
+                            '</li>' +
+                            '<li class="share" data-id="' + result.id + '">' +
+                            '<a href="javascript:;" ><i class="layui-icon">&#xe641;</i></a>' +
+                            '</li>' +
+                            '<li class="report" data-id="' + result.id + '">' +
+                            '<a href="javascript:;" ><i class="layui-icon">&#xe6c5;</i></a>' +
+                            '</li>' +
+                            '</ul>' +
+                            '<div class="commentAll">' +
+                            '<div class="reviewArea clearfix"></div>' +
+                            '<div class="comment-show">';
+                        if (result.comment.length > 0) {
+                            var child = buildReply(result.comment);
+                            tmp += '<ul class="hf-list-con" style="display: block;">' + child + '</ul>';
+                        } else {
+                            tmp += '<ul class="hf-list-con"></ul>';
+                        }
+                        tmp +=
+                            '</div>' +
+                            '</div>' +
+                            '<div class="comment-pl-block clearfix">' +
+                            '<a href="../buzz/comment.html?id=' + result.id + '" class="float_right">查看更多</a>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</li>';
+                    });
+                    $('div[data-id="buzz"]').html(tmp);
+
                     $("div[data-id='buzz']").slideDown("normal");
+                } else {
+                    return false;
                 }
             }
             , error: function (res) {
@@ -600,7 +674,16 @@
     (function () {
         $('#content').on('click', '.like,a.date-dz-z', function () {
             var type = getType(this);
-
+            var isChild = $(this).parents('.hf-list-con').length > 0;
+            if (isChild && type === 'share') {
+                type = "shareComment";
+            }
+            if (isChild && type === 'buzz') {
+                type = "comment";
+            }
+            if (isChild && type === 'topic') {
+                type = "topic";
+            }
             var thumbNum = $(this).find('num').html();
             console.log("当前点赞数:" + thumbNum);
             var dom = this;

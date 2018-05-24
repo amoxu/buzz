@@ -1,4 +1,3 @@
-<%--@elvariable id="article" type="com.amoxu.entity.Article>"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%
@@ -66,7 +65,7 @@
                     <div class="layui-row">
                         <ul class="inline">
                             <li class="like" data-id="${article.id}"><a href="javascript:;"><i
-                                    class="iconfont icon-dianzan"></i>
+                                    class="${article.userLike>0? 'iconfont icon-dianzan1' : 'iconfont icon-dianzan'}"></i>
                                 <num>${article.likes}</num>
                             </a></li>
                             <li class="comment" data-id="${article.id}"><a href="javascript:;"><i
@@ -96,9 +95,9 @@
                 <hr>
                 <ul>
                     <div class="announcement">
-                        <li><a>活动1..............</a></li>
-                        <li><a>活动2..............</a></li>
-                        <li><a>活动3..............</a></li>
+                        <li><a></a></li>
+                        <li><a></a></li>
+                        <li><a></a></li>
                     </div>
                 </ul>
                 <hr>
@@ -122,12 +121,9 @@
 
 </div>
 <script src="layui/layui.js"></script>
-
-
 <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
 <script src="js/jquery.session.js"></script>
 <script type="text/javascript" src="js/jquery.flexText.js"></script>
-<script src="js/common.js"></script>
 <script src="js/top.js"></script>
 
 <script>
@@ -136,7 +132,7 @@
         var element = layui.element;
         var layer = layui.layer;
 
-        /*创建回复按钮*/
+        /*创建回复按钮 根*/
         (function () {
             $(".comment").on('click', function () {
                 if (!$.cookie("user")) {
@@ -144,7 +140,7 @@
                     return false;
                 }
                 //获取回复人的名字
-                var fhName = $(this).parents('.card_detail').find('.S_txt1').html();
+                var fhName = $(this).parents('.article').find('.S_txt1').html();
                 //回复@
                 var fhN = '回复@' + fhName + "：";
                 //var oInput = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.hf-con');
@@ -163,6 +159,38 @@
                 } else {
                     $(this).removeClass('hf-con-block');
                     $(this).parents('.card_detail').find('.hf-con').remove();
+                }
+            });
+        })();
+        /*创建回复模块 子*/
+        <!--点击回复动态创建回复块 主栏目-->
+        (function () {
+            $('.comment-show').on('click', '.date-dz-pl.pl-hf', function () {
+                if (!$.cookie("user")) {
+                    layer.msg("请登录后评论");
+                    return false;
+                }
+                //获取回复人的名字
+                var fhName = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.pl-text').find('.comment-size-name').html();
+                //回复@
+                var fhN = '回复@' + fhName + "：";
+                //var oInput = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.hf-con');
+                var fhHtml = '<div class="hf-con pull-left"> ' +
+                    '<textarea class="content comment-input hf-input" data-name="' + fhName +
+                    '" placeholder="' + fhN + '"></textarea> <a href="javascript:;" class="hf-pl" data-id="'
+                    + $(this).attr('data-id') + '">评论</a></div>';
+                //显示回复
+                if ($(this).is('.hf-con-block')) {
+                    $(this).parents('.date-dz-right').parents('.date-dz').append(fhHtml);
+                    $(this).removeClass('hf-con-block');
+                    $('.content').flexText();
+                    $(this).parents('.date-dz-right').siblings('.hf-con').find('.pre').css('padding', '6px 15px');
+                    //console.log($(this).parents('.date-dz-right').siblings('.hf-con').find('.pre'))
+                    //input框自动聚焦
+                    $(this).parents('.date-dz-right').siblings('.hf-con').find('.hf-input').val('').focus().val();
+                } else {
+                    $(this).addClass('hf-con-block');
+                    $(this).parents('.date-dz-right').siblings('.hf-con').remove();
                 }
             });
         })();
@@ -281,9 +309,9 @@
                     var cid = $(this).attr('data-id');
                     var links;
                     if ($(this).attr('class').find('like')) {
-                        links = '/like/share/' + cid
+                        links = '/like/article/' + cid
                     } else
-                        links = '/like/shareComment/' + cid
+                        links = '/like/articleComment/' + cid
                     $.ajax({
 
                         url: links
@@ -338,11 +366,11 @@
                 , scrollElem: '.comment-pl-block'
                 , done: function (page, next) { //到达临界点（默认滚动触发），触发下一页
                     var lis = [];
-                    if (page === 1) {
+                    /*if (page === 1) {
                         lis.push('<li class="all-pl-con new-tab">\n' +
                             '以下是最新评论:\n' +
                             '</li>');
-                    }
+                    }*/
                     //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
                     var id = window.location.href.split("/");
 
@@ -360,11 +388,54 @@
                 }
             });
         });
+        /*添加回复列表*/
+        function addReply(oHtml, dom) {
+            dom.parents('.commentAll').find('.hf-list-con').css('display', 'block').prepend(oHtml)
+            && dom.parents('.commentAll').siblings('.inline').find('.comment').removeClass('hf-con-block')/*移出回复输入框css块*/
+            && dom.parents('.hf-con').remove();/*移出回复输入框*/
+        }
 
+        /*构造子回复列表*/
+        function buildReply(data) {
+            var str = '';
+            if (data instanceof Array) {
+                $.each(data, function (idx, data) {
+                    build(data);
+                });
+            }else{
+                build(data);
+            }
+            return str;
+            function build(data) {
+                var likeClazz = "";
+                if (data.userLike) {
+                    likeClazz = 'class="date-dz-z pull-left date-dz-z-click"><i  class="date-dz-z-click-red red">';
+                } else {
+                    likeClazz = 'class="date-dz-z pull-left"><i  class="date-dz-z-click-red">';
+                }
+                str += "<li class=\"all-pl-con\" data-id='"+data.id+"' >" +
+                    "<div class=\"pl-text hfpl-text clearfix\">" +
+                    "<a href=" + zone(data.uid) + " class=\"comment-size-name\">" +
+                    data.sendUser.nickname +
+                    "</a><span class=\"my-pl-con\">回复<a href=" + zone(data.receiveUser.uid) + " class=\"atName\">@" +
+                    data.receiveUser.nickname +
+                    "</a> : " +
+                    data.content +
+                    "</span></div><div class=\"date-dz\"> <span class=\"date-dz-left pull-left comment-time\">" +
+                    data.ctime +
+                    "</span> <div class=\"date-dz-right pull-right comment-pl-block\">  " +
+                    "<a href=\"javascript:;\" class=\"date-dz-pl pl-hf pull-left hf-con-block\" data-id='" +
+                    data.id +
+                    "'>回复</a> " +
+                    "<span class=\"pull-left date-dz-line\">|</span> " +
+                    '<a data-id="' + data.id + '" href="javascript:;" ' +
+                    likeClazz +
+                    '</i>赞 (<num>' + data.likes + '</num>)</a> </div> </div>';
+            }
+        }
 
     });
 </script>
 <script type="text/javascript" src="js/nearby.js"></script>
 </body>
 </html>
-</%--@elvariable id="article" type="com.amoxu.entity.Article>

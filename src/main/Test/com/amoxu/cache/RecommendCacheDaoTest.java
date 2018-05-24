@@ -9,10 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring/applicationContext-service.xml"
-        , "classpath:spring/applicationContext-dao.xml"
-        , "classpath:spring/applicationContext-mail.xml"
-        , "classpath:spring/applicationContext-trsaction.xml"
+@ContextConfiguration(locations = {"classpath:spring/applicationContext-*.xml"
 })
 public class RecommendCacheDaoTest {
     @Autowired
@@ -20,7 +17,7 @@ public class RecommendCacheDaoTest {
 
     @Test
     public void getCommend() {
-        List commend = cacheDao.getCommend(55);
+        List commend = cacheDao.getCommend(1);
         System.out.println(JSON.toJSONString(commend));
 
     }
