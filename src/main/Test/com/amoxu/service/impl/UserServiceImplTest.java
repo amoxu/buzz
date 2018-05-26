@@ -61,7 +61,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void updateUser() {
+    public void updateUser() throws UnLoginException {
         User u = userService.selectUserById(1);
         u.setSex("男");
         u.setCity("安徽-宣城");
