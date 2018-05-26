@@ -83,8 +83,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUser(User user) {
-        return mapper.updateByPrimaryKeySelective(user);
+    public int updateUser(User user) throws UnLoginException {
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            throw new UnLoginException();
+        } else {
+            user.setUid(((User) subject.getPrincipal()).getUid());
+        }
+        return mapper.updateByPrimaryKey(user);
     }
 
     @Override
@@ -161,7 +167,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUserPassword(String oldPasswor, String newPasswor) {
+    public int updateUserPassword(String oldPasswor, String newPasswor) throws UnLoginException {
         Subject subject = SecurityUtils.getSubject();
         User user = (User) subject.getPrincipal(); //当前登录用户，用于获取用户ID
         logger.info("Subject user Object: " + user);

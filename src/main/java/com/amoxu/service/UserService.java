@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserService {
     int insetUser(User user);
 
-    int updateUser(User user);
+    int updateUser(User user) throws UnLoginException;
 
     List<User> selectUserLikeName(String name);
 
@@ -19,7 +19,7 @@ public interface UserService {
 
     User getUserInfo(Integer uid) throws UnLoginException;
 
-    int updateUserPassword(String oldPasswor, String newPasswor);
+    int updateUserPassword(String oldPasswor, String newPasswor) throws UnLoginException;
 
     int sendMail2NewNail(String mail);
 

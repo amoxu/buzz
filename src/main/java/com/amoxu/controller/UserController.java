@@ -224,7 +224,7 @@ public class UserController {
             , produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8"
     )
     @ResponseBody
-    public String setUserInfo(User user) {
+    public String setUserInfo(User user) throws UnLoginException {
         AjaxResult<User> result = new AjaxResult<>();
         int code = userService.updateUser(user);
         result.ok();
@@ -388,7 +388,7 @@ public class UserController {
          *
          *
          * */
-        public String alterPassword(@RequestParam("data") String data) {
+        public String alterPassword(@RequestParam("data") String data) throws UnLoginException {
             AjaxResult<Permission> result = new AjaxResult<>();
 
             logger.info(data);
